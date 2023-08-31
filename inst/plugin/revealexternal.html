@@ -1,0 +1,12 @@
+<script>
+  // Numbering the title slide so that revealjs doesn't loop
+  // back to the title-slide
+  window.addEventListener("DOMContentLoaded", function(){
+    document.querySelectorAll("#title-slide").forEach( (x,y) => {
+      if (y !== 0) {
+        x.id = "title-slide" + y
+      }
+    } )
+  })
+</script>
+<script src="inst/plugin/external.js"></script>

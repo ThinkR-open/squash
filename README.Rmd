@@ -19,6 +19,12 @@ knitr::opts_chunk$set(
 
 The goal of {nq1h}  is to compile n .qmd (under format revealjs) to one single html file.
 
+Contrary to [thinkrverse/poc_and_reprex/multi_quarto_to_one_reveal](https://forge.thinkr.fr/thinkr/thinkrverse/poc_and_reprex/multi_quarto_to_one_reveal), this version :
+
+- does not rely on `npm`
+- encapsulate the mechanism within an R pacakage
+
+
 ## POC
 
 Render all qmds to html.
@@ -43,7 +49,8 @@ for (qmd in vec_qmd_path){
   )
 }
 ```
-Compile individual html into one unique html file.
+In order to compile individual html into one unique html file.
+
 
 ```{r}
 template_qmd <- readLines("inst/template.qmd")
