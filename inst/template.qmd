@@ -1,0 +1,8 @@
+---
+title: "Formation R"
+format: 
+  revealjs:
+    include-after-body: inst/plugin/revealexternal.html
+---
+
+{{insert_divs}}

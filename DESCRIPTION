@@ -1,0 +1,16 @@
+Package: nq1h
+Version: 0.0.0.9000
+Title: Compile N Qmd To One HTML File
+Description: Compile n .qmd (under format revealjs) to one single html file.
+Authors@R: c(person(given = "Antoine",
+         family = "Languillaume",
+         role = c("aut", "cre"),
+         email = "antoine@thinkr.fr"),
+  person(given = "Colin",
+         family = "Fay",
+         role = c("aut", "cre"),
+         email = "colin@thinkr.fr"))
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3

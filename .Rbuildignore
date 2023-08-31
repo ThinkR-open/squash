@@ -1,0 +1,4 @@
+^dev$
+^LICENSE\.md$
+^.*\.Rproj$
+^\.Rproj\.user$

@@ -1,0 +1,9 @@
+---
+title: "Deuxième Chapitre"
+subtitle: "omega"
+format: revealjs
+---
+
+## Slide 2
+
+Texte 2
