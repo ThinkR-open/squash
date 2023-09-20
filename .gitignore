@@ -2,6 +2,7 @@
 .RData
 .Rproj.user
 *.html
+!inst/template.html
 !inst/plugin/revealexternal.html
 index.qmd
 index_files
