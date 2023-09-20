@@ -1,6 +1,6 @@
 Package: nq1h
 Title: Compile N Qmd To One HTML File
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Authors@R: c(
     person("Antoine", "Languillaume", , "antoine@thinkr.fr", role = c("aut", "cre")),
     person("Colin", "Fay", , "colin@thinkr.fr", role = "aut")
@@ -11,6 +11,7 @@ License: MIT + file LICENSE
 Imports: 
     cli,
     quarto,
+    rvest,
     tools,
     withr
 Suggests: 

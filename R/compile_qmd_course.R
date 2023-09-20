@@ -9,11 +9,13 @@
 #' @importFrom withr with_dir
 #' @importFrom cli cat_bullet
 #' @importFrom quarto quarto_render
+#' @importFrom rvest read_html html_elements
 #' 
-#' @return NULL Side effect : generate html files in output dir
+#' @return list. A list of xml_nodeset elements extracted from each compiled html
 #' 
 #' @export
 #' @examples
+#' 
 #' # list example qmds
 #' courses_path <- system.file(
 #'   "courses",
@@ -29,52 +31,13 @@
 #' # generate html in temp folder
 #' temp_dir <- tempfile(pattern = "compile") 
 #' 
-#' compile_qmd_course(
+#' compile_output <- compile_qmd_course(
 #'   vec_qmd_path = qmds,
 #'   output_dir = temp_dir
 #' )
 #' 
 #' # clean up
 #' unlink(temp_dir, recursive = TRUE)
-#' 
-#' #---- to refactor next
-#' 
-#' # template_qmd <- readLines(
-#' #   system.file(
-#' #     "template.qmd",
-#' #     package = "nq1h"
-#' #   )
-#' # )
-#' # 
-#' # path_html_files <- list.files(
-#' #   temp_dir, 
-#' #   full.names = TRUE,
-#' #   pattern = "\\.html$"
-#' # )
-#' # 
-#' # divs_to_insert <- path_html_files |> 
-#' #   lapply(
-#' #     \(path_html_file) {
-#' #       sprintf(
-#' #         '<div data-external-replace="%s">  </div>',
-#' #         path_html_file
-#' #       )
-#' #     }
-#' #   ) |> 
-#' #   paste(
-#' #     collapse = "\n\n---\n\n"
-#' #   )
-#' # 
-#' # index_qmd <- gsub(
-#' #   pattern = "\\{\\{insert_divs\\}\\}",
-#' #   replacement = divs_to_insert,
-#' #   template_qmd
-#' # ) 
-#' # 
-#' # writeLines(
-#' #   index_qmd,
-#' #   "index.qmd"
-#' # )
 #' 
 compile_qmd_course <- function(
     vec_qmd_path,
@@ -117,6 +80,17 @@ compile_qmd_course <- function(
   
   # remove qmd from render dir
   unlink(file.path(output_dir, basename(vec_qmd_path)))
-
-  return(NULL)
+  
+  # read html and extract slides elements
+  vec_html_path <- file.path(output_dir,
+                             gsub(".qmd", ".html", basename(vec_qmd_path)))
+  
+  vec_html_slides <- lapply(X = vec_html_path,
+                            FUN = \(x) {
+                              x |>
+                                read_html() |>
+                                html_elements(".slides")
+                            })
+  
+  return(vec_html_slides)
 }
