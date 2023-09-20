@@ -12,8 +12,8 @@ test_that("compile_qmd_course works", {
   # generate html in temp folder
   temp_dir <- tempfile(pattern = "compile")
   
-  compile_qmd_course(vec_qmd_path = qmds,
-                     output_dir = temp_dir)
+  compile_output <- compile_qmd_course(vec_qmd_path = qmds,
+                                       output_dir = temp_dir)
   
   # test that html file exists
   expected_html <- file.path(temp_dir,
@@ -23,6 +23,11 @@ test_that("compile_qmd_course works", {
   # test that companion html folders exist
   expected_html_folders <- gsub(".html", "_files", expected_html)
   expect_true(all(file.exists(expected_html_folders)))
+  
+  # test that output is a list of html elements
+  expect_true(inherits(compile_output, "list"))
+  element_class <- lapply(compile_output, class)
+  expect_true(all(element_class == "xml_nodeset"))
   
   # clean up
   unlink(temp_dir, recursive = TRUE)

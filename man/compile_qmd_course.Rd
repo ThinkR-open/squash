@@ -12,8 +12,34 @@ compile_qmd_course(vec_qmd_path, output_dir)
 \item{output_dir}{character. Output path to store html files and companion folders}
 }
 \value{
-NULL Side effect : generate html files in output dir
+list. A list of xml_nodeset elements extracted from each compiled html
 }
 \description{
 Independently compile several qmd and create a common html
+}
+\examples{
+
+# list example qmds
+courses_path <- system.file(
+  "courses",
+  package = "nq1h"
+)
+
+qmds <- list.files(
+  path = courses_path, 
+  full.names = TRUE, 
+  pattern = "qmd$"
+)
+
+# generate html in temp folder
+temp_dir <- tempfile(pattern = "compile") 
+
+compile_output <- compile_qmd_course(
+  vec_qmd_path = qmds,
+  output_dir = temp_dir
+)
+
+# clean up
+unlink(temp_dir, recursive = TRUE)
+
 }
