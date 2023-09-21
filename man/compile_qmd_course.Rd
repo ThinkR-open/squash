@@ -4,12 +4,14 @@
 \alias{compile_qmd_course}
 \title{Independently compile several qmd and create a common html}
 \usage{
-compile_qmd_course(vec_qmd_path, output_dir)
+compile_qmd_course(vec_qmd_path, output_dir, output_html)
 }
 \arguments{
 \item{vec_qmd_path}{character. Vector of the path to qmd files}
 
 \item{output_dir}{character. Output path to store html files and companion folders}
+
+\item{output_html}{character. File name of the complete html output saved}
 }
 \value{
 list. A list of xml_nodeset elements extracted from each compiled html
@@ -18,7 +20,6 @@ list. A list of xml_nodeset elements extracted from each compiled html
 Independently compile several qmd and create a common html
 }
 \examples{
-
 # list example qmds
 courses_path <- system.file(
   "courses",
@@ -34,9 +35,10 @@ qmds <- list.files(
 # generate html in temp folder
 temp_dir <- tempfile(pattern = "compile") 
 
-compile_output <- compile_qmd_course(
+html_output <- compile_qmd_course(
   vec_qmd_path = qmds,
-  output_dir = temp_dir
+  output_dir = temp_dir,
+  output_html = "course_complete.html"
 )
 
 # clean up

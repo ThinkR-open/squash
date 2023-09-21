@@ -23,7 +23,6 @@ library(nq1h)
 ## `compile_qmd_course()` : compile individual qmds into a combined html
 
 ```{r examples-compile_qmd_course}
-
 # list example qmds
 courses_path <- system.file(
   "courses",
@@ -39,9 +38,10 @@ qmds <- list.files(
 # generate html in temp folder
 temp_dir <- tempfile(pattern = "compile") 
 
-compile_output <- compile_qmd_course(
+html_output <- compile_qmd_course(
   vec_qmd_path = qmds,
-  output_dir = temp_dir
+  output_dir = temp_dir,
+  output_html = "course_complete.html"
 )
 
 # clean up

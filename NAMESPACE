@@ -2,7 +2,12 @@
 
 export(compile_qmd_course)
 importFrom(cli,cat_bullet)
+importFrom(htmltools,HTML)
+importFrom(htmltools,htmlTemplate)
+importFrom(htmltools,renderDocument)
+importFrom(htmltools,save_html)
 importFrom(quarto,quarto_render)
+importFrom(rvest,html_children)
 importFrom(rvest,html_elements)
 importFrom(rvest,read_html)
 importFrom(tools,file_ext)

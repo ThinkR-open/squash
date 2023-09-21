@@ -4,18 +4,19 @@
 #'
 #' @param vec_qmd_path character. Vector of the path to qmd files
 #' @param output_dir character. Output path to store html files and companion folders
+#' @param output_html character. File name of the complete html output saved
 #' 
 #' @importFrom tools file_ext
 #' @importFrom withr with_dir
 #' @importFrom cli cat_bullet
 #' @importFrom quarto quarto_render
-#' @importFrom rvest read_html html_elements
+#' @importFrom rvest read_html html_elements html_children
+#' @importFrom htmltools htmlTemplate renderDocument HTML save_html
 #' 
 #' @return list. A list of xml_nodeset elements extracted from each compiled html
 #' 
 #' @export
 #' @examples
-#' 
 #' # list example qmds
 #' courses_path <- system.file(
 #'   "courses",
@@ -31,9 +32,10 @@
 #' # generate html in temp folder
 #' temp_dir <- tempfile(pattern = "compile") 
 #' 
-#' compile_output <- compile_qmd_course(
+#' html_output <- compile_qmd_course(
 #'   vec_qmd_path = qmds,
-#'   output_dir = temp_dir
+#'   output_dir = temp_dir,
+#'   output_html = "course_complete.html"
 #' )
 #' 
 #' # clean up
@@ -41,7 +43,8 @@
 #' 
 compile_qmd_course <- function(
     vec_qmd_path,
-    output_dir
+    output_dir,
+    output_html
 ) {
   # check paths
   not_all_files_are_qmd <- any(
@@ -92,5 +95,42 @@ compile_qmd_course <- function(
                                 html_elements(".slides")
                             })
   
-  return(vec_html_slides)
+  
+  # compile all slides element into a single HTML text
+  html_content <- lapply(X = vec_html_slides,
+                         FUN = \(x) {
+                           x |>
+                             html_children() |>
+                             as.character()
+                         }) |>
+    unlist() |>
+    paste0(collapse = "\n") |>
+    HTML()
+  
+  # include content in template
+  complete_html <- htmlTemplate(
+    filename = system.file("template.html", package = "nq1h"),
+    include_html_content = html_content
+  ) |>
+    renderDocument()
+  
+  # save html file
+  path_to_html <- file.path(output_dir,
+                            output_html)
+  
+  save_html(html = complete_html,
+            file = path_to_html,
+            libdir = file.path(output_dir, "lib"))
+  
+  # remove intermediate html files/folders
+  intermediate_html <- file.path(
+    output_dir,
+    gsub(".qmd", ".html", basename(vec_qmd_path))
+    )
+  
+  unlink(intermediate_html)
+  unlink(gsub(".html", "_files", intermediate_html),
+         recursive = TRUE)
+
+  return(path_to_html)
 }

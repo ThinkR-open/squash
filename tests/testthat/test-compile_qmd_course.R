@@ -12,22 +12,31 @@ test_that("compile_qmd_course works", {
   # generate html in temp folder
   temp_dir <- tempfile(pattern = "compile")
   
-  compile_output <- compile_qmd_course(vec_qmd_path = qmds,
-                                       output_dir = temp_dir)
+  html_output <- compile_qmd_course(vec_qmd_path = qmds,
+                                    output_dir = temp_dir,
+                                    output_html = "complete_course.html")
   
-  # test that html file exists
-  expected_html <- file.path(temp_dir,
-                             gsub(".qmd", ".html", basename(qmds)))
-  expect_true(all(file.exists(expected_html)))
+  # test that output path exists
+  expect_true(file.exists(html_output))
   
-  # test that companion html folders exist
-  expected_html_folders <- gsub(".html", "_files", expected_html)
-  expect_true(all(file.exists(expected_html_folders)))
+  # test html slide content is correct
+  slide_content <- html_output |> 
+    read_html() |>
+    html_elements(css = ".slides") |>
+    html_children() |>
+    as.character()
   
-  # test that output is a list of html elements
-  expect_true(inherits(compile_output, "list"))
-  element_class <- lapply(compile_output, class)
-  expect_true(all(element_class == "xml_nodeset"))
+  expect_equal(
+    object = slide_content,
+    expected = c(
+      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
+      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
+      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>"
+    )
+  )
   
   # clean up
   unlink(temp_dir, recursive = TRUE)
