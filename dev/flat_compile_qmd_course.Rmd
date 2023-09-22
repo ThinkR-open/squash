@@ -21,19 +21,21 @@ pkgload::load_all(export_all = TRUE)
 #'
 #' @param vec_qmd_path character. Vector of the path to qmd files
 #' @param output_dir character. Output path to store html files and companion folders
+#' @param output_html character. File name of the complete html output saved
 #' 
 #' @importFrom tools file_ext
 #' @importFrom withr with_dir
 #' @importFrom cli cat_bullet
 #' @importFrom quarto quarto_render
-#' @importFrom rvest read_html html_elements
+#' @importFrom htmltools htmlTemplate renderDocument save_html
 #' 
-#' @return list. A list of xml_nodeset elements extracted from each compiled html
+#' @return character. The path to the resulting html file
 #' 
 #' @export
 compile_qmd_course <- function(
     vec_qmd_path,
-    output_dir
+    output_dir,
+    output_html
 ) {
   # check paths
   not_all_files_are_qmd <- any(
@@ -77,19 +79,30 @@ compile_qmd_course <- function(
   vec_html_path <- file.path(output_dir,
                              gsub(".qmd", ".html", basename(vec_qmd_path)))
   
-  vec_html_slides <- lapply(X = vec_html_path,
-                            FUN = \(x) {
-                              x |>
-                                read_html() |>
-                                html_elements(".slides")
-                            })
+  html_content <- extract_html_slides(
+    vec_html_path = vec_html_path
+    )
   
-  return(vec_html_slides)
+  # include content in template
+  complete_html <- htmlTemplate(
+    filename = system.file("template.html", package = "nq1h"),
+    include_html_content = html_content
+  ) |>
+    renderDocument()
+  
+  # save html file
+  path_to_html <- file.path(output_dir,
+                            output_html)
+  
+  save_html(html = complete_html,
+            file = path_to_html,
+            libdir = file.path(output_dir, "lib"))
+
+  return(path_to_html)
 }
 ```
 
 ```{r examples-compile_qmd_course}
-
 # list example qmds
 courses_path <- system.file(
   "courses",
@@ -105,57 +118,16 @@ qmds <- list.files(
 # generate html in temp folder
 temp_dir <- tempfile(pattern = "compile") 
 
-compile_output <- compile_qmd_course(
+html_output <- compile_qmd_course(
   vec_qmd_path = qmds,
-  output_dir = temp_dir
+  output_dir = temp_dir,
+  output_html = "course_complete.html"
 )
 
 # clean up
 unlink(temp_dir, recursive = TRUE)
 
 ```
-
-```{r dev-compile_qmd_course}
-#---- to refactor next
-
-# template_qmd <- readLines(
-#   system.file(
-#     "template.qmd",
-#     package = "nq1h"
-#   )
-# )
-# 
-# path_html_files <- list.files(
-#   temp_dir, 
-#   full.names = TRUE,
-#   pattern = "\\.html$"
-# )
-# 
-# divs_to_insert <- path_html_files |> 
-#   lapply(
-#     \(path_html_file) {
-#       sprintf(
-#         '<div data-external-replace="%s">  </div>',
-#         path_html_file
-#       )
-#     }
-#   ) |> 
-#   paste(
-#     collapse = "\n\n---\n\n"
-#   )
-# 
-# index_qmd <- gsub(
-#   pattern = "\\{\\{insert_divs\\}\\}",
-#   replacement = divs_to_insert,
-#   template_qmd
-# ) 
-# 
-# writeLines(
-#   index_qmd,
-#   "index.qmd"
-# )
-```
-
 
 ```{r tests-compile_qmd_course}
 test_that("compile_qmd_course works", {
@@ -170,28 +142,138 @@ test_that("compile_qmd_course works", {
   # generate html in temp folder
   temp_dir <- tempfile(pattern = "compile")
   
-  compile_output <- compile_qmd_course(vec_qmd_path = qmds,
-                                       output_dir = temp_dir)
+  html_output <- compile_qmd_course(vec_qmd_path = qmds,
+                                    output_dir = temp_dir,
+                                    output_html = "complete_course.html")
   
-  # test that html file exists
-  expected_html <- file.path(temp_dir,
-                             gsub(".qmd", ".html", basename(qmds)))
-  expect_true(all(file.exists(expected_html)))
+  # test that output path exists
+  expect_true(file.exists(html_output))
   
-  # test that companion html folders exist
-  expected_html_folders <- gsub(".html", "_files", expected_html)
-  expect_true(all(file.exists(expected_html_folders)))
+  # test html slide content is correct
+  slide_content <- html_output |> 
+    read_html() |>
+    html_elements(css = ".slides") |>
+    html_children() |>
+    as.character()
   
-  # test that output is a list of html elements
-  expect_true(inherits(compile_output, "list"))
-  element_class <- lapply(compile_output, class)
-  expect_true(all(element_class == "xml_nodeset"))
+  expect_equal(
+    object = slide_content,
+    expected = c(
+      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
+      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
+      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>"
+    )
+  )
   
   # clean up
   unlink(temp_dir, recursive = TRUE)
 })
 ```
 
+
+## `extract_html_slides()` : extract html each elements of slides from multiple html files
+    
+```{r function-extract_html_slides}
+#' extract_html_slides
+#' 
+#' Extract slide content from multiple html
+#' 
+#' @param vec_html_path character. The vector of path to individual html files 
+#' 
+#' @importFrom tools file_ext
+#' @importFrom rvest read_html html_elements html_children
+#' @importFrom htmltools HTML
+#' 
+#' @return HTML. The HTML slide content of all html files combined together.
+#' 
+#' @export
+extract_html_slides <- function(
+    vec_html_path
+) {
+  # verify path are html files
+  not_all_files_are_html <- any(
+      file_ext(vec_html_path) != "html"
+    )
+  if (isTRUE(not_all_files_are_html)){
+    stop("Some of the input files are not html files.")
+  }
+  
+  # extract slides elements
+  list_html_slides <- lapply(X = vec_html_path,
+                             FUN = \(x) {
+                               x |>
+                                 read_html() |>
+                                 html_elements(".slides")
+                             })
+  
+  # compile all slides content into a single HTML text
+  html_content <- lapply(X = list_html_slides,
+                         FUN = \(x) {
+                           x |>
+                             html_children() |>
+                             as.character()
+                         }) |>
+    unlist() |>
+    paste0(collapse = "\n") |>
+    HTML()
+}
+```
+  
+```{r example-extract_html_slides}
+# list html files
+courses_path <- system.file("courses",
+                            package = "nq1h")
+
+htmls <- list.files(path = courses_path,
+                    full.names = TRUE,
+                    pattern = "html$")
+
+html_slide_content <- extract_html_slides(vec_html_path = htmls)
+```
+  
+```{r tests-extract_html_slides}
+test_that("extract_html_slides works", {
+  # list html files
+  courses_path <- system.file("courses",
+                              package = "nq1h")
+  
+  htmls <- list.files(path = courses_path,
+                      full.names = TRUE,
+                      pattern = "html$")
+  
+  # test with three htmls in order 1-2-3
+  html_slide_content <- extract_html_slides(vec_html_path = htmls)
+  
+  expect_equal(
+    object = html_slide_content,
+    expected = structure(
+      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
+      html = TRUE,
+      class = c("html",
+                "character")
+    )
+  )
+  
+  # test with three htmls in order 2-1-3
+  html_slide_content_reordered <-
+    extract_html_slides(vec_html_path = htmls[c(2, 1, 3)])
+  
+  expect_equal(
+    object = html_slide_content_reordered,
+    expected = structure(
+      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
+      html = TRUE,
+      class = c("html",
+                "character")
+    )
+  )
+
+})
+```
+  
 
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop

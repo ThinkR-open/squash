@@ -23,7 +23,6 @@ library(nq1h)
 ## `compile_qmd_course()` : compile individual qmds into a combined html
 
 ```{r examples-compile_qmd_course}
-
 # list example qmds
 courses_path <- system.file(
   "courses",
@@ -39,13 +38,37 @@ qmds <- list.files(
 # generate html in temp folder
 temp_dir <- tempfile(pattern = "compile") 
 
-compile_output <- compile_qmd_course(
+html_output <- compile_qmd_course(
   vec_qmd_path = qmds,
-  output_dir = temp_dir
+  output_dir = temp_dir,
+  output_html = "course_complete.html"
 )
 
 # clean up
 unlink(temp_dir, recursive = TRUE)
 
 ```
+
+## `extract_html_slides()` : extract html each elements of slides from multiple html files
+
+    
+
+  
+
+```{r example-extract_html_slides}
+# list html files
+courses_path <- system.file("courses",
+                            package = "nq1h")
+
+htmls <- list.files(path = courses_path,
+                    full.names = TRUE,
+                    pattern = "html$")
+
+html_slide_content <- extract_html_slides(vec_html_path = htmls)
+```
+
+  
+
+  
+
 
