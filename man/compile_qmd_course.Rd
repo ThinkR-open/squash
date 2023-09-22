@@ -14,7 +14,7 @@ compile_qmd_course(vec_qmd_path, output_dir, output_html)
 \item{output_html}{character. File name of the complete html output saved}
 }
 \value{
-list. A list of xml_nodeset elements extracted from each compiled html
+character. The path to the resulting html file
 }
 \description{
 Independently compile several qmd and create a common html

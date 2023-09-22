@@ -49,3 +49,26 @@ unlink(temp_dir, recursive = TRUE)
 
 ```
 
+## `extract_html_slides()` : extract html each elements of slides from multiple html files
+
+    
+
+  
+
+```{r example-extract_html_slides}
+# list html files
+courses_path <- system.file("courses",
+                            package = "nq1h")
+
+htmls <- list.files(path = courses_path,
+                    full.names = TRUE,
+                    pattern = "html$")
+
+html_slide_content <- extract_html_slides(vec_html_path = htmls)
+```
+
+  
+
+  
+
+

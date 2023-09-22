@@ -10,10 +10,9 @@
 #' @importFrom withr with_dir
 #' @importFrom cli cat_bullet
 #' @importFrom quarto quarto_render
-#' @importFrom rvest read_html html_elements html_children
-#' @importFrom htmltools htmlTemplate renderDocument HTML save_html
+#' @importFrom htmltools htmlTemplate renderDocument save_html
 #' 
-#' @return list. A list of xml_nodeset elements extracted from each compiled html
+#' @return character. The path to the resulting html file
 #' 
 #' @export
 #' @examples
@@ -88,24 +87,9 @@ compile_qmd_course <- function(
   vec_html_path <- file.path(output_dir,
                              gsub(".qmd", ".html", basename(vec_qmd_path)))
   
-  vec_html_slides <- lapply(X = vec_html_path,
-                            FUN = \(x) {
-                              x |>
-                                read_html() |>
-                                html_elements(".slides")
-                            })
-  
-  
-  # compile all slides element into a single HTML text
-  html_content <- lapply(X = vec_html_slides,
-                         FUN = \(x) {
-                           x |>
-                             html_children() |>
-                             as.character()
-                         }) |>
-    unlist() |>
-    paste0(collapse = "\n") |>
-    HTML()
+  html_content <- extract_html_slides(
+    vec_html_path = vec_html_path
+    )
   
   # include content in template
   complete_html <- htmlTemplate(
@@ -121,16 +105,6 @@ compile_qmd_course <- function(
   save_html(html = complete_html,
             file = path_to_html,
             libdir = file.path(output_dir, "lib"))
-  
-  # remove intermediate html files/folders
-  intermediate_html <- file.path(
-    output_dir,
-    gsub(".qmd", ".html", basename(vec_qmd_path))
-    )
-  
-  unlink(intermediate_html)
-  unlink(gsub(".html", "_files", intermediate_html),
-         recursive = TRUE)
 
   return(path_to_html)
 }
