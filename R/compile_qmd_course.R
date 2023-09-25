@@ -54,22 +54,25 @@ compile_qmd_course <- function(
     stop("Some of the input files are not qmd files.")
   }
   
-  # create output dir
+  # create output dir and temp dir
   if (isFALSE(file.exists(output_dir))) {
     dir.create(output_dir)
   }
   
+  temp_dir <- tempfile(pattern = "compile-qmd")
+  dir.create(temp_dir)
+  
   # copy qmd to render dir
   file.copy(
     from = vec_qmd_path,
-    to = output_dir
+    to = temp_dir
   )
   
   # render qmd to html
   vec_qmd_filename <- basename(vec_qmd_path)
   
   with_dir(
-    output_dir,
+    temp_dir,
     {
       for (qmd in vec_qmd_filename) {
         cat_bullet(
@@ -83,15 +86,9 @@ compile_qmd_course <- function(
     }
   )
   
-  # remove qmd from render dir
-  unlink(file.path(
-    output_dir,
-    vec_qmd_filename
-  ))
-  
   # read html and extract slides elements
   vec_html_path <- file.path(
-    output_dir,
+    temp_dir,
     gsub(".qmd", ".html", vec_qmd_filename)
   )
   
@@ -109,14 +106,14 @@ compile_qmd_course <- function(
   
   # save html file
   path_to_html <- file.path(
-    output_dir,
+    temp_dir,
     output_html
   )
   
   save_html(
     html = complete_html,
     file = path_to_html,
-    libdir = file.path(output_dir, "lib")
+    libdir = file.path(temp_dir, "lib")
   )
   
   # copy lib folder from 1st render and edit paths in html
@@ -129,5 +126,28 @@ compile_qmd_course <- function(
     to_lib = gsub(".html", "_files", path_to_html)
   )
   
-  return(path_to_html)
+  # copy final html and companion folder in output_dir
+  html_with_deps_path <- c(
+    path_to_html,
+    gsub(".html", "_files", path_to_html)
+    )
+  
+  file.copy(
+    from = html_with_deps_path,
+    to = output_dir,
+    recursive = TRUE
+    )
+  
+  # remove temp files
+  unlink(
+    temp_dir,
+    recursive = TRUE
+  )
+  
+  return(
+    file.path(
+      output_dir,
+      output_html
+      )
+    )
 }

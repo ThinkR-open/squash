@@ -7,7 +7,7 @@
 #' @param html_path character. Path to the html file to be edited, serve as the root for lib folder paths
 #' @param src_regex character. Regex of the existing lib path in the html to replace with new location
 #' @param from_lib character. Path to the lib folder to copy
-#' @param to_lib character. Path to copy to lib folder to.
+#' @param to_lib character. Path to copy the lib folder to.
 #'
 #' @importFrom cli cli_alert_info
 #'
@@ -73,8 +73,12 @@ add_companion_folder <- function(
   # detect lib path in html
   html_content <- readLines(html_path)
   
-  n_path <- sum(grepl(pattern = src_regex,
-                      x = html_content))
+  n_path <- sum(
+    grepl(
+      pattern = src_regex,
+      x = html_content
+    )
+  )
   
   cli_alert_info(
     "Paths to dependencies will be edited in {n_path} line{?s} of the final HTML."

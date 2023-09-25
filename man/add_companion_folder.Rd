@@ -13,7 +13,7 @@ add_companion_folder(html_path, src_regex, from_lib, to_lib)
 
 \item{from_lib}{character. Path to the lib folder to copy}
 
-\item{to_lib}{character. Path to copy to lib folder to.}
+\item{to_lib}{character. Path to copy the lib folder to.}
 }
 \value{
 NULL. 2nd effect : create a lib folder and edit html path accordingly

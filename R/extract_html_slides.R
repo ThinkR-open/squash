@@ -40,8 +40,8 @@ extract_html_slides <- function(
   # extract all slides elements
   list_html_slides <- lapply(
     X = vec_html_path,
-    FUN = \(x) {
-      x |>
+    FUN = \(html_path) {
+      html_path |>
         read_html() |>
         html_elements(".slides") |>
         html_children() |>
@@ -52,11 +52,11 @@ extract_html_slides <- function(
   # rename 1st slide to avoid duplicated title-slide ids
   list_html_slides <- lapply(
     X = seq_along(list_html_slides),
-    FUN = \(x) {
+    FUN = \(slide_number) {
       gsub(
         pattern = "title-slide",
-        replacement = paste0("title-slide-", as.character(x)),
-        x = list_html_slides[[x]]
+        replacement = paste0("title-slide-", as.character(slide_number)),
+        x = list_html_slides[[slide_number]]
       )
     }
   )
