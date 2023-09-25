@@ -17,12 +17,16 @@ Extract slide content from multiple html
 }
 \examples{
 # list html files
-courses_path <- system.file("courses",
-                            package = "nq1h")
+courses_path <- system.file(
+  "courses",
+  package = "nq1h"
+)
 
-htmls <- list.files(path = courses_path,
-                    full.names = TRUE,
-                    pattern = "html$")
+htmls <- list.files(
+  path = courses_path,
+  full.names = TRUE,
+  pattern = "html$"
+)
 
 html_slide_content <- extract_html_slides(vec_html_path = htmls)
 }

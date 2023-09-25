@@ -17,20 +17,22 @@ pkgload::load_all(export_all = TRUE)
 ## `compile_qmd_course()` : compile individual qmds into a combined html
 
 ```{r function-compile_qmd_course}
+#' compile_qmd_course
+#'
 #' Independently compile several qmd and create a common html
 #'
 #' @param vec_qmd_path character. Vector of the path to qmd files
 #' @param output_dir character. Output path to store html files and companion folders
 #' @param output_html character. File name of the complete html output saved
-#' 
+#'
 #' @importFrom tools file_ext
 #' @importFrom withr with_dir
 #' @importFrom cli cat_bullet
 #' @importFrom quarto quarto_render
 #' @importFrom htmltools htmlTemplate renderDocument save_html
-#' 
+#'
 #' @return character. The path to the resulting html file
-#' 
+#'
 #' @export
 compile_qmd_course <- function(
     vec_qmd_path,
@@ -39,28 +41,33 @@ compile_qmd_course <- function(
 ) {
   # check paths
   not_all_files_are_qmd <- any(
-      file_ext(vec_qmd_path) != "qmd"
-    )
-  if (isTRUE(not_all_files_are_qmd)){
+    file_ext(vec_qmd_path) != "qmd"
+  )
+  if (isTRUE(not_all_files_are_qmd)) {
     stop("Some of the input files are not qmd files.")
   }
-
-  # create output dir
-  if (isFALSE(file.exists(output_dir))){
+  
+  # create output dir and temp dir
+  if (isFALSE(file.exists(output_dir))) {
     dir.create(output_dir)
   }
-
+  
+  temp_dir <- tempfile(pattern = "compile-qmd")
+  dir.create(temp_dir)
+  
   # copy qmd to render dir
   file.copy(
     from = vec_qmd_path,
-    to = output_dir
+    to = temp_dir
   )
-
+  
   # render qmd to html
+  vec_qmd_filename <- basename(vec_qmd_path)
+  
   with_dir(
-    output_dir,
+    temp_dir,
     {
-      for (qmd in basename(vec_qmd_path)){
+      for (qmd in vec_qmd_filename) {
         cat_bullet(
           sprintf("Rendering %s", qmd)
         )
@@ -72,33 +79,70 @@ compile_qmd_course <- function(
     }
   )
   
-  # remove qmd from render dir
-  unlink(file.path(output_dir, basename(vec_qmd_path)))
-  
   # read html and extract slides elements
-  vec_html_path <- file.path(output_dir,
-                             gsub(".qmd", ".html", basename(vec_qmd_path)))
+  vec_html_path <- file.path(
+    temp_dir,
+    gsub(".qmd", ".html", vec_qmd_filename)
+  )
   
   html_content <- extract_html_slides(
     vec_html_path = vec_html_path
-    )
+  )
   
   # include content in template
   complete_html <- htmlTemplate(
-    filename = system.file("template.html", package = "nq1h"),
+    filename = system.file("template.html",
+                           package = "nq1h"),
     include_html_content = html_content
   ) |>
     renderDocument()
   
   # save html file
-  path_to_html <- file.path(output_dir,
-                            output_html)
+  path_to_html <- file.path(
+    temp_dir,
+    output_html
+  )
   
-  save_html(html = complete_html,
-            file = path_to_html,
-            libdir = file.path(output_dir, "lib"))
-
-  return(path_to_html)
+  save_html(
+    html = complete_html,
+    file = path_to_html,
+    libdir = file.path(temp_dir, "lib")
+  )
+  
+  # copy lib folder from 1st render and edit paths in html
+  path_to_lib_folder <- gsub(".html", "_files", vec_html_path[[1]])
+  
+  add_companion_folder(
+    html_path = path_to_html,
+    src_regex = "__path_to_deps_folder__",
+    from_lib = path_to_lib_folder,
+    to_lib = gsub(".html", "_files", path_to_html)
+  )
+  
+  # copy final html and companion folder in output_dir
+  html_with_deps_path <- c(
+    path_to_html,
+    gsub(".html", "_files", path_to_html)
+    )
+  
+  file.copy(
+    from = html_with_deps_path,
+    to = output_dir,
+    recursive = TRUE
+    )
+  
+  # remove temp files
+  unlink(
+    temp_dir,
+    recursive = TRUE
+  )
+  
+  return(
+    file.path(
+      output_dir,
+      output_html
+      )
+    )
 }
 ```
 
@@ -110,13 +154,13 @@ courses_path <- system.file(
 )
 
 qmds <- list.files(
-  path = courses_path, 
-  full.names = TRUE, 
+  path = courses_path,
+  full.names = TRUE,
   pattern = "qmd$"
 )
 
 # generate html in temp folder
-temp_dir <- tempfile(pattern = "compile") 
+temp_dir <- tempfile(pattern = "compile")
 
 html_output <- compile_qmd_course(
   vec_qmd_path = qmds,
@@ -126,31 +170,36 @@ html_output <- compile_qmd_course(
 
 # clean up
 unlink(temp_dir, recursive = TRUE)
-
 ```
 
 ```{r tests-compile_qmd_course}
 test_that("compile_qmd_course works", {
   # list example qmds
-  courses_path <- system.file("courses",
-                              package = "nq1h")
+  courses_path <- system.file(
+    "courses",
+    package = "nq1h"
+  )
   
-  qmds <- list.files(path = courses_path,
-                     full.names = TRUE,
-                     pattern = "qmd$")
+  qmds <- list.files(
+    path = courses_path,
+    full.names = TRUE,
+    pattern = "qmd$"
+  )
   
   # generate html in temp folder
   temp_dir <- tempfile(pattern = "compile")
   
-  html_output <- compile_qmd_course(vec_qmd_path = qmds,
-                                    output_dir = temp_dir,
-                                    output_html = "complete_course.html")
+  html_output <- compile_qmd_course(
+    vec_qmd_path = qmds,
+    output_dir = temp_dir,
+    output_html = "complete_course.html"
+  )
   
   # test that output path exists
   expect_true(file.exists(html_output))
   
   # test html slide content is correct
-  slide_content <- html_output |> 
+  slide_content <- html_output |>
     read_html() |>
     html_elements(css = ".slides") |>
     html_children() |>
@@ -159,11 +208,11 @@ test_that("compile_qmd_course works", {
   expect_equal(
     object = slide_content,
     expected = c(
-      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
       "<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
-      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
       "<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
-      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
       "<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>"
     )
   )
@@ -175,74 +224,94 @@ test_that("compile_qmd_course works", {
 
 
 ## `extract_html_slides()` : extract html each elements of slides from multiple html files
-    
+
 ```{r function-extract_html_slides}
 #' extract_html_slides
-#' 
+#'
 #' Extract slide content from multiple html
-#' 
-#' @param vec_html_path character. The vector of path to individual html files 
-#' 
+#'
+#' @param vec_html_path character. The vector of path to individual html files
+#'
 #' @importFrom tools file_ext
 #' @importFrom rvest read_html html_elements html_children
 #' @importFrom htmltools HTML
-#' 
+#'
 #' @return HTML. The HTML slide content of all html files combined together.
-#' 
+#'
 #' @export
 extract_html_slides <- function(
-    vec_html_path
-) {
+    vec_html_path) {
   # verify path are html files
   not_all_files_are_html <- any(
-      file_ext(vec_html_path) != "html"
-    )
-  if (isTRUE(not_all_files_are_html)){
+    file_ext(vec_html_path) != "html"
+  )
+  if (isTRUE(not_all_files_are_html)) {
     stop("Some of the input files are not html files.")
   }
   
-  # extract slides elements
-  list_html_slides <- lapply(X = vec_html_path,
-                             FUN = \(x) {
-                               x |>
-                                 read_html() |>
-                                 html_elements(".slides")
-                             })
+  # extract all slides elements
+  list_html_slides <- lapply(
+    X = vec_html_path,
+    FUN = \(html_path) {
+      html_path |>
+        read_html() |>
+        html_elements(".slides") |>
+        html_children() |>
+        as.character()
+    }
+  )
+  
+  # rename 1st slide to avoid duplicated title-slide ids
+  list_html_slides <- lapply(
+    X = seq_along(list_html_slides),
+    FUN = \(slide_number) {
+      gsub(
+        pattern = "title-slide",
+        replacement = paste0("title-slide-", as.character(slide_number)),
+        x = list_html_slides[[slide_number]]
+      )
+    }
+  )
   
   # compile all slides content into a single HTML text
-  html_content <- lapply(X = list_html_slides,
-                         FUN = \(x) {
-                           x |>
-                             html_children() |>
-                             as.character()
-                         }) |>
+  html_content <- list_html_slides |>
     unlist() |>
     paste0(collapse = "\n") |>
     HTML()
+  
+  return(html_content)
 }
 ```
-  
+
 ```{r example-extract_html_slides}
 # list html files
-courses_path <- system.file("courses",
-                            package = "nq1h")
+courses_path <- system.file(
+  "courses",
+  package = "nq1h"
+)
 
-htmls <- list.files(path = courses_path,
-                    full.names = TRUE,
-                    pattern = "html$")
+htmls <- list.files(
+  path = courses_path,
+  full.names = TRUE,
+  pattern = "html$"
+)
 
 html_slide_content <- extract_html_slides(vec_html_path = htmls)
 ```
-  
+
 ```{r tests-extract_html_slides}
 test_that("extract_html_slides works", {
   # list html files
-  courses_path <- system.file("courses",
-                              package = "nq1h")
+  courses_path <- system.file(
+    "courses",
+    package = "nq1h"
+  )
   
-  htmls <- list.files(path = courses_path,
-                      full.names = TRUE,
-                      pattern = "html$")
+  htmls <- list.files(
+    path = courses_path,
+    full.names = TRUE,
+    pattern = "html$"
+  )
   
   # test with three htmls in order 1-2-3
   html_slide_content <- extract_html_slides(vec_html_path = htmls)
@@ -250,30 +319,225 @@ test_that("extract_html_slides works", {
   expect_equal(
     object = html_slide_content,
     expected = structure(
-      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
+      "<section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
       html = TRUE,
-      class = c("html",
-                "character")
+      class = c(
+        "html",
+        "character"
+      )
     )
   )
   
   # test with three htmls in order 2-1-3
-  html_slide_content_reordered <-
-    extract_html_slides(vec_html_path = htmls[c(2, 1, 3)])
+  html_slide_content_reordered <- extract_html_slides(vec_html_path = htmls[c(2, 1, 3)])
   
   expect_equal(
     object = html_slide_content_reordered,
     expected = structure(
-      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
+      "<section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
       html = TRUE,
-      class = c("html",
-                "character")
+      class = c(
+        "html",
+        "character"
+      )
     )
   )
-
 })
 ```
+
+## `add_companion_folder()` : copy a lib folder and solve dependencies path in html
+
+```{r function-add_companion_folder}
+#' add_companion_folder
+#'
+#' Copy a lib folder and solve dependencies path in html
+#'
+#' @param html_path character. Path to the html file to be edited, serve as the root for lib folder paths
+#' @param src_regex character. Regex of the existing lib path in the html to replace with new location
+#' @param from_lib character. Path to the lib folder to copy
+#' @param to_lib character. Path to copy the lib folder to.
+#'
+#' @importFrom cli cli_alert_info
+#'
+#' @return NULL. 2nd effect : create a lib folder and edit html path accordingly
+#'
+#' @export
+add_companion_folder <- function(
+    html_path,
+    src_regex,
+    from_lib,
+    to_lib
+) {
+  # verify lib dir will be created as a sub-folder of html dir
+  html_root_dir <- dirname(normalizePath(html_path))
   
+  lib_is_inside_root <- grepl(
+    pattern = html_root_dir,
+    x = normalizePath(to_lib)
+  )
+  
+  if (!lib_is_inside_root) {
+    stop("The lib folder path should be a descendant of html folder path")
+  }
+  
+  # copy lib dir
+  if (!file.exists(to_lib)) {
+    dir.create(to_lib, recursive = TRUE)
+  }
+  
+  file.copy(
+    from = file.path(from_lib, "."),
+    to = to_lib,
+    recursive = TRUE
+  )
+  
+  # detect lib path in html
+  html_content <- readLines(html_path)
+  
+  n_path <- sum(
+    grepl(
+      pattern = src_regex,
+      x = html_content
+    )
+  )
+  
+  cli_alert_info(
+    "Paths to dependencies will be edited in {n_path} line{?s} of the final HTML."
+  )
+  
+  # create replacement path as a relative path to html file
+  lib_path_edited <- gsub(
+    pattern = paste0(html_root_dir, "/"),
+    replacement = "",
+    x = normalizePath(to_lib)
+  )
+  
+  # replace path in html
+  html_content_edited_path <- gsub(
+    pattern = src_regex,
+    replacement = lib_path_edited,
+    x = html_content
+  )
+  
+  # overwrite html with new path
+  write(
+    x = html_content_edited_path,
+    file = html_path
+  )
+  
+  return(NULL)
+}
+```
+
+```{r example-add_companion_folder}
+# create tmp dir
+temp_dir <- tempfile(pattern = "compile")
+dir.create(temp_dir, recursive = TRUE)
+
+# copy html and plugin dir
+file.copy(
+  from = system.file("template.html", package = "nq1h"),
+  to = temp_dir
+)
+
+file.copy(
+  from = system.file("plugin", package = "nq1h"),
+  to = temp_dir,
+  recursive = TRUE
+)
+
+# run add_companion_folder()
+add_companion_folder(
+  html_path = file.path(temp_dir, "template.html"),
+  src_regex = "__path_to_deps_folder__",
+  from_lib = file.path(temp_dir, "plugin"),
+  to_lib = file.path(temp_dir, "plugin_copy", "plugin")
+)
+
+# clean up
+unlink(temp_dir, recursive = TRUE)
+```
+
+```{r tests-add_companion_folder}
+test_that("add_companion_folder works", {
+  # create tmp dir
+  temp_dir <- tempfile(pattern = "compile")
+  dir.create(temp_dir, recursive = TRUE)
+  
+  # copy html and plugin dir
+  file.copy(
+    from = system.file("template.html", package = "nq1h"),
+    to = temp_dir
+  )
+  
+  file.copy(
+    from = system.file("plugin", package = "nq1h"),
+    to = temp_dir,
+    recursive = TRUE
+  )
+  
+  # test with wrong arguments
+  expect_error(object = {
+    add_companion_folder(
+      html_path = file.path(temp_dir, "template.html"),
+      src_regex = "__path_to_deps_folder__",
+      from_lib = file.path(temp_dir, "plugin"),
+      to_lib = "another/dir/path"
+    )
+  }, regexp = "The lib folder path should be a descendant of html folder path")
+  
+  # run add_companion_folder()
+  expect_message(
+    object = {
+      add_companion_folder(
+        html_path = file.path(temp_dir, "template.html"),
+        src_regex = "__path_to_deps_folder__",
+        from_lib = file.path(temp_dir, "plugin"),
+        to_lib = file.path(temp_dir, "plugin_copy", "plugin")
+      )
+    },
+    regexp = "Paths to dependencies will be edited in 25 lines of the final HTML."
+  )
+  
+  # test content of lib
+  md5_before <- tools::md5sum(files = list.files(
+    path = file.path(
+      temp_dir,
+      "plugin"
+    ),
+    full.names = TRUE
+  ))
+  
+  md5_after <- tools::md5sum(files = list.files(
+    path = file.path(
+      temp_dir,
+      "plugin_copy",
+      "plugin"
+    ),
+    full.names = TRUE
+  ))
+  
+  expect_true(
+    all(md5_before == md5_after)
+  )
+  
+  # test no missed paths in html
+  html_content <- readLines(file.path(temp_dir, "template.html"))
+  fetch_temp_path <- grepl(
+    pattern = temp_dir,
+    x = html_content
+  )
+  fetch_initial_path <- grepl(
+    pattern = "__path_to_deps_folder__",
+    x = html_content
+  )
+  expect_true(!any(fetch_initial_path, fetch_temp_path))
+  
+  # clean up
+  unlink(temp_dir, recursive = TRUE)
+})
+```
+
 
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop
@@ -283,6 +547,5 @@ fusen::inflate(
   vignette_name = "Compile n qmd to html",
   check = FALSE,
   overwrite = TRUE
-  )
+)
 ```
-

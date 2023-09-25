@@ -2,25 +2,31 @@
 
 test_that("compile_qmd_course works", {
   # list example qmds
-  courses_path <- system.file("courses",
-                              package = "nq1h")
+  courses_path <- system.file(
+    "courses",
+    package = "nq1h"
+  )
   
-  qmds <- list.files(path = courses_path,
-                     full.names = TRUE,
-                     pattern = "qmd$")
+  qmds <- list.files(
+    path = courses_path,
+    full.names = TRUE,
+    pattern = "qmd$"
+  )
   
   # generate html in temp folder
   temp_dir <- tempfile(pattern = "compile")
   
-  html_output <- compile_qmd_course(vec_qmd_path = qmds,
-                                    output_dir = temp_dir,
-                                    output_html = "complete_course.html")
+  html_output <- compile_qmd_course(
+    vec_qmd_path = qmds,
+    output_dir = temp_dir,
+    output_html = "complete_course.html"
+  )
   
   # test that output path exists
   expect_true(file.exists(html_output))
   
   # test html slide content is correct
-  slide_content <- html_output |> 
+  slide_content <- html_output |>
     read_html() |>
     html_elements(css = ".slides") |>
     html_children() |>
@@ -29,11 +35,11 @@ test_that("compile_qmd_course works", {
   expect_equal(
     object = slide_content,
     expected = c(
-      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
       "<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
-      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
       "<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
-      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
       "<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>"
     )
   )

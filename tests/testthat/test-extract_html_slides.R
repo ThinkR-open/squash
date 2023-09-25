@@ -2,12 +2,16 @@
 
 test_that("extract_html_slides works", {
   # list html files
-  courses_path <- system.file("courses",
-                              package = "nq1h")
+  courses_path <- system.file(
+    "courses",
+    package = "nq1h"
+  )
   
-  htmls <- list.files(path = courses_path,
-                      full.names = TRUE,
-                      pattern = "html$")
+  htmls <- list.files(
+    path = courses_path,
+    full.names = TRUE,
+    pattern = "html$"
+  )
   
   # test with three htmls in order 1-2-3
   html_slide_content <- extract_html_slides(vec_html_path = htmls)
@@ -15,25 +19,27 @@ test_that("extract_html_slides works", {
   expect_equal(
     object = html_slide_content,
     expected = structure(
-      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
+      "<section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
       html = TRUE,
-      class = c("html",
-                "character")
+      class = c(
+        "html",
+        "character"
+      )
     )
   )
   
   # test with three htmls in order 2-1-3
-  html_slide_content_reordered <-
-    extract_html_slides(vec_html_path = htmls[c(2, 1, 3)])
+  html_slide_content_reordered <- extract_html_slides(vec_html_path = htmls[c(2, 1, 3)])
   
   expect_equal(
     object = html_slide_content_reordered,
     expected = structure(
-      "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
+      "<section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
       html = TRUE,
-      class = c("html",
-                "character")
+      class = c(
+        "html",
+        "character"
+      )
     )
   )
-
 })
