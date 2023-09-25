@@ -2,7 +2,7 @@
 % Please edit documentation in R/compile_qmd_course.R
 \name{compile_qmd_course}
 \alias{compile_qmd_course}
-\title{Independently compile several qmd and create a common html}
+\title{compile_qmd_course}
 \usage{
 compile_qmd_course(vec_qmd_path, output_dir, output_html)
 }
@@ -27,13 +27,13 @@ courses_path <- system.file(
 )
 
 qmds <- list.files(
-  path = courses_path, 
-  full.names = TRUE, 
+  path = courses_path,
+  full.names = TRUE,
   pattern = "qmd$"
 )
 
 # generate html in temp folder
-temp_dir <- tempfile(pattern = "compile") 
+temp_dir <- tempfile(pattern = "compile")
 
 html_output <- compile_qmd_course(
   vec_qmd_path = qmds,
@@ -43,5 +43,4 @@ html_output <- compile_qmd_course(
 
 # clean up
 unlink(temp_dir, recursive = TRUE)
-
 }
