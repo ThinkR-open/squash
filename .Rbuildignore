@@ -4,3 +4,5 @@
 ^\.Rproj\.user$
 ^nq1h\.Rproj$
 ^README\.Rmd$
+^\.gitlab-ci\.yml$
+^ci/lib$
