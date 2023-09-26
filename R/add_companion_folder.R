@@ -52,7 +52,8 @@ add_companion_folder <- function(
   
   lib_is_inside_root <- grepl(
     pattern = html_root_dir,
-    x = normalizePath(to_lib)
+    # adding `mustWork` to normalise path not existing yet
+    x = normalizePath(to_lib, mustWork = FALSE)
   )
   
   if (!lib_is_inside_root) {
