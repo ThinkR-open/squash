@@ -56,6 +56,8 @@ usethis::git_default_branch_rename()
 remotes::install_local()
 # README
 usethis::use_readme_rmd()
+# hide readme from build
+usethis::use_build_ignore("README.Rmd")
 # Code of Conduct
 usethis::use_code_of_conduct("contact@fake.com")
 # NEWS
