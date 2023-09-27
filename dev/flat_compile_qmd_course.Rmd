@@ -47,43 +47,43 @@ compile_qmd_course <- function(
     stop("Some of the input files are not qmd files.")
   }
   
-  # create output dir and temp dir
+  # create output dir
   if (isFALSE(file.exists(output_dir))) {
     dir.create(output_dir)
   }
   
-  temp_dir <- tempfile(pattern = "compile-qmd")
-  dir.create(temp_dir)
+  # list files present before rendering
+  vec_qmd_dir <- unique(dirname(vec_qmd_path))
   
-  # copy qmd to render dir
-  file.copy(
-    from = vec_qmd_path,
-    to = temp_dir
-  )
+  file_present_before_rendering <- list.files(
+    path = vec_qmd_dir,
+    full.names = TRUE)
   
-  # render qmd to html
-  vec_qmd_filename <- basename(vec_qmd_path)
-  
-  with_dir(
-    temp_dir,
-    {
-      for (qmd in vec_qmd_filename) {
-        cat_bullet(
-          sprintf("Rendering %s", qmd)
-        )
-        quarto_render(
-          input = qmd,
-          quiet = FALSE
-        )
-      }
+  for (qmd_dir in vec_qmd_dir) {
+    
+    # prepare rendering params (img/ dir and qmd files)
+    img_dir <- file.path(
+      gsub("\\.html", "_img", output_html),
+      paste0(basename(qmd_dir), "_img")
+    )
+    
+    vec_qmd_path_group <- vec_qmd_path[dirname(vec_qmd_path) == qmd_dir]
+    
+    # render qmd in html
+    for (qmd in vec_qmd_path_group) {
+      cat_bullet(sprintf("Rendering %s", qmd))
+      
+      quarto_render(
+        input = qmd,
+        quiet = FALSE,
+        # use revealjs parameter to make a copy of img dir
+        pandoc_args = paste0("--extract-media=", img_dir)
+      )
     }
-  )
+  }
   
   # read html and extract slides elements
-  vec_html_path <- file.path(
-    temp_dir,
-    gsub(".qmd", ".html", vec_qmd_filename)
-  )
+  vec_html_path <- gsub("\\.qmd", "\\.html", vec_qmd_path)
   
   html_content <- extract_html_slides(
     vec_html_path = vec_html_path
@@ -99,14 +99,13 @@ compile_qmd_course <- function(
   
   # save html file
   path_to_html <- file.path(
-    temp_dir,
+    output_dir,
     output_html
   )
   
   save_html(
     html = complete_html,
-    file = path_to_html,
-    libdir = file.path(temp_dir, "lib")
+    file = path_to_html
   )
   
   # copy lib folder from 1st render and edit paths in html
@@ -119,21 +118,40 @@ compile_qmd_course <- function(
     to_lib = gsub(".html", "_files", path_to_html)
   )
   
-  # copy final html and companion folder in output_dir
-  html_with_deps_path <- c(
-    path_to_html,
-    gsub(".html", "_files", path_to_html)
-    )
+  # copy all img sub-folders to output_dir
+  output_img_dir <- file.path(
+    output_dir,
+    gsub("\\.html", "_img", output_html)
+  )
+  
+  if (!file.exists(output_img_dir)) {
+    dir.create(path = output_img_dir)
+  }
+  
+  vec_img_dir <- file.path(
+    vec_qmd_dir,
+    gsub("\\.html", "_img", output_html),
+    paste0(basename(qmd_dir), "_img")
+  )
   
   file.copy(
-    from = html_with_deps_path,
-    to = output_dir,
+    from = unique(vec_img_dir),
+    to = output_img_dir,
     recursive = TRUE
-    )
+  )
   
-  # remove temp files
+  # clean render output in qmd dir
+  file_present_after_rendering <- list.files(
+    path = unique(dirname(vec_qmd_path)),
+    full.names = TRUE)
+  
+  file_created_by_rendering <- setdiff(
+    x = file_present_after_rendering,
+    y = file_present_before_rendering
+  )
+  
   unlink(
-    temp_dir,
+    x = file_created_by_rendering,
     recursive = TRUE
   )
   
@@ -141,8 +159,8 @@ compile_qmd_course <- function(
     file.path(
       output_dir,
       output_html
-      )
     )
+  )
 }
 ```
 
@@ -195,8 +213,20 @@ test_that("compile_qmd_course works", {
     output_html = "complete_course.html"
   )
   
-  # test that output path exists
+  # test that output html exists
   expect_true(file.exists(html_output))
+  
+  # test that output image exist
+  img_path <- file.path(
+    dirname(html_output),
+    c(
+      "complete_course_img/courses_img/img/tidyr.png",
+      "complete_course_img/courses_img/img/dplyr.png",
+      "complete_course_img/courses_img/img/ggplot2.png"
+      )
+    )
+  
+  expect_true(all(file.edit(img_path)))
   
   # test html slide content is correct
   slide_content <- html_output |>
@@ -209,11 +239,14 @@ test_that("compile_qmd_course works", {
     object = slide_content,
     expected = c(
       "<section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
-      "<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
+      "<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n</section>",
+      "<section id=\"slide-1-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>{dplyr} image</p>\n\n<img data-src=\"complete_course_img/courses_img/img/dplyr.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>",
       "<section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
-      "<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
+      "<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n</section>",
+      "<section id=\"slide-2-1\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>{tidyr} image</p>\n\n<img data-src=\"complete_course_img/courses_img/img/tidyr.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>",
       "<section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
-      "<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>"
+      "<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n</section>",
+      "<section id=\"slide-3-1\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>{ggplot2} image</p>\n\n<img data-src=\"complete_course_img/courses_img/img/ggplot2.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>"
     )
   )
   
@@ -319,12 +352,10 @@ test_that("extract_html_slides works", {
   expect_equal(
     object = html_slide_content,
     expected = structure(
-      "<section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
+      "<section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n</section>\n<section id=\"slide-1-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>{dplyr} image</p>\n\n<img data-src=\"complete_course_img/courses_img/img/dplyr.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n</section>\n<section id=\"slide-2-1\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>{tidyr} image</p>\n\n<img data-src=\"complete_course_img/courses_img/img/tidyr.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n</section>\n<section id=\"slide-3-1\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>{ggplot2} image</p>\n\n<img data-src=\"complete_course_img/courses_img/img/ggplot2.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>",
       html = TRUE,
-      class = c(
-        "html",
-        "character"
-      )
+      class = c("html",
+                "character")
     )
   )
   
@@ -334,12 +365,10 @@ test_that("extract_html_slides works", {
   expect_equal(
     object = html_slide_content_reordered,
     expected = structure(
-      "<section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n<div class=\"footer footer-default\">\n\n</div>\n</section>",
+      "<section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n</section>\n<section id=\"slide-2-1\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>{tidyr} image</p>\n\n<img data-src=\"complete_course_img/courses_img/img/tidyr.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n</section>\n<section id=\"slide-1-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>{dplyr} image</p>\n\n<img data-src=\"complete_course_img/courses_img/img/dplyr.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>\n<section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>\n<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n</section>\n<section id=\"slide-3-1\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>{ggplot2} image</p>\n\n<img data-src=\"complete_course_img/courses_img/img/ggplot2.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>",
       html = TRUE,
-      class = c(
-        "html",
-        "character"
-      )
+      class = c("html",
+                "character")
     )
   )
 })

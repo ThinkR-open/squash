@@ -30,64 +30,56 @@ Contrary to [thinkrverse/poc_and_reprex/multi_quarto_to_one_reveal](https://forg
 Render all qmds to html.
 
 ```{r}
-courses_path <- "inst/courses"
+# list example qmds
+courses_path <- system.file(
+  "courses",
+  package = "nq1h"
+)
 
-vec_qmd_path <- list.files(
-  path = courses_path, 
-  full.names = TRUE, 
+qmds <- list.files(
+  path = courses_path,
+  full.names = TRUE,
   pattern = "qmd$"
 )
 
+# generate html in temp folder
+temp_dir <- tempfile(pattern = "compile")
 
-for (qmd in vec_qmd_path){
-  cli::cat_bullet(
-    sprintf("Rendering %s", basename(qmd))
-  )
-  quarto::quarto_render(
-    input = qmd,
-    quiet = TRUE
-  )
-}
-```
-In order to compile individual html into one unique html file.
-
-
-```{r}
-template_qmd <- readLines("inst/template.qmd")
-
-path_html_files <- list.files(
-  courses_path, 
-  full.names = TRUE,
-  pattern = "\\.html$"
+html_output <- compile_qmd_course(
+  vec_qmd_path = qmds,
+  output_dir = temp_dir,
+  output_html = "course_complete.html"
 )
 
-divs_to_insert <- path_html_files |> 
-  lapply(
-    \(path_html_file) {
-      sprintf(
-        '<div data-external-replace="%s">  </div>',
-        path_html_file
-      )
-    }
-  ) |> 
-  paste(
-    collapse = "\n\n---\n\n"
-  )
-
-index_qmd <- gsub(
-  pattern = "\\{\\{insert_divs\\}\\}",
-  replacement = divs_to_insert,
-  template_qmd
-) 
-
-writeLines(
-  index_qmd,
-  "index.qmd"
-)
 ```
-
-Preview result
 
 ```{r}
-quarto::quarto_preview("index.qmd")
+# view html
+browseURL(html_output)
 ```
+
+The images rendered in the final html are stored in sub-folders based on their folder of origin to avoid erasing images with identical names.
+
+The reveal dependencies are stored in a companion folder.
+
+```{r}
+# list image folder
+fs::dir_tree(
+  path = file.path(
+    dirname(html_output),
+    "course_complete_img"
+  )
+)
+
+# list dependencies folder
+fs::dir_tree(
+  path = file.path(
+    dirname(html_output),
+    "course_complete_files"
+  )
+)
+
+# clean up
+unlink(temp_dir, recursive = TRUE)
+```
+
