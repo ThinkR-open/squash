@@ -7,3 +7,9 @@ format: revealjs
 ## Slide 3
 
 Texte 3
+
+## Slide 3
+
+{ggplot2} image
+
+![](img/logo_1.png)

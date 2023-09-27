@@ -29,6 +29,7 @@ courses_path <- system.file(
 qmds <- list.files(
   path = courses_path,
   full.names = TRUE,
+  recursive = TRUE,
   pattern = "qmd$"
 )
 

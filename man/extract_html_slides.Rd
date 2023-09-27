@@ -25,6 +25,7 @@ courses_path <- system.file(
 htmls <- list.files(
   path = courses_path,
   full.names = TRUE,
+  recursive = TRUE,
   pattern = "html$"
 )
 
