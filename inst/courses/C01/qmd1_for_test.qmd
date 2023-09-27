@@ -14,4 +14,4 @@ Texte 1
 
 {dplyr} image
 
-![](img/dplyr.png)
+![](img/logo_1.png)

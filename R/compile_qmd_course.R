@@ -27,6 +27,7 @@
 #' qmds <- list.files(
 #'   path = courses_path,
 #'   full.names = TRUE,
+#'   recursive = TRUE,
 #'   pattern = "qmd$"
 #' )
 #' 
@@ -138,7 +139,7 @@ compile_qmd_course <- function(
   vec_img_dir <- file.path(
     vec_qmd_dir,
     gsub("\\.html", "_img", output_html),
-    paste0(basename(qmd_dir), "_img")
+    paste0(basename(vec_qmd_dir), "_img")
   )
   
   file.copy(

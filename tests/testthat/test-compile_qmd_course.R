@@ -10,6 +10,7 @@ test_that("compile_qmd_course works", {
   qmds <- list.files(
     path = courses_path,
     full.names = TRUE,
+    recursive = TRUE,
     pattern = "qmd$"
   )
   
@@ -25,17 +26,23 @@ test_that("compile_qmd_course works", {
   # test that output html exists
   expect_true(file.exists(html_output))
   
-  # test that output image exist
+  # test that output image exist and are the correct ones
   img_path <- file.path(
     dirname(html_output),
     c(
-      "complete_course_img/courses_img/img/tidyr.png",
-      "complete_course_img/courses_img/img/dplyr.png",
-      "complete_course_img/courses_img/img/ggplot2.png"
+      "complete_course_img/C01_img/img/logo_1.png",
+      "complete_course_img/C01_img/img/logo_2.png",
+      "complete_course_img/C02_img/img/logo_1.png"
       )
     )
-  
   expect_true(all(file.edit(img_path)))
+  
+  expected_md5 <- c(
+    "ac99473759dd46bf0564047e5cfc2714", 
+    "8d77c0f9921459b6fdc64f2cceb7c575", 
+    "3b740309e3746c97e95df575801e3253"
+    )
+  expect_true(all(tools::md5sum(img_path) == expected_md5))
   
   # test html slide content is correct
   slide_content <- html_output |>
@@ -49,13 +56,13 @@ test_that("compile_qmd_course works", {
     expected = c(
       "<section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
       "<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n</section>",
-      "<section id=\"slide-1-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>{dplyr} image</p>\n\n<img data-src=\"complete_course_img/courses_img/img/dplyr.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>",
+      "<section id=\"slide-1-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>{dplyr} image</p>\n\n<img data-src=\"complete_course_img/C01_img/img/logo_1.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>",
       "<section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
       "<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n</section>",
-      "<section id=\"slide-2-1\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>{tidyr} image</p>\n\n<img data-src=\"complete_course_img/courses_img/img/tidyr.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>",
+      "<section id=\"slide-2-1\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>{tidyr} image</p>\n\n<img data-src=\"complete_course_img/C01_img/img/logo_2.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>",
       "<section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
       "<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n</section>",
-      "<section id=\"slide-3-1\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>{ggplot2} image</p>\n\n<img data-src=\"complete_course_img/courses_img/img/ggplot2.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>"
+      "<section id=\"slide-3-1\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>{ggplot2} image</p>\n\n<img data-src=\"complete_course_img/C02_img/img/logo_1.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>"
     )
   )
   

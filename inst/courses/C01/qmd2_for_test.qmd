@@ -14,4 +14,4 @@ Texte 2
 
 {tidyr} image
 
-![](img/tidyr.png)
+![](img/logo_2.png)

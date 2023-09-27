@@ -12,4 +12,4 @@ Texte 3
 
 {ggplot2} image
 
-![](img/ggplot2.png)
+![](img/logo_1.png)
