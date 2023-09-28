@@ -7,6 +7,7 @@
 #' @param vec_qmd_path character. Vector of the path to qmd files
 #' @param output_dir character. Output path to store html files and companion folders
 #' @param output_html character. File name of the complete html output saved
+#' @param template character. Path to the template html to use. Content will be included at the position where `{{ include_html_content }}` is found.
 #'
 #' @importFrom tools file_ext
 #' @importFrom withr with_dir
@@ -45,7 +46,8 @@
 compile_qmd_course <- function(
     vec_qmd_path,
     output_dir,
-    output_html
+    output_html,
+    template = system.file("template.qmd", package = "nq1h")
 ) {
   # check paths
   not_all_files_are_qmd <- any(
@@ -55,12 +57,14 @@ compile_qmd_course <- function(
     stop("Some of the input files are not qmd files.")
   }
   
-  # create output dir
-  if (isFALSE(file.exists(output_dir))) {
-    dir.create(output_dir)
-  }
+  # create output dir and html template
+  template_html <- create_template_html(
+    path_to_qmd = template,
+    output_dir = output_dir,
+    output_file = output_html
+  )
   
-  # list files present before rendering
+  # list courses files present before rendering
   vec_qmd_dir <- unique(dirname(vec_qmd_path))
   
   file_present_before_rendering <- list.files(
@@ -77,7 +81,7 @@ compile_qmd_course <- function(
     
     vec_qmd_path_group <- vec_qmd_path[dirname(vec_qmd_path) == qmd_dir]
     
-    # render qmd in html
+    # render qmd in html in original dir
     for (qmd in vec_qmd_path_group) {
       cat_bullet(sprintf("Rendering %s", qmd))
       
@@ -99,8 +103,7 @@ compile_qmd_course <- function(
   
   # include content in template
   complete_html <- htmlTemplate(
-    filename = system.file("template.html",
-                           package = "nq1h"),
+    filename = template_html,
     include_html_content = html_content
   ) |>
     renderDocument()
@@ -114,16 +117,6 @@ compile_qmd_course <- function(
   save_html(
     html = complete_html,
     file = path_to_html
-  )
-  
-  # copy lib folder from 1st render and edit paths in html
-  path_to_lib_folder <- gsub(".html", "_files", vec_html_path[[1]])
-  
-  add_companion_folder(
-    html_path = path_to_html,
-    src_regex = "__path_to_deps_folder__",
-    from_lib = path_to_lib_folder,
-    to_lib = gsub(".html", "_files", path_to_html)
   )
   
   # copy all img sub-folders to output_dir

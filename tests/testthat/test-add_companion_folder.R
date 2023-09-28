@@ -37,7 +37,7 @@ test_that("add_companion_folder works", {
         to_lib = file.path(temp_dir, "plugin_copy", "plugin")
       )
     },
-    regexp = "Paths to dependencies will be edited in 25 lines of the final HTML."
+    regexp = "Paths to dependencies will be edited in 27 lines of the final HTML."
   )
   
   # test content of lib

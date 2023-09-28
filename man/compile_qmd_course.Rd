@@ -4,7 +4,12 @@
 \alias{compile_qmd_course}
 \title{compile_qmd_course}
 \usage{
-compile_qmd_course(vec_qmd_path, output_dir, output_html)
+compile_qmd_course(
+  vec_qmd_path,
+  output_dir,
+  output_html,
+  template = system.file("template.qmd", package = "nq1h")
+)
 }
 \arguments{
 \item{vec_qmd_path}{character. Vector of the path to qmd files}
@@ -12,6 +17,8 @@ compile_qmd_course(vec_qmd_path, output_dir, output_html)
 \item{output_dir}{character. Output path to store html files and companion folders}
 
 \item{output_html}{character. File name of the complete html output saved}
+
+\item{template}{character. Path to the template html to use. Content will be included at the position where \code{{{ include_html_content }}} is found.}
 }
 \value{
 character. The path to the resulting html file

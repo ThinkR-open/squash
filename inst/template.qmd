@@ -1,8 +1,7 @@
 ---
 title: "Formation R"
 format: 
-  revealjs:
-    include-after-body: inst/plugin/revealexternal.html
+  thinkridentity-revealjs: default
 ---
 
-{{insert_divs}}
+{{ include_html_content }}
