@@ -18,7 +18,7 @@ compile_qmd_course(
 
 \item{output_html}{character. File name of the complete html output saved}
 
-\item{template}{character. Path to the template html to use. Content will be included at the position where \code{{{ include_html_content }}} is found.}
+\item{template}{character. Path to the template qmd to use. Content will be included at the position where \code{{{ include_html_content }}} is found.}
 }
 \value{
 character. The path to the resulting html file

@@ -7,7 +7,7 @@
 #' @param vec_qmd_path character. Vector of the path to qmd files
 #' @param output_dir character. Output path to store html files and companion folders
 #' @param output_html character. File name of the complete html output saved
-#' @param template character. Path to the template html to use. Content will be included at the position where `{{ include_html_content }}` is found.
+#' @param template character. Path to the template qmd to use. Content will be included at the position where `{{ include_html_content }}` is found.
 #'
 #' @importFrom tools file_ext
 #' @importFrom withr with_dir
