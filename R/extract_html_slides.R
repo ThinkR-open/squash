@@ -29,7 +29,8 @@
 #' 
 #' html_slide_content <- extract_html_slides(vec_html_path = htmls)
 extract_html_slides <- function(
-    vec_html_path) {
+    vec_html_path
+  ) {
   # verify path are html files
   not_all_files_are_html <- any(
     file_ext(vec_html_path) != "html"

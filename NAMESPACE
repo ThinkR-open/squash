@@ -2,6 +2,7 @@
 
 export(add_companion_folder)
 export(compile_qmd_course)
+export(create_template_html)
 export(extract_html_slides)
 importFrom(cli,cat_bullet)
 importFrom(cli,cli_alert_info)

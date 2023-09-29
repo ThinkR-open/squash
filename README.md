@@ -21,6 +21,8 @@ this version :
 Render all qmds to html.
 
 ``` r
+library(nq1h)
+
 # list example qmds
 courses_path <- system.file(
   "courses",
@@ -68,6 +70,14 @@ fs::dir_tree(
   path = file.path(
     dirname(html_output),
     "course_complete_files"
+  )
+)
+
+# list extensions_ folder
+fs::dir_tree(
+  path = file.path(
+    dirname(html_output),
+    "_extensions"
   )
 )
 

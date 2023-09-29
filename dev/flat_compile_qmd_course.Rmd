@@ -24,6 +24,7 @@ pkgload::load_all(export_all = TRUE)
 #' @param vec_qmd_path character. Vector of the path to qmd files
 #' @param output_dir character. Output path to store html files and companion folders
 #' @param output_html character. File name of the complete html output saved
+#' @param template character. Path to the template qmd to use. Content will be included at the position where `{{ include_html_content }}` is found.
 #'
 #' @importFrom tools file_ext
 #' @importFrom withr with_dir
@@ -37,7 +38,8 @@ pkgload::load_all(export_all = TRUE)
 compile_qmd_course <- function(
     vec_qmd_path,
     output_dir,
-    output_html
+    output_html,
+    template = system.file("template.qmd", package = "nq1h")
 ) {
   # check paths
   not_all_files_are_qmd <- any(
@@ -47,12 +49,14 @@ compile_qmd_course <- function(
     stop("Some of the input files are not qmd files.")
   }
   
-  # create output dir
-  if (isFALSE(file.exists(output_dir))) {
-    dir.create(output_dir)
-  }
+  # create output dir and html template
+  template_html <- create_template_html(
+    path_to_qmd = template,
+    output_dir = output_dir,
+    output_file = output_html
+  )
   
-  # list files present before rendering
+  # list courses files present before rendering
   vec_qmd_dir <- unique(dirname(vec_qmd_path))
   
   file_present_before_rendering <- list.files(
@@ -69,7 +73,7 @@ compile_qmd_course <- function(
     
     vec_qmd_path_group <- vec_qmd_path[dirname(vec_qmd_path) == qmd_dir]
     
-    # render qmd in html
+    # render qmd in html in original dir
     for (qmd in vec_qmd_path_group) {
       cat_bullet(sprintf("Rendering %s", qmd))
       
@@ -91,8 +95,7 @@ compile_qmd_course <- function(
   
   # include content in template
   complete_html <- htmlTemplate(
-    filename = system.file("template.html",
-                           package = "nq1h"),
+    filename = template_html,
     include_html_content = html_content
   ) |>
     renderDocument()
@@ -106,16 +109,6 @@ compile_qmd_course <- function(
   save_html(
     html = complete_html,
     file = path_to_html
-  )
-  
-  # copy lib folder from 1st render and edit paths in html
-  path_to_lib_folder <- gsub(".html", "_files", vec_html_path[[1]])
-  
-  add_companion_folder(
-    html_path = path_to_html,
-    src_regex = "__path_to_deps_folder__",
-    from_lib = path_to_lib_folder,
-    to_lib = gsub(".html", "_files", path_to_html)
   )
   
   # copy all img sub-folders to output_dir
@@ -246,15 +239,8 @@ test_that("compile_qmd_course works", {
   expect_equal(
     object = slide_content,
     expected = c(
-      "<section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
-      "<section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n</section>",
-      "<section id=\"slide-1-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>{dplyr} image</p>\n\n<img data-src=\"complete_course_img/C01_img/img/logo_1.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>",
-      "<section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
-      "<section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n</section>",
-      "<section id=\"slide-2-1\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>{tidyr} image</p>\n\n<img data-src=\"complete_course_img/C01_img/img/logo_2.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>",
-      "<section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
-      "<section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n</section>",
-      "<section id=\"slide-3-1\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>{ggplot2} image</p>\n\n<img data-src=\"complete_course_img/C02_img/img/logo_1.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section>"
+      "<section id=\"title-slide\" data-background-image=\"_extensions/thinkridentity/font.png\" class=\"quarto-title-block center\"><h1 class=\"title\">Formation R</h1>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section class=\"slide level2\"><p><section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section><section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n</section><section id=\"slide-1-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>{dplyr} image</p>\n\n<img data-src=\"complete_course_img/C01_img/img/logo_1.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section><section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section><section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n</section><section id=\"slide-2-1\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>{tidyr} image</p>\n\n<img data-src=\"complete_course_img/C01_img/img/logo_2.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section><section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section><section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n</section><section id=\"slide-3-1\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>{ggplot2} image</p>\n\n<img data-src=\"complete_course_img/C02_img/img/logo_1.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section></p>\n\n<img src=\"_extensions/thinkridentity/thinkr_logo.png\" class=\"slide-logo r-stretch\"><div class=\"footer footer-default\">\n<p><strong><i class=\"las la-book\"></i> Formation R</strong> | Retrouvez nous sur <a href=\"https://thinkr.fr\" class=\"uri\">https://thinkr.fr</a></p>\n</div>\n</section>"
     )
   )
   
@@ -281,7 +267,8 @@ test_that("compile_qmd_course works", {
 #'
 #' @export
 extract_html_slides <- function(
-    vec_html_path) {
+    vec_html_path
+  ) {
   # verify path are html files
   not_all_files_are_html <- any(
     file_ext(vec_html_path) != "html"
@@ -536,7 +523,7 @@ test_that("add_companion_folder works", {
         to_lib = file.path(temp_dir, "plugin_copy", "plugin")
       )
     },
-    regexp = "Paths to dependencies will be edited in 25 lines of the final HTML."
+    regexp = "Paths to dependencies will be edited in 27 lines of the final HTML."
   )
   
   # test content of lib
@@ -578,6 +565,144 @@ test_that("add_companion_folder works", {
 })
 ```
 
+## `create_template_html()` : create a template html with ThinkR styling
+
+Use the quakr extension to render html.
+    
+```{r function-create_template_html}
+#' create_template_html
+#' 
+#' Create a template html with ThinkR styling
+#' 
+#' @param path_to_qmd character. Path to the qmd template to be rendered in html
+#' @param output_dir character. Path where files and html will be generated
+#' @param output_file character. Name of the output html template
+#' 
+#' @importFrom quarto quarto_render
+#'
+#' @return character. Path to the html template
+#' 
+#' @export
+create_template_html <- function(
+  path_to_qmd,
+  output_dir,
+  output_file
+  ){
+    
+  # copy qmd template to output dir with new name
+  if (!file.exists(output_dir)){
+    dir.create(output_dir)
+  }
+  
+  output_file_qmd <- gsub("\\.html", "\\.qmd", output_file)
+  
+  file.copy(
+    from = path_to_qmd,
+    to = file.path(
+      output_dir,
+      output_file_qmd)
+    )
+  
+  # copy quakr _extension in output dir
+  # `quarto add` not defined in {quarto} yet
+  file.copy(
+    from = system.file("_extensions", package = "nq1h"),
+    to = output_dir,
+    recursive = TRUE
+  )
+  
+  # render template with ThinkR theme and img/ folder output
+  img_dir <- file.path(
+      gsub("\\.html", "_img", output_file),
+      "template_img"
+    )
+  
+  quarto_render(
+    input = file.path(output_dir, output_file_qmd),
+    pandoc_args = paste0("--extract-media=", img_dir),
+    quiet = TRUE)
+  
+  # remove qmd file from output dir
+  unlink(file.path(output_dir,
+                   output_file_qmd))
+  
+  # return path to html template
+  return(file.path(output_dir, output_file))
+  
+}
+```
+  
+```{r example-create_template_html}
+# create temp dir
+temp_dir <- tempfile(pattern = "template")
+
+# create html template
+path_to_html_template <- create_template_html(
+  path_to_qmd = system.file("template.qmd", package = "nq1h"),
+  output_dir = temp_dir,
+  output_file = "complete_course.html"
+)
+
+# clean up
+unlink(temp_dir, recursive = TRUE)
+```
+  
+```{r tests-create_template_html}
+test_that("create_template_html works", {
+
+  # create temp dir
+  temp_dir <- tempfile(pattern = "template")
+  
+  # create html template
+  path_to_html_template <- create_template_html(
+    path_to_qmd = system.file("template.qmd", package = "nq1h"),
+    output_dir = temp_dir,
+    output_file = "complete_course.html"
+  )
+
+  # test extension dir is correctly copied
+  expect_md5 <- tools::md5sum(
+    files = list.files(
+      system.file(
+        "_extensions",
+        package = "nq1h"
+      ),
+      recursive = TRUE,
+      full.names = TRUE
+    )
+  )
+  
+  observed_md5 <- tools::md5sum(
+    files = list.files(
+      file.path(temp_dir, "_extensions"),
+      recursive = TRUE,
+      full.names = TRUE
+    )
+  )
+  
+  expect_true(all(expect_md5 == observed_md5))
+  
+  # test html content of template
+  slide_content <- path_to_html_template |>
+    read_html() |>
+    html_elements(css = ".slides") |>
+    html_children() |>
+    as.character()
+  
+  expect_equal(
+    object = slide_content,
+    expected = c(
+      "<section id=\"title-slide\" data-background-image=\"_extensions/thinkridentity/font.png\" class=\"quarto-title-block center\"><h1 class=\"title\">Formation R</h1>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section class=\"slide level2\"><p>{{ include_html_content }}</p>\n\n<img src=\"_extensions/thinkridentity/thinkr_logo.png\" class=\"slide-logo r-stretch\"><div class=\"footer footer-default\">\n<p><strong><i class=\"las la-book\"></i> Formation R</strong> | Retrouvez nous sur <a href=\"https://thinkr.fr\" class=\"uri\">https://thinkr.fr</a></p>\n</div>\n</section>"
+    )
+  )
+  
+  # clean up
+  unlink(temp_dir, recursive = TRUE)
+  
+})
+```
+  
 
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop
