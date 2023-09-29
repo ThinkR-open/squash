@@ -13,8 +13,6 @@ contributes:
         Retrouvez nous sur <https://thinkr.fr>
       title-slide-attributes:
         data-background-image: font.png
-      include-before-body:
-        - line-awesome.html
       code-annotations: hover
       chalkboard: true
 
