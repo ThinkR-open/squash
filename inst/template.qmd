@@ -1,7 +1,5 @@
 ---
 title: "Formation R"
-format: 
-  thinkridentity-revealjs: default
 ---
 
 {{ include_html_content }}

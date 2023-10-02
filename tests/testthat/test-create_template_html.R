@@ -13,26 +13,21 @@ test_that("create_template_html works", {
   )
 
   # test extension dir is correctly copied
-  expect_md5 <- tools::md5sum(
-    files = list.files(
-      system.file(
-        "_extensions",
-        package = "nq1h"
-      ),
-      recursive = TRUE,
-      full.names = TRUE
-    )
-  )
-  
-  observed_md5 <- tools::md5sum(
-    files = list.files(
+  expect_extension_files <- list.files(
       file.path(temp_dir, "_extensions"),
-      recursive = TRUE,
-      full.names = TRUE
+      recursive = TRUE
+    )
+
+  expect_setequal(
+    object = expect_extension_files,
+    expected = c(
+      "thinkridentity/_extension.yml",
+      "thinkridentity/background.png",
+      "thinkridentity/logo.png",
+      "thinkridentity/logo.svg",
+      "thinkridentity/thinkridentity.scss"
     )
   )
-  
-  expect_true(all(expect_md5 == observed_md5))
   
   # test html content of template
   slide_content <- path_to_html_template |>
@@ -44,8 +39,8 @@ test_that("create_template_html works", {
   expect_equal(
     object = slide_content,
     expected = c(
-      "<section id=\"title-slide\" data-background-image=\"_extensions/thinkridentity/font.png\" class=\"quarto-title-block center\"><h1 class=\"title\">Formation R</h1>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
-      "<section class=\"slide level2\"><p>{{ include_html_content }}</p>\n\n<img src=\"_extensions/thinkridentity/thinkr_logo.png\" class=\"slide-logo r-stretch\"><div class=\"footer footer-default\">\n<p><strong><i class=\"las la-book\"></i> Formation R</strong> | Retrouvez nous sur <a href=\"https://thinkr.fr\" class=\"uri\">https://thinkr.fr</a></p>\n</div>\n</section>"
+      "<section id=\"title-slide\" data-background-image=\"_extensions/thinkridentity/background.png\" class=\"quarto-title-block center\"><h1 class=\"title\">Formation R</h1>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section class=\"slide level2\"><p>{{ include_html_content }}</p>\n\n<img src=\"_extensions/thinkridentity/logo.png\" class=\"slide-logo r-stretch\"><div class=\"footer footer-default\">\n<p><strong><i class=\"las la-book\"></i> Formation R</strong> | Retrouvez nous sur <a href=\"https://thinkr.fr\" class=\"uri\">https://thinkr.fr</a></p>\n</div>\n</section>"
     )
   )
   

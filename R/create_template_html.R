@@ -4,11 +4,13 @@
 #' 
 #' Create a template html with ThinkR styling
 #' 
-#' @param path_to_qmd character. Path to the qmd template to be rendered in html
-#' @param output_dir character. Path where files and html will be generated
+#' @param path_to_qmd character. Path to the qmd template to be rendered in thinkridentity-revealjs
+#' @param output_dir character. Path to html output dir
 #' @param output_file character. Name of the output html template
+#' @param temp_dir character. Path to the temp_dir where template will be rendered
 #' 
 #' @importFrom quarto quarto_render
+#' @importFrom utils download.file unzip
 #'
 #' @return character. Path to the html template
 #' 
@@ -29,30 +31,47 @@
 create_template_html <- function(
   path_to_qmd,
   output_dir,
-  output_file
+  output_file,
+  temp_dir = tempfile(pattern = "template")
   ){
     
-  # copy qmd template to output dir with new name
-  if (!file.exists(output_dir)){
-    dir.create(output_dir)
-  }
-  
+  # set qmd file name base on html output name
   output_file_qmd <- gsub("\\.html", "\\.qmd", output_file)
+  
+  # copy qmd template to temp_dir with new name
+  if (!file.exists(temp_dir)){
+    dir.create(temp_dir)
+  }
   
   file.copy(
     from = path_to_qmd,
     to = file.path(
-      output_dir,
+      temp_dir,
       output_file_qmd)
     )
   
-  # copy quakr _extension in output dir
-  # `quarto add` not defined in {quarto} yet
+  # download quakr _extensions from GitHub to temp_dir
+  download.file(
+    url = "https://github.com/ThinkR-open/quakr/archive/refs/heads/main.zip",
+    destfile = file.path(temp_dir, "quakr.zip"),
+    quiet = TRUE
+    )
+
+  if (!file.exists(file.path(temp_dir, "quakr.zip"))){
+    stop("Thinkr-open/quakr zip was not properly downloaded.")
+  }
+    
+  unzip(
+    zipfile = file.path(temp_dir, "quakr.zip"),
+    exdir = file.path(temp_dir, "quakr")
+    )
+  
+  dir.create(file.path(temp_dir, "_extensions/"))
+  
   file.copy(
-    from = system.file("_extensions", package = "nq1h"),
-    to = output_dir,
-    recursive = TRUE
-  )
+    from = file.path(temp_dir, "quakr", "quakr-main", "_extensions/."),
+    to = file.path(temp_dir, "_extensions"),
+    recursive = TRUE)
   
   # render template with ThinkR theme and img/ folder output
   img_dir <- file.path(
@@ -61,13 +80,29 @@ create_template_html <- function(
     )
   
   quarto_render(
-    input = file.path(output_dir, output_file_qmd),
-    pandoc_args = paste0("--extract-media=", img_dir),
-    quiet = TRUE)
+    input = file.path(temp_dir, output_file_qmd),
+    output_format = "thinkridentity-revealjs",
+    quiet = FALSE)
   
-  # remove qmd file from output dir
-  unlink(file.path(output_dir,
-                   output_file_qmd))
+  # copy output html and companion folders to output_dir
+  files_to_copy <- c(
+    "html" = file.path(temp_dir, output_file),
+    "lib_folder" = file.path(temp_dir, gsub("\\.html", "_files", output_file)),
+    "ext_folder" = file.path(temp_dir, "_extensions")
+  )
+  
+  if (!file.exists(output_dir)){
+    dir.create(output_dir)
+  }
+  
+  file.copy(
+    from = files_to_copy,
+    to = output_dir,
+    recursive = TRUE
+  )
+  
+  # remove temp_dir
+  unlink(temp_dir, recursive = TRUE)
   
   # return path to html template
   return(file.path(output_dir, output_file))

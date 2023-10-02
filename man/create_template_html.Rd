@@ -4,14 +4,21 @@
 \alias{create_template_html}
 \title{create_template_html}
 \usage{
-create_template_html(path_to_qmd, output_dir, output_file)
+create_template_html(
+  path_to_qmd,
+  output_dir,
+  output_file,
+  temp_dir = tempfile(pattern = "template")
+)
 }
 \arguments{
-\item{path_to_qmd}{character. Path to the qmd template to be rendered in html}
+\item{path_to_qmd}{character. Path to the qmd template to be rendered in thinkridentity-revealjs}
 
-\item{output_dir}{character. Path where files and html will be generated}
+\item{output_dir}{character. Path to html output dir}
 
 \item{output_file}{character. Name of the output html template}
+
+\item{temp_dir}{character. Path to the temp_dir where template will be rendered}
 }
 \value{
 character. Path to the html template

@@ -102,7 +102,10 @@ gitlabr::use_gitlab_ci(type = "check-coverage-pkgdown")
 pkgload::load_all()
 
 # Generate documentation and deal with dependencies
-attachment::att_amend_desc(extra.suggests = c("tools", "testthat"))
+attachment::att_amend_desc(
+  extra.suggests = c("tools", "testthat"),
+  update.config = TRUE
+  )
 
 # Check the package
 devtools::check()

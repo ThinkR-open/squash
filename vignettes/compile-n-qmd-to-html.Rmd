@@ -68,37 +68,6 @@ htmls <- list.files(
 html_slide_content <- extract_html_slides(vec_html_path = htmls)
 ```
 
-## `add_companion_folder()` : copy a lib folder and solve dependencies path in html
-
-```{r example-add_companion_folder}
-# create tmp dir
-temp_dir <- tempfile(pattern = "compile")
-dir.create(temp_dir, recursive = TRUE)
-
-# copy html and plugin dir
-file.copy(
-  from = system.file("template.html", package = "nq1h"),
-  to = temp_dir
-)
-
-file.copy(
-  from = system.file("plugin", package = "nq1h"),
-  to = temp_dir,
-  recursive = TRUE
-)
-
-# run add_companion_folder()
-add_companion_folder(
-  html_path = file.path(temp_dir, "template.html"),
-  src_regex = "__path_to_deps_folder__",
-  from_lib = file.path(temp_dir, "plugin"),
-  to_lib = file.path(temp_dir, "plugin_copy", "plugin")
-)
-
-# clean up
-unlink(temp_dir, recursive = TRUE)
-```
-
 ## `create_template_html()` : create a template html with ThinkR styling
 
 Use the quakr extension to render html.
