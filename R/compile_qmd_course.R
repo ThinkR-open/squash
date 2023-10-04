@@ -99,16 +99,17 @@ compile_qmd_course <- function(
         )
         cli_alert_success("{basename(qmd)} rendered successfully")
       },
-      error = \(x) {
+      error = \(error_message) {
         cli_alert_danger("Fail to render {qmd}, cleaning and existing")
         
-        # clean rendering output and throw error
+        # clean rendering output
         clean_rendering_files(
           dir = vec_qmd_dir,
           present_before = file_present_before_rendering
         )
         
-        stop(x, appendLF = TRUE)
+        # throw an error with original error message
+        stop(error_message)
       })
     }
   }
