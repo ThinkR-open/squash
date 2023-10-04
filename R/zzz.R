@@ -6,6 +6,11 @@
   version_ok <-  local_quarto >= numeric_version("1.3.0")
 
   if (!version_ok){
-    warning("Your current version of quarto is ", local_quarto, ", minimal required version is 1.3.0")
+    stop(paste0(
+      "Your current version of quarto is ",
+      local_quarto,
+      ", minimal required version is 1.3.0"
+      )
+    )
   }
 }
