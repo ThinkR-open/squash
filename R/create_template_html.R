@@ -82,7 +82,7 @@ create_template_html <- function(
   quarto_render(
     input = file.path(temp_dir, output_file_qmd),
     output_format = "thinkridentity-revealjs",
-    quiet = FALSE)
+    quiet = TRUE)
   
   # copy output html and companion folders to output_dir
   files_to_copy <- c(

@@ -42,7 +42,7 @@ temp_dir <- tempfile(pattern = "compile")
 html_output <- compile_qmd_course(
   vec_qmd_path = qmds,
   output_dir = temp_dir,
-  output_html = "course_complete.html"
+  output_html = "complete_course.html"
 )
 
 # clean up
@@ -92,6 +92,55 @@ unlink(temp_dir, recursive = TRUE)
 
   
 
+## `clean_rendering_files()` : cleanup course directory after rendering
+
+Utility function to remove all the files and folders created when rendering a qmd. The files already present and updated will not be removed.
+    
+
   
 
+```{r example-clean_rendering_files}
+# create a temp dir with qmd
+temp_dir <- tempfile(pattern = "clean")
+
+dir.create(
+  path = file.path(temp_dir, "img"),
+  recursive = TRUE
+)
+
+file.copy(
+  from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "nq1h"),
+  to = temp_dir
+)
+
+file.copy(
+  from = system.file("courses", "C01", "img", "logo_1.png", package = "nq1h"),
+  to = file.path(temp_dir, "img")
+)
+
+# list files before rendering
+file_and_dirs_before <- list.files(
+  temp_dir,
+  recursive = TRUE,
+  full.names = TRUE,
+  include.dirs = TRUE
+)
+
+# render qmd
+quarto::quarto_render(
+  input = file.path(temp_dir, "qmd1_for_test.qmd"),
+  quiet = TRUE
+)
+
+# remove created files and dirs
+clean_rendering_files(
+  dir = temp_dir,
+  present_before = file_and_dirs_before
+)
+
+# clean temp dir
+unlink(temp_dir, recursive = TRUE)
+```
+
+  
 
