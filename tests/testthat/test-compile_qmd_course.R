@@ -14,15 +14,62 @@ test_that("compile_qmd_course works", {
     pattern = "qmd$"
   )
   
+  qmds_with_missing_path <- c(
+    qmds[[1]],
+    "a_path_to_a_qmd_that_does_not_exists.qmd"
+  )
+  
   # generate html in temp folder
   temp_dir <- tempfile(pattern = "compile")
   
-  html_output <- compile_qmd_course(
-    vec_qmd_path = qmds,
-    output_dir = temp_dir,
-    output_html = "complete_course.html"
+  # list files present before rendering
+  file_present_before_rendering <- list.files(
+    path = courses_path,
+    full.names = TRUE,
+    include.dirs = TRUE,
+    recursive = TRUE
   )
   
+  # test cli_message in case of error in rendering
+  # (skip error with tryCatch to see message in test)
+  expect_message(object = {
+    tryCatch(expr = {
+      compile_qmd_course(
+        vec_qmd_path = qmds_with_missing_path,
+        output_dir = temp_dir,
+        output_html = "complete_course.html"
+      )
+    },
+    error = \(x) {}
+    )
+  },
+  regexp = "Fail to render a_path_to_a_qmd_that_does_not_exists.qmd"
+  )
+  
+  # test cli message in case of success
+  expect_message(object = {
+    html_output <- compile_qmd_course(
+      vec_qmd_path = qmds,
+      output_dir = temp_dir,
+      output_html = "complete_course.html"
+    )
+  },
+  regexp = "qmd1_for_test.qmd rendered successfully"
+  )
+
+  # test that no remaining output files are present
+  file_present_after_rendering <- list.files(
+    path = courses_path,
+    full.names = TRUE,
+    include.dirs = TRUE,
+    recursive = TRUE
+  )
+  
+  expect_setequal(
+    object = file_present_after_rendering,
+    expected = file_present_before_rendering
+  )
+    
   # test that output html exists
   expect_true(file.exists(html_output))
   

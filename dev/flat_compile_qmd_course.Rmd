@@ -31,6 +31,7 @@ pkgload::load_all(export_all = TRUE)
 #' @importFrom cli cat_bullet
 #' @importFrom quarto quarto_render
 #' @importFrom htmltools htmlTemplate renderDocument save_html
+#' @importFrom cli cli_alert_success cli_alert_danger
 #'
 #' @return character. The path to the resulting html file
 #'
@@ -61,7 +62,10 @@ compile_qmd_course <- function(
   
   file_present_before_rendering <- list.files(
     path = vec_qmd_dir,
-    full.names = TRUE)
+    full.names = TRUE,
+    include.dirs = TRUE,
+    recursive = TRUE
+  )
   
   for (qmd_dir in vec_qmd_dir) {
     
@@ -77,12 +81,28 @@ compile_qmd_course <- function(
     for (qmd in vec_qmd_path_group) {
       cat_bullet(sprintf("Rendering %s", qmd))
       
-      quarto_render(
-        input = qmd,
-        quiet = FALSE,
-        # use revealjs parameter to make a copy of img dir
-        pandoc_args = paste0("--extract-media=", img_dir)
-      )
+      # try rendering qmd and warn user if successful / fail
+      tryCatch(expr = {
+        quarto_render(
+          input = qmd,
+          quiet = TRUE,
+          # use revealjs parameter to make a copy of img dir
+          pandoc_args = paste0("--extract-media=", img_dir)
+        )
+        cli_alert_success("{basename(qmd)} rendered successfully")
+      },
+      error = \(error_message) {
+        cli_alert_danger("Fail to render {qmd}, cleaning and existing")
+        
+        # clean rendering output
+        clean_rendering_files(
+          dir = vec_qmd_dir,
+          present_before = file_present_before_rendering
+        )
+        
+        # throw an error with original error message
+        stop(error_message)
+      })
     }
   }
   
@@ -133,19 +153,9 @@ compile_qmd_course <- function(
     recursive = TRUE
   )
   
-  # clean render output in qmd dir
-  file_present_after_rendering <- list.files(
-    path = unique(dirname(vec_qmd_path)),
-    full.names = TRUE)
-  
-  file_created_by_rendering <- setdiff(
-    x = file_present_after_rendering,
-    y = file_present_before_rendering
-  )
-  
-  unlink(
-    x = file_created_by_rendering,
-    recursive = TRUE
+  clean_rendering_files(
+    dir = vec_qmd_dir,
+    present_before = file_present_before_rendering
   )
   
   return(
@@ -177,7 +187,7 @@ temp_dir <- tempfile(pattern = "compile")
 html_output <- compile_qmd_course(
   vec_qmd_path = qmds,
   output_dir = temp_dir,
-  output_html = "course_complete.html"
+  output_html = "complete_course.html"
 )
 
 # clean up
@@ -199,15 +209,62 @@ test_that("compile_qmd_course works", {
     pattern = "qmd$"
   )
   
+  qmds_with_missing_path <- c(
+    qmds[[1]],
+    "a_path_to_a_qmd_that_does_not_exists.qmd"
+  )
+  
   # generate html in temp folder
   temp_dir <- tempfile(pattern = "compile")
   
-  html_output <- compile_qmd_course(
-    vec_qmd_path = qmds,
-    output_dir = temp_dir,
-    output_html = "complete_course.html"
+  # list files present before rendering
+  file_present_before_rendering <- list.files(
+    path = courses_path,
+    full.names = TRUE,
+    include.dirs = TRUE,
+    recursive = TRUE
   )
   
+  # test cli_message in case of error in rendering
+  # (skip error with tryCatch to see message in test)
+  expect_message(object = {
+    tryCatch(expr = {
+      compile_qmd_course(
+        vec_qmd_path = qmds_with_missing_path,
+        output_dir = temp_dir,
+        output_html = "complete_course.html"
+      )
+    },
+    error = \(x) {}
+    )
+  },
+  regexp = "Fail to render a_path_to_a_qmd_that_does_not_exists.qmd"
+  )
+  
+  # test cli message in case of success
+  expect_message(object = {
+    html_output <- compile_qmd_course(
+      vec_qmd_path = qmds,
+      output_dir = temp_dir,
+      output_html = "complete_course.html"
+    )
+  },
+  regexp = "qmd1_for_test.qmd rendered successfully"
+  )
+
+  # test that no remaining output files are present
+  file_present_after_rendering <- list.files(
+    path = courses_path,
+    full.names = TRUE,
+    include.dirs = TRUE,
+    recursive = TRUE
+  )
+  
+  expect_setequal(
+    object = file_present_after_rendering,
+    expected = file_present_before_rendering
+  )
+    
   # test that output html exists
   expect_true(file.exists(html_output))
   
@@ -445,7 +502,7 @@ create_template_html <- function(
   quarto_render(
     input = file.path(temp_dir, output_file_qmd),
     output_format = "thinkridentity-revealjs",
-    quiet = FALSE)
+    quiet = TRUE)
   
   # copy output html and companion folders to output_dir
   files_to_copy <- c(
@@ -538,7 +595,150 @@ test_that("create_template_html works", {
   
 })
 ```
+
+
+## `clean_rendering_files()` : cleanup course directory after rendering
+
+Utility function to remove all the files and folders created when rendering a qmd. The files already present and updated will not be removed.
+    
+```{r function-clean_rendering_files}
+#' clean_rendering_files
+#' 
+#' Remove all the files and folders created when rendering a qmd to html
+#' 
+#' @param dir character. The directory to look for rendering output recursively.
+#' @param present_before character. Path to the files and directories present before rendering.
+#' 
+#' @return None. Side effect: remove files that were not present before rendering
+#' 
+#' @export
+clean_rendering_files <- function(
+    dir,
+    present_before
+){
+    
+  # list files
+  present_after <- unique(
+    list.files(
+      path = dir,
+      full.names = TRUE,
+      recursive = TRUE,
+      include.dirs = TRUE
+    )
+  )
   
+  file_created_by_rendering <- setdiff(
+    x = present_after,
+    y = path.expand(present_before)
+  )
+  
+  unlink(
+    x = file_created_by_rendering,
+    recursive = TRUE
+  )
+  
+}
+```
+  
+```{r example-clean_rendering_files}
+# create a temp dir with qmd
+temp_dir <- tempfile(pattern = "clean")
+
+dir.create(
+  path = file.path(temp_dir, "img"),
+  recursive = TRUE
+)
+
+file.copy(
+  from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "nq1h"),
+  to = temp_dir
+)
+
+file.copy(
+  from = system.file("courses", "C01", "img", "logo_1.png", package = "nq1h"),
+  to = file.path(temp_dir, "img")
+)
+
+# list files before rendering
+file_and_dirs_before <- list.files(
+  temp_dir,
+  recursive = TRUE,
+  full.names = TRUE,
+  include.dirs = TRUE
+)
+
+# render qmd
+quarto::quarto_render(
+  input = file.path(temp_dir, "qmd1_for_test.qmd"),
+  quiet = TRUE
+)
+
+# remove created files and dirs
+clean_rendering_files(
+  dir = temp_dir,
+  present_before = file_and_dirs_before
+)
+
+# clean temp dir
+unlink(temp_dir, recursive = TRUE)
+```
+  
+```{r tests-clean_rendering_files}
+test_that("clean_rendering_files works", {
+  # create a temp dir with qmd
+  temp_dir <- tempfile(pattern = "clean")
+  
+  dir.create(
+    path = file.path(temp_dir, "img"),
+    recursive = TRUE
+  )
+  
+  file.copy(
+    from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "nq1h"),
+    to = temp_dir
+  )
+  
+  file.copy(
+    from = system.file("courses", "C01", "img", "logo_1.png", package = "nq1h"),
+    to = file.path(temp_dir, "img")
+  )
+  
+  # list files before rendering
+  file_and_dirs_before <- list.files(
+    temp_dir,
+    recursive = TRUE,
+    full.names = TRUE,
+    include.dirs = TRUE
+  )
+  
+  # render qmd
+  quarto::quarto_render(
+    input = file.path(temp_dir, "qmd1_for_test.qmd"),
+    quiet = TRUE
+  )
+  
+  # remove created files and dirs
+  clean_rendering_files(
+    dir = temp_dir,
+    present_before = file_and_dirs_before
+  )
+  
+  # test list of files is the same before and after
+  file_present_now <- list.files(
+    temp_dir,
+    recursive = TRUE,
+    full.names = TRUE,
+    include.dirs = TRUE
+  )
+  
+  expect_setequal(
+    object = file_present_now,
+    expected = file_and_dirs_before)
+  
+  # clean temp dir
+  unlink(temp_dir, recursive = TRUE)
+})
+```
 
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop

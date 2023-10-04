@@ -14,6 +14,7 @@
 #' @importFrom cli cat_bullet
 #' @importFrom quarto quarto_render
 #' @importFrom htmltools htmlTemplate renderDocument save_html
+#' @importFrom cli cli_alert_success cli_alert_danger
 #'
 #' @return character. The path to the resulting html file
 #'
@@ -38,7 +39,7 @@
 #' html_output <- compile_qmd_course(
 #'   vec_qmd_path = qmds,
 #'   output_dir = temp_dir,
-#'   output_html = "course_complete.html"
+#'   output_html = "complete_course.html"
 #' )
 #' 
 #' # clean up
@@ -69,7 +70,10 @@ compile_qmd_course <- function(
   
   file_present_before_rendering <- list.files(
     path = vec_qmd_dir,
-    full.names = TRUE)
+    full.names = TRUE,
+    include.dirs = TRUE,
+    recursive = TRUE
+  )
   
   for (qmd_dir in vec_qmd_dir) {
     
@@ -85,12 +89,28 @@ compile_qmd_course <- function(
     for (qmd in vec_qmd_path_group) {
       cat_bullet(sprintf("Rendering %s", qmd))
       
-      quarto_render(
-        input = qmd,
-        quiet = FALSE,
-        # use revealjs parameter to make a copy of img dir
-        pandoc_args = paste0("--extract-media=", img_dir)
-      )
+      # try rendering qmd and warn user if successful / fail
+      tryCatch(expr = {
+        quarto_render(
+          input = qmd,
+          quiet = TRUE,
+          # use revealjs parameter to make a copy of img dir
+          pandoc_args = paste0("--extract-media=", img_dir)
+        )
+        cli_alert_success("{basename(qmd)} rendered successfully")
+      },
+      error = \(error_message) {
+        cli_alert_danger("Fail to render {qmd}, cleaning and existing")
+        
+        # clean rendering output
+        clean_rendering_files(
+          dir = vec_qmd_dir,
+          present_before = file_present_before_rendering
+        )
+        
+        # throw an error with original error message
+        stop(error_message)
+      })
     }
   }
   
@@ -141,19 +161,9 @@ compile_qmd_course <- function(
     recursive = TRUE
   )
   
-  # clean render output in qmd dir
-  file_present_after_rendering <- list.files(
-    path = unique(dirname(vec_qmd_path)),
-    full.names = TRUE)
-  
-  file_created_by_rendering <- setdiff(
-    x = file_present_after_rendering,
-    y = file_present_before_rendering
-  )
-  
-  unlink(
-    x = file_created_by_rendering,
-    recursive = TRUE
+  clean_rendering_files(
+    dir = vec_qmd_dir,
+    present_before = file_present_before_rendering
   )
   
   return(

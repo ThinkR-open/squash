@@ -46,7 +46,7 @@ temp_dir <- tempfile(pattern = "compile")
 html_output <- compile_qmd_course(
   vec_qmd_path = qmds,
   output_dir = temp_dir,
-  output_html = "course_complete.html"
+  output_html = "complete_course.html"
 )
 
 # clean up
