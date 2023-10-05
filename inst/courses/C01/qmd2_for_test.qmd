@@ -8,6 +8,10 @@ format: revealjs
 
 Texte 2
 
+::: {.notes}
+This is a speaker note, it is only visible in the speaker view.
+:::
+
 ---
 
 ## Slide 2
