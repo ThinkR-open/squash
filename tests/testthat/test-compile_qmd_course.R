@@ -82,7 +82,7 @@ test_that("compile_qmd_course works", {
       "complete_course_img/C02_img/img/logo_1.png"
       )
     )
-  expect_true(all(file.edit(img_path)))
+  expect_true(all(file.exists(img_path)))
   
   expected_md5 <- c(
     "ac99473759dd46bf0564047e5cfc2714", 
