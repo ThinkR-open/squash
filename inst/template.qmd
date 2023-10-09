@@ -1,5 +1,11 @@
----
-title: "Formation R"
----
 
 {{ include_html_content }}
+
+---
+
+
+## {{ include_trainer }}
+
+**{{ include_phone }}**
+
+**{{ include_mail }}**

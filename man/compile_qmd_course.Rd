@@ -8,7 +8,12 @@ compile_qmd_course(
   vec_qmd_path,
   output_dir,
   output_html,
-  template = system.file("template.qmd", package = "nq1h")
+  template = system.file("template.qmd", package = "nq1h"),
+  title = "Formation R",
+  date = "01/01/01-01/01/01",
+  trainer = "ThinkR",
+  mail = "thinkr.fr",
+  phone = "+33 0 00 00 00 00"
 )
 }
 \arguments{
@@ -18,7 +23,17 @@ compile_qmd_course(
 
 \item{output_html}{character. File name of the complete html output saved}
 
-\item{template}{character. Path to the template qmd to use. Content will be included at the position where \code{{{ include_html_content }}} is found.}
+\item{template}{character. Path to the template qmd to use. Content will be included at the positions inside double-brackets}
+
+\item{title}{character. Title of the presentation}
+
+\item{date}{character. Start and end dates of the training}
+
+\item{trainer}{character. Name of the trainer}
+
+\item{mail}{character. Mail of the trainer}
+
+\item{phone}{character. Phone number of the trainer}
 }
 \value{
 character. The path to the resulting html file

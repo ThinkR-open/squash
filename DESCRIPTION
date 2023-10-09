@@ -15,7 +15,8 @@ Imports:
     rvest,
     tools,
     utils,
-    withr
+    withr,
+    yaml
 Suggests: 
     knitr,
     rmarkdown,
