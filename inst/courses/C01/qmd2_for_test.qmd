@@ -1,7 +1,6 @@
 ---
 title: "Deuxième Chapitre"
 subtitle: "omega"
-format: revealjs
 ---
 
 ## Slide 2

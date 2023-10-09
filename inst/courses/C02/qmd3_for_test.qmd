@@ -1,7 +1,6 @@
 ---
 title: "Troisième Chapitre"
 subtitle: "youpi"
-format: revealjs
 ---
 
 ## Slide 3

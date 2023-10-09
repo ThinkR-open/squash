@@ -58,6 +58,7 @@ remotes::install_local()
 usethis::use_readme_rmd()
 # hide readme from build
 usethis::use_build_ignore("README.Rmd")
+usethis::use_build_ignore("inst/.quarto")
 # Code of Conduct
 usethis::use_code_of_conduct("contact@fake.com")
 # NEWS
