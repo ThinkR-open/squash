@@ -6,17 +6,23 @@
 \usage{
 create_template_html(
   path_to_qmd,
-  output_dir,
   output_file,
+  output_dir,
+  title = "Formation R",
+  date = "01/01/01-01/01/01",
   temp_dir = tempfile(pattern = "template")
 )
 }
 \arguments{
 \item{path_to_qmd}{character. Path to the qmd template to be rendered in thinkridentity-revealjs}
 
-\item{output_dir}{character. Path to html output dir}
-
 \item{output_file}{character. Name of the output html template}
+
+\item{output_dir}{character. Output path to store html files and companion folders}
+
+\item{title}{character. Title of the presentation}
+
+\item{date}{character. Start and end dates of the training}
 
 \item{temp_dir}{character. Path to the temp_dir where template will be rendered}
 }

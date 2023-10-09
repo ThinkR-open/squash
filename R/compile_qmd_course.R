@@ -7,7 +7,12 @@
 #' @param vec_qmd_path character. Vector of the path to qmd files
 #' @param output_dir character. Output path to store html files and companion folders
 #' @param output_html character. File name of the complete html output saved
-#' @param template character. Path to the template qmd to use. Content will be included at the position where `{{ include_html_content }}` is found.
+#' @param template character. Path to the template qmd to use. Content will be included at the positions inside double-brackets
+#' @param title character. Title of the presentation
+#' @param date character. Start and end dates of the training
+#' @param trainer character. Name of the trainer
+#' @param mail character. Mail of the trainer
+#' @param phone character. Phone number of the trainer
 #'
 #' @importFrom tools file_ext
 #' @importFrom withr with_dir
@@ -48,7 +53,12 @@ compile_qmd_course <- function(
     vec_qmd_path,
     output_dir,
     output_html,
-    template = system.file("template.qmd", package = "nq1h")
+    template = system.file("template.qmd", package = "nq1h"),
+    title = "Formation R",
+    date = "01/01/01-01/01/01",
+    trainer = "ThinkR",
+    mail = "thinkr.fr",
+    phone = "+33 0 00 00 00 00"
 ) {
   # check paths
   not_all_files_are_qmd <- any(
@@ -62,7 +72,9 @@ compile_qmd_course <- function(
   template_html <- create_template_html(
     path_to_qmd = template,
     output_dir = output_dir,
-    output_file = output_html
+    output_file = output_html,
+    title = title,
+    date = date
   )
   
   # list courses files present before rendering
@@ -124,7 +136,10 @@ compile_qmd_course <- function(
   # include content in template
   complete_html <- htmlTemplate(
     filename = template_html,
-    include_html_content = html_content
+    include_html_content = html_content,
+    include_trainer = trainer,
+    include_mail = mail,
+    include_phone = phone
   ) |>
     renderDocument()
   

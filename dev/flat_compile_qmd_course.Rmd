@@ -24,7 +24,12 @@ pkgload::load_all(export_all = TRUE)
 #' @param vec_qmd_path character. Vector of the path to qmd files
 #' @param output_dir character. Output path to store html files and companion folders
 #' @param output_html character. File name of the complete html output saved
-#' @param template character. Path to the template qmd to use. Content will be included at the position where `{{ include_html_content }}` is found.
+#' @param template character. Path to the template qmd to use. Content will be included at the positions inside double-brackets
+#' @param title character. Title of the presentation
+#' @param date character. Start and end dates of the training
+#' @param trainer character. Name of the trainer
+#' @param mail character. Mail of the trainer
+#' @param phone character. Phone number of the trainer
 #'
 #' @importFrom tools file_ext
 #' @importFrom withr with_dir
@@ -40,7 +45,12 @@ compile_qmd_course <- function(
     vec_qmd_path,
     output_dir,
     output_html,
-    template = system.file("template.qmd", package = "nq1h")
+    template = system.file("template.qmd", package = "nq1h"),
+    title = "Formation R",
+    date = "01/01/01-01/01/01",
+    trainer = "ThinkR",
+    mail = "thinkr.fr",
+    phone = "+33 0 00 00 00 00"
 ) {
   # check paths
   not_all_files_are_qmd <- any(
@@ -54,7 +64,9 @@ compile_qmd_course <- function(
   template_html <- create_template_html(
     path_to_qmd = template,
     output_dir = output_dir,
-    output_file = output_html
+    output_file = output_html,
+    title = title,
+    date = date
   )
   
   # list courses files present before rendering
@@ -116,7 +128,10 @@ compile_qmd_course <- function(
   # include content in template
   complete_html <- htmlTemplate(
     filename = template_html,
-    include_html_content = html_content
+    include_html_content = html_content,
+    include_trainer = trainer,
+    include_mail = mail,
+    include_phone = phone
   ) |>
     renderDocument()
   
@@ -277,7 +292,7 @@ test_that("compile_qmd_course works", {
       "complete_course_img/C02_img/img/logo_1.png"
       )
     )
-  expect_true(all(file.edit(img_path)))
+  expect_true(all(file.exists(img_path)))
   
   expected_md5 <- c(
     "ac99473759dd46bf0564047e5cfc2714", 
@@ -296,8 +311,9 @@ test_that("compile_qmd_course works", {
   expect_equal(
     object = slide_content,
     expected = c(
-      "<section id=\"title-slide\" data-background-image=\"_extensions/thinkridentity/background.png\" class=\"quarto-title-block center\"><h1 class=\"title\">Formation R</h1>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
-      "<section class=\"slide level2\"><p><section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section><section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n</section><section id=\"slide-1-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>{dplyr} image</p>\n\n<img data-src=\"complete_course_img/C01_img/img/logo_1.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section><section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section><section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<aside class=\"notes\"><p>This is a speaker note, it is only visible in the speaker view.</p>\n<style type=\"text/css\">\n        span.MJX_Assistive_MathML {\n          position:absolute!important;\n          clip: rect(1px, 1px, 1px, 1px);\n          padding: 1px 0 0 0!important;\n          border: 0!important;\n          height: 1px!important;\n          width: 1px!important;\n          overflow: hidden!important;\n          display:block!important;\n      }</style></aside></section><section id=\"slide-2-1\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>{tidyr} image</p>\n\n<img data-src=\"complete_course_img/C01_img/img/logo_2.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section><section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section><section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n</section><section id=\"slide-3-1\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>{ggplot2} image</p>\n\n<img data-src=\"complete_course_img/C02_img/img/logo_1.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section></p>\n\n<img src=\"_extensions/thinkridentity/logo.png\" class=\"slide-logo r-stretch\"><div class=\"footer footer-default\">\n<p><strong><i class=\"las la-book\"></i> Formation R</strong> | Retrouvez nous sur <a href=\"https://thinkr.fr\" class=\"uri\">https://thinkr.fr</a></p>\n</div>\n</section>"
+      "<section id=\"title-slide\" data-background-image=\"_extensions/thinkridentity/background.png\" class=\"quarto-title-block center\"><h1 class=\"title\">Formation R</h1>\n  <p class=\"subtitle\">01/01/01-01/01/01</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section class=\"slide level2\"><p><section id=\"title-slide-1\" class=\"quarto-title-block center\"><h1 class=\"title\">Premier Chapitre</h1>\n  <p class=\"subtitle\">alpha</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section><section id=\"slide-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>Texte 1</p>\n</section><section id=\"slide-1-1\" class=\"slide level2\"><h2>Slide 1</h2>\n<p>{dplyr} image</p>\n\n<img data-src=\"complete_course_img/C01_img/img/logo_1.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section><section id=\"title-slide-2\" class=\"quarto-title-block center\"><h1 class=\"title\">Deuxième Chapitre</h1>\n  <p class=\"subtitle\">omega</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section><section id=\"slide-2\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>Texte 2</p>\n<aside class=\"notes\"><p>This is a speaker note, it is only visible in the speaker view.</p>\n<style type=\"text/css\">\n        span.MJX_Assistive_MathML {\n          position:absolute!important;\n          clip: rect(1px, 1px, 1px, 1px);\n          padding: 1px 0 0 0!important;\n          border: 0!important;\n          height: 1px!important;\n          width: 1px!important;\n          overflow: hidden!important;\n          display:block!important;\n      }</style></aside></section><section id=\"slide-2-1\" class=\"slide level2\"><h2>Slide 2</h2>\n<p>{tidyr} image</p>\n\n<img data-src=\"complete_course_img/C01_img/img/logo_2.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section><section id=\"title-slide-3\" class=\"quarto-title-block center\"><h1 class=\"title\">Troisième Chapitre</h1>\n  <p class=\"subtitle\">youpi</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section><section id=\"slide-3\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>Texte 3</p>\n</section><section id=\"slide-3-1\" class=\"slide level2\"><h2>Slide 3</h2>\n<p>{ggplot2} image</p>\n\n<img data-src=\"complete_course_img/C02_img/img/logo_1.png\" class=\"r-stretch\"><div class=\"footer footer-default\">\n\n</div>\n</section></p>\n</section>",
+      "<section id=\"include_trainer\" class=\"slide level2\"><h2>ThinkR</h2>\n<p><strong>+33 0 00 00 00 00</strong></p>\n<p><strong>thinkr.fr</strong></p>\n\n<img src=\"_extensions/thinkridentity/logo.png\" class=\"slide-logo r-stretch\"><div class=\"footer footer-default\">\n<p><strong><i class=\"las la-book\"></i> Formation R</strong> | Retrouvez nous sur <a href=\"https://thinkr.fr\" class=\"uri\">https://thinkr.fr</a></p>\n</div>\n</section>"
     )
   )
   
@@ -431,27 +447,31 @@ test_that("extract_html_slides works", {
 ## `create_template_html()` : create a template html with ThinkR styling
 
 Use the quakr extension to render html.
-    
+
 ```{r function-create_template_html}
 #' create_template_html
 #' 
 #' Create a template html with ThinkR styling
 #' 
 #' @param path_to_qmd character. Path to the qmd template to be rendered in thinkridentity-revealjs
-#' @param output_dir character. Path to html output dir
 #' @param output_file character. Name of the output html template
 #' @param temp_dir character. Path to the temp_dir where template will be rendered
 #' 
+#' @inheritParams compile_qmd_course
+#' 
 #' @importFrom quarto quarto_render
 #' @importFrom utils download.file unzip
+#' @importFrom yaml write_yaml
 #'
 #' @return character. Path to the html template
 #' 
 #' @export
 create_template_html <- function(
   path_to_qmd,
-  output_dir,
   output_file,
+  output_dir,
+  title = "Formation R",
+  date = '01/01/01-01/01/01',
   temp_dir = tempfile(pattern = "template")
   ){
     
@@ -493,15 +513,19 @@ create_template_html <- function(
     to = file.path(temp_dir, "_extensions"),
     recursive = TRUE)
   
-  # render template with ThinkR theme and img/ folder output
-  img_dir <- file.path(
-      gsub("\\.html", "_img", output_file),
-      "template_img"
-    )
+  # define quarto project parameters
+  write_yaml(
+    x = list(
+      "title" = title,
+      "subtitle" = date,
+      "format" = "thinkridentity-revealjs"
+      ),
+    file = file.path(temp_dir, "_quarto.yml")
+  )
   
+  # render template with parameters of quarto project
   quarto_render(
     input = file.path(temp_dir, output_file_qmd),
-    output_format = "thinkridentity-revealjs",
     quiet = TRUE)
   
   # copy output html and companion folders to output_dir
@@ -526,7 +550,6 @@ create_template_html <- function(
   
   # return path to html template
   return(file.path(output_dir, output_file))
-  
 }
 ```
   
@@ -585,8 +608,9 @@ test_that("create_template_html works", {
   expect_equal(
     object = slide_content,
     expected = c(
-      "<section id=\"title-slide\" data-background-image=\"_extensions/thinkridentity/background.png\" class=\"quarto-title-block center\"><h1 class=\"title\">Formation R</h1>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
-      "<section class=\"slide level2\"><p>{{ include_html_content }}</p>\n\n<img src=\"_extensions/thinkridentity/logo.png\" class=\"slide-logo r-stretch\"><div class=\"footer footer-default\">\n<p><strong><i class=\"las la-book\"></i> Formation R</strong> | Retrouvez nous sur <a href=\"https://thinkr.fr\" class=\"uri\">https://thinkr.fr</a></p>\n</div>\n</section>"
+      "<section id=\"title-slide\" data-background-image=\"_extensions/thinkridentity/background.png\" class=\"quarto-title-block center\"><h1 class=\"title\">Formation R</h1>\n  <p class=\"subtitle\">01/01/01-01/01/01</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>",
+      "<section class=\"slide level2\"><p>{{ include_html_content }}</p>\n</section>",
+      "<section id=\"include_trainer\" class=\"slide level2\"><h2>{{ include_trainer }}</h2>\n<p><strong>{{ include_phone }}</strong></p>\n<p><strong>{{ include_mail }}</strong></p>\n\n<img src=\"_extensions/thinkridentity/logo.png\" class=\"slide-logo r-stretch\"><div class=\"footer footer-default\">\n<p><strong><i class=\"las la-book\"></i> Formation R</strong> | Retrouvez nous sur <a href=\"https://thinkr.fr\" class=\"uri\">https://thinkr.fr</a></p>\n</div>\n</section>"
     )
   )
   

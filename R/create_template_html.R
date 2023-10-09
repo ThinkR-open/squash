@@ -5,12 +5,14 @@
 #' Create a template html with ThinkR styling
 #' 
 #' @param path_to_qmd character. Path to the qmd template to be rendered in thinkridentity-revealjs
-#' @param output_dir character. Path to html output dir
 #' @param output_file character. Name of the output html template
 #' @param temp_dir character. Path to the temp_dir where template will be rendered
 #' 
+#' @inheritParams compile_qmd_course
+#' 
 #' @importFrom quarto quarto_render
 #' @importFrom utils download.file unzip
+#' @importFrom yaml write_yaml
 #'
 #' @return character. Path to the html template
 #' 
@@ -30,8 +32,10 @@
 #' unlink(temp_dir, recursive = TRUE)
 create_template_html <- function(
   path_to_qmd,
-  output_dir,
   output_file,
+  output_dir,
+  title = "Formation R",
+  date = '01/01/01-01/01/01',
   temp_dir = tempfile(pattern = "template")
   ){
     
@@ -73,15 +77,19 @@ create_template_html <- function(
     to = file.path(temp_dir, "_extensions"),
     recursive = TRUE)
   
-  # render template with ThinkR theme and img/ folder output
-  img_dir <- file.path(
-      gsub("\\.html", "_img", output_file),
-      "template_img"
-    )
+  # define quarto project parameters
+  write_yaml(
+    x = list(
+      "title" = title,
+      "subtitle" = date,
+      "format" = "thinkridentity-revealjs"
+      ),
+    file = file.path(temp_dir, "_quarto.yml")
+  )
   
+  # render template with parameters of quarto project
   quarto_render(
     input = file.path(temp_dir, output_file_qmd),
-    output_format = "thinkridentity-revealjs",
     quiet = TRUE)
   
   # copy output html and companion folders to output_dir
@@ -106,5 +114,4 @@ create_template_html <- function(
   
   # return path to html template
   return(file.path(output_dir, output_file))
-  
 }

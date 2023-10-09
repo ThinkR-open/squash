@@ -71,7 +71,7 @@ html_slide_content <- extract_html_slides(vec_html_path = htmls)
 ## `create_template_html()` : create a template html with ThinkR styling
 
 Use the quakr extension to render html.
-    
+
 
   
 
