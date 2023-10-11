@@ -2,11 +2,8 @@
 .RData
 .Rproj.user
 *.html
-!inst/template.html
-!inst/plugin/revealexternal.html
-!inst/courses/*/*.html
 index.qmd
 index_files
-inst/courses/qmd[0-9]_for_test_files
 .Rproj.user
 inst/doc
+inst/**/*_files/
