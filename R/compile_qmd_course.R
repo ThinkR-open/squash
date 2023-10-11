@@ -107,10 +107,14 @@ compile_qmd_course <- function(
           input = qmd,
           quiet = TRUE,
           # use revealjs parameter to make a copy of img dir
-          pandoc_args = paste0("--extract-media=", img_dir)
+          # use compil quarto profile to not add logo/bg and footer from quakr
+          pandoc_args = c(
+            paste0("--extract-media=", img_dir),
+            "--profile=compil"
+          )
         )
         cli_alert_success("{basename(qmd)} rendered successfully")
-      },
+      }, 
       error = \(error_message) {
         cli_alert_danger("Fail to render {qmd}, cleaning and existing")
         

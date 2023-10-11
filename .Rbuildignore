@@ -6,3 +6,4 @@
 ^README\.Rmd$
 ^\.gitlab-ci\.yml$
 ^ci/lib$
+^inst/\.quarto$
