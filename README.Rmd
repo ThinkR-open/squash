@@ -16,12 +16,12 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of {nq1h}  is to compile n .qmd to one single html file.
+The goal of {nq1h} is to compile n .qmd presentations to one single html file.
 
 The main purpose of this is to create custom slide decks from several 
 chapter .qmd files.
 
-The resulting html file follows the ThinkR quarot theme: [thinkr-open/quakr](https://github.com/ThinkR-open/quakr)
+The resulting html file follows the ThinkR quarto theme: [thinkr-open/quakr](https://github.com/ThinkR-open/quakr)
 
 ![](inst/schemas/schema_readme.png)
 
