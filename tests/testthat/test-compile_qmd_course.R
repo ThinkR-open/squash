@@ -119,6 +119,35 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
       "<section id=\"include_trainer\" class=\"slide level2\"><h2>ThinkR</h2>\n<p><strong>+33 0 00 00 00 00</strong></p>\n<p><strong>thinkr.fr</strong></p>\n\n<img src=\"_extensions/thinkridentity/logo.png\" class=\"slide-logo r-stretch\"><div class=\"footer footer-default\">\n<p><strong><i class=\"las la-book\"></i> Formation R</strong> | Retrouvez nous sur <a href=\"https://thinkr.fr\" class=\"uri\">https://thinkr.fr</a></p>\n</div>\n</section>"
     )
   )
+
+})
+
+test_that("compile_qmd_course HTML preview looks ok", {
+  # manual check on interactive mode only
+  skip_if_not(interactive())
+  take_a_look <- yesno::yesno2("\nReady to look at the html preview ?")
+  
+  if (isTRUE(take_a_look)) {
+    cat("Buckle up, html will open in a new pane, come back to this session for validation")
+    Sys.sleep(3)
+    browseURL(file.path(temp_dir, "complete_course.html"))
+    
+    questions <- c(
+      "\nYou have 11 slides, all with footer and logo ?",
+      "\nMain titles are centered, all titles are orange ?",
+      "\nImage and code chunk appear properly sized and colored ?"
+      )
+    
+    answers <- sapply(
+      X = questions,
+      FUN = yesno::yesno2
+      )
+    
+    cat("\nThank you :) resuming tests\n")
+    
+    #' @description testing all visual checks are ok from user answers
+    expect_true(all(answers))
+  }
 })
 
 test_that("compile_qmd_course works with non-default parameters", {
