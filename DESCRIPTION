@@ -15,12 +15,12 @@ Imports:
     rvest,
     tools,
     utils,
-    withr,
     yaml
 Suggests: 
     knitr,
     rmarkdown,
-    testthat
+    testthat,
+    yesno
 VignetteBuilder: 
     knitr
 Encoding: UTF-8

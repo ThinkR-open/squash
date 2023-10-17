@@ -2,7 +2,7 @@
 % Please edit documentation in R/extract_html_slides.R
 \name{extract_html_slides}
 \alias{extract_html_slides}
-\title{extract_html_slides}
+\title{Extract html slide content}
 \usage{
 extract_html_slides(vec_html_path)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/clean_rendering_files.R
 \name{clean_rendering_files}
 \alias{clean_rendering_files}
-\title{clean_rendering_files}
+\title{Clean folder after quarto rendering}
 \usage{
 clean_rendering_files(dir, present_before)
 }

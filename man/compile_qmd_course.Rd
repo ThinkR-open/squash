@@ -2,7 +2,7 @@
 % Please edit documentation in R/compile_qmd_course.R
 \name{compile_qmd_course}
 \alias{compile_qmd_course}
-\title{compile_qmd_course}
+\title{Create a single html from multiple qmd}
 \usage{
 compile_qmd_course(
   vec_qmd_path,

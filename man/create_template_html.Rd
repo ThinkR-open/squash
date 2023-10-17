@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_template_html.R
 \name{create_template_html}
 \alias{create_template_html}
-\title{create_template_html}
+\title{Create a themed html from a qmd template}
 \usage{
 create_template_html(
   path_to_qmd,
