@@ -5,7 +5,12 @@ subtitle: "alpha"
 
 ## Slide 1
 
-Texte 1
+An example code chunk
+
+```{r}
+8 * 8
+```
+
 
 ---
 
