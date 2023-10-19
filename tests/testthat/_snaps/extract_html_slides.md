@@ -18,6 +18,15 @@
       <pre><code>[1] 64</code></pre>
       </div>
       </div>
+      <p>An example fenced code chunk</p>
+      <div class="cell">
+      <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1"></a><span class="in">```{r}</span></span>
+      <span id="cb3-2"><a href="#cb3-2"></a><span class="dv">6</span> <span class="sc">*</span> <span class="dv">6</span></span>
+      <span id="cb3-3"><a href="#cb3-3"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+      <div class="cell-output cell-output-stdout">
+      <pre><code>[1] 36</code></pre>
+      </div>
+      </div>
       </section>
       <section id="slide-1-1" class="slide level2"><h2>Slide 1</h2>
       <p>{dplyr} image</p>
@@ -122,6 +131,15 @@
       <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="dv">8</span> <span class="sc">*</span> <span class="dv">8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
       <div class="cell-output cell-output-stdout">
       <pre><code>[1] 64</code></pre>
+      </div>
+      </div>
+      <p>An example fenced code chunk</p>
+      <div class="cell">
+      <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1"></a><span class="in">```{r}</span></span>
+      <span id="cb3-2"><a href="#cb3-2"></a><span class="dv">6</span> <span class="sc">*</span> <span class="dv">6</span></span>
+      <span id="cb3-3"><a href="#cb3-3"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+      <div class="cell-output cell-output-stdout">
+      <pre><code>[1] 36</code></pre>
       </div>
       </div>
       </section>
