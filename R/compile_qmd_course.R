@@ -15,10 +15,8 @@
 #' @param phone character. Phone number of the trainer
 #'
 #' @importFrom tools file_ext
-#' @importFrom cli cat_bullet
-#' @importFrom quarto quarto_render
 #' @importFrom htmltools htmlTemplate renderDocument save_html
-#' @importFrom cli cli_alert_success cli_alert_danger
+#' @importFrom furrr future_map_lgl furrr_options
 #'
 #' @return character. The path to the resulting html file
 #'
@@ -86,49 +84,27 @@ compile_qmd_course <- function(
     recursive = TRUE
   )
   
-  for (qmd_dir in vec_qmd_dir) {
-    
-    # prepare rendering params (img/ dir and qmd files)
-    img_dir <- file.path(
-      gsub("\\.html", "_img", output_html),
-      paste0(basename(qmd_dir), "_img")
-    )
-    
-    vec_qmd_path_group <- vec_qmd_path[dirname(vec_qmd_path) == qmd_dir]
-    
-    # render qmd in html in original dir
-    for (qmd in vec_qmd_path_group) {
-      cat_bullet(sprintf("Rendering %s", qmd))
-      
-      # try rendering qmd and warn user if successful / fail
-      tryCatch(expr = {
-        quarto_render(
-          input = qmd,
-          quiet = TRUE,
-          # use revealjs parameter to make a copy of img dir
-          # use compil quarto profile to not add logo/bg and footer from quakr
-          pandoc_args = c(
-            paste0("--extract-media=", img_dir),
-            "--profile=compil"
-          )
-        )
-        cli_alert_success("{basename(qmd)} rendered successfully")
-      }, 
-      error = \(error_message) {
-        cli_alert_danger("Fail to render {qmd}, cleaning and existing")
-        
-        # clean rendering output
-        clean_rendering_files(
-          dir = vec_qmd_dir,
-          present_before = file_present_before_rendering
-        )
-        
-        # throw an error with original error message
-        stop(error_message)
-      })
-    }
-  }
+  # set main folder for image
+  img_root_dir <- gsub("\\.html", "_img", output_html)
   
+  # render each course in parallel
+  # set seed = NULL to diable warning on random number generation
+  render_success <- future_map_lgl(
+    .x = vec_qmd_path,
+    .f = render_single_qmd,
+    img_root_dir = img_root_dir,
+    .options = furrr_options(seed = NULL)
+    )
+  
+  # exit and clean if some rendering failed
+  if (!all(render_success)){
+    clean_rendering_files(
+      dir = vec_qmd_dir,
+      present_before = file_present_before_rendering
+    )
+    return(NULL)
+  }
+
   # read html and extract slides elements
   vec_html_path <- gsub("\\.qmd", "\\.html", vec_qmd_path)
   

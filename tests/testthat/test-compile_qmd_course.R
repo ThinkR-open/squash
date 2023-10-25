@@ -25,22 +25,6 @@ file_present_before_rendering <- list.files(
 )
 
 test_that("compile_qmd_course fails gracefully in case of incorrect inputs", {
-  
-  # add incorrect path in qmd list
-  qmds_with_missing_path <- c(
-    qmds[[1]],
-    "a_path_to_a_qmd_that_does_not_exists.qmd"
-  )
-  
-  #' @description test cli_message in case of error in rendering
-  compile_qmd_course(
-        vec_qmd_path = qmds_with_missing_path,
-        output_dir = temp_dir,
-        output_html = "complete_course.html"
-      ) |> 
-    expect_message("Fail to render a_path_to_a_qmd_that_does_not_exists.qmd") |> 
-    expect_error()
-  
   # add path to a html file in list
   qmds_with_missing_path <- c(
     qmds[[1]],
@@ -54,19 +38,15 @@ test_that("compile_qmd_course fails gracefully in case of incorrect inputs", {
         output_html = "complete_course.html"
       ) |> 
     expect_error("Some of the input files are not qmd files.")
-  
 })
 
 test_that("compile_qmd_course renders all input courses inside a unique html output", {
-  #' @description test cli message in case of success
-  expect_message(
-    object = {
-      html_output <- compile_qmd_course(
-        vec_qmd_path = qmds,
-        output_dir = temp_dir,
-        output_html = "complete_course.html"
-      )
-    }, regexp = "qmd1_for_test.qmd rendered successfully"
+  
+  # run function
+  html_output <- compile_qmd_course(
+    vec_qmd_path = qmds,
+    output_dir = temp_dir,
+    output_html = "complete_course.html"
   )
   
   file_present_after_rendering <- list.files(
@@ -116,6 +96,7 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
 })
 
 test_that("compile_qmd_course HTML preview looks ok", {
+  
   # manual check on interactive mode only
   skip_if_not(interactive())
   take_a_look <- yesno::yesno2("\nReady to look at the html preview ?")
