@@ -11,6 +11,12 @@ An example code chunk
 8 * 8
 ```
 
+An example fenced code chunk
+
+```{r}
+#| echo: fenced
+6 * 6
+```
 
 ---
 
