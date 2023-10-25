@@ -10,6 +10,7 @@ Description: Compile n .qmd (under format revealjs) to one single html
 License: MIT + file LICENSE
 Imports: 
     cli,
+    furrr,
     htmltools,
     quarto,
     rvest,

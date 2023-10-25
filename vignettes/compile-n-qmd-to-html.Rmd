@@ -49,6 +49,46 @@ html_output <- compile_qmd_course(
 unlink(temp_dir, recursive = TRUE)
 ```
 
+## `render_single_qmd()` : render a single qmd file to html with image folder
+
+    
+
+  
+
+```{r example-render_single_qmd}
+# create a temp dir with qmd
+temp_dir <- tempfile(pattern = "render")
+
+dir.create(
+  path = file.path(temp_dir, "img"),
+  recursive = TRUE
+)
+
+file.copy(
+  from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "nq1h"),
+  to = temp_dir
+)
+
+file.copy(
+  from = system.file("courses", "C01", "img", "logo_1.png", package = "nq1h"),
+  to = file.path(temp_dir, "img")
+)
+
+# render qmd
+is_rendered <- render_single_qmd(
+  qmd = file.path(temp_dir, "qmd1_for_test.qmd"),
+  img_root_dir = file.path(temp_dir, "image_folder")
+    )
+
+# clean temp dir
+unlink(temp_dir, recursive = TRUE)
+```
+
+  
+
+  
+
+
 ## `extract_html_slides()` : extract html each elements of slides from multiple html files
 
 ```{r example-extract_html_slides}
