@@ -88,12 +88,12 @@ compile_qmd_course <- function(
   img_root_dir <- gsub("\\.html", "_img", output_html)
   
   # render each course in parallel
-  # set seed = NULL to diable warning on random number generation
   render_success <- future_map_lgl(
     .x = vec_qmd_path,
     .f = render_single_qmd,
     img_root_dir = img_root_dir,
-    .options = furrr_options(seed = NULL)
+    # make random number generation reproducible
+    .options = furrr_options(seed = TRUE)
     )
   
   # exit and clean if some rendering failed
