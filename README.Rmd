@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
 # {nq1h}: n qmd to 1 html 
 
 <!-- badges: start -->
+[![R build status](https://forge.thinkr.fr/thinkr/thinkrverse/poc_and_reprex/nq1h/badges/main/pipeline.svg)](https://forge.thinkr.fr/thinkr/thinkrverse/poc_and_reprex/nq1h/-/pipelines)
+[![Codecov test coverage](https://forge.thinkr.fr/thinkr/thinkrverse/poc_and_reprex/nq1h/badges/main/coverage.svg)](https://forge.thinkr.fr/thinkr/thinkrverse/poc_and_reprex/nq1h/commits/main)
 <!-- badges: end -->
 
 The goal of {nq1h} is to compile n .qmd presentations to one single html file.
