@@ -11,6 +11,7 @@ License: MIT + file LICENSE
 Imports: 
     cli,
     furrr,
+    future,
     htmltools,
     quarto,
     rvest,

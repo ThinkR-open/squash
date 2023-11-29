@@ -23,6 +23,11 @@ library(nq1h)
 ## `compile_qmd_course()` : compile individual qmds into a combined html
 
 ```{r examples-compile_qmd_course}
+library(future)
+
+# set parallel rendering
+plan(multisession, workers = 2)
+
 # list example qmds
 courses_path <- system.file(
   "courses",
@@ -44,6 +49,9 @@ html_output <- compile_qmd_course(
   output_dir = temp_dir,
   output_html = "complete_course.html"
 )
+
+# reset default rendering
+plan("default")
 
 # clean up
 unlink(temp_dir, recursive = TRUE)
