@@ -42,6 +42,11 @@ character. The path to the resulting html file
 Independently compile several qmd and create a common html
 }
 \examples{
+library(future)
+
+# set parallel rendering
+plan(multisession, workers = 2)
+
 # list example qmds
 courses_path <- system.file(
   "courses",
@@ -63,6 +68,9 @@ html_output <- compile_qmd_course(
   output_dir = temp_dir,
   output_html = "complete_course.html"
 )
+
+# reset default rendering
+plan("default")
 
 # clean up
 unlink(temp_dir, recursive = TRUE)

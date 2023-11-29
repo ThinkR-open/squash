@@ -34,6 +34,8 @@ pkgload::load_all(export_all = TRUE)
 #' @importFrom tools file_ext
 #' @importFrom htmltools htmlTemplate renderDocument save_html
 #' @importFrom furrr future_map_lgl furrr_options
+#' @importFrom future plan
+#' @importFrom cli cli_alert_info
 #'
 #' @return character. The path to the resulting html file
 #'
@@ -78,6 +80,19 @@ compile_qmd_course <- function(
   
   # set main folder for image
   img_root_dir <- gsub("\\.html", "_img", output_html)
+  
+  # warn user about {furrr} strategy (e.g. parallel, sequential, default)
+  future_setting <- attr(plan(), "call")
+  future_setting <- ifelse(
+    test = is.null(future_setting),
+    yes = 'plan("default")',
+    no = deparse(future_setting)
+    )
+  
+  cli_alert_info(paste(
+    "{{future}} is using {future_setting},",
+    "to modify this use {.code future::plan()}"
+  ))
   
   # render each course in parallel
   render_success <- future_map_lgl(
@@ -162,6 +177,11 @@ compile_qmd_course <- function(
 ```
 
 ```{r examples-compile_qmd_course}
+library(future)
+
+# set parallel rendering
+plan(multisession, workers = 2)
+
 # list example qmds
 courses_path <- system.file(
   "courses",
@@ -183,6 +203,9 @@ html_output <- compile_qmd_course(
   output_dir = temp_dir,
   output_html = "complete_course.html"
 )
+
+# reset default rendering
+plan("default")
 
 # clean up
 unlink(temp_dir, recursive = TRUE)
