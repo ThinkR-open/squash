@@ -111,7 +111,7 @@ if (interactive()) {
           "The package quakr version is out-of-date compare to ThinkR-open/quakr@%s.",
           branch
         ),
-        "Please run to update it:",
+        "Please run the following command in the terminal to update it:",
         "`cd inst/; quarto update ThinkR-open/quakr; cd ..`",
         sep  = "\n"
       )
