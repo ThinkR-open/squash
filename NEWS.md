@@ -1,3 +1,9 @@
+
+# nq1h 0.1.3
+
+* Check if quakr is always up-to-date and informs devs if not.
+This is done via `.check_if_quakr_up_to_date()` within the project's `.Rprofile`.
+
 # nq1h 0.1.2
 
 * `compile_qmd_course()` produces html with ThinkR theme rendering
