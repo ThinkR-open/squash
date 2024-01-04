@@ -15,6 +15,19 @@ flat_compile_qmd_course.Rmd:
     check: false
     document: true
     overwrite: 'yes'
+flat_html_to_pdf.Rmd:
+  path: dev/flat_html_to_pdf.Rmd
+  state: active
+  R: R/convert_html_to_pdf.R
+  tests: tests/testthat/test-convert_html_to_pdf.R
+  vignettes: vignettes/convert-html-slides-to-pdf.Rmd
+  inflate:
+    flat_file: dev/flat_html_to_pdf.Rmd
+    vignette_name: Convert html slides to pdf
+    open_vignette: false
+    check: false
+    document: true
+    overwrite: 'yes'
 flat_utils.Rmd:
   path: dev/flat_utils.Rmd
   state: active
