@@ -18,7 +18,7 @@
 #' @importFrom htmltools htmlTemplate renderDocument save_html
 #' @importFrom furrr future_map_lgl furrr_options
 #' @importFrom future plan
-#' @importFrom cli cli_alert_info
+#' @importFrom cli cli_alert_info cli_alert_warning
 #'
 #' @return character. The path to the resulting html file
 #'
@@ -93,6 +93,20 @@ compile_qmd_course <- function(
     include.dirs = TRUE,
     recursive = TRUE
   )
+  
+  # add compil quarto profile in each directory
+  quarto_profile_copied <- file.copy(
+    from = system.file("_quarto-compil.yml", package = "nq1h"),
+    to = file.path(vec_qmd_dir, "_quarto-compil.yml")
+  )
+  # skip copy and warn if it already exists
+  if (!all(quarto_profile_copied)){
+    cli_alert_warning(
+      paste0("Existing quarto compil profile (_quarto-compil.yaml) found in:\n",
+            paste0(vec_qmd_dir[!quarto_profile_copied], collapse = "\n"),
+            "\nIt will be used for qmd rendering.")
+    )
+  }
   
   # set main folder for image
   img_root_dir <- gsub("\\.html", "_img", output_html)

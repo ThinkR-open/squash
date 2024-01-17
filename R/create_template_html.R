@@ -54,28 +54,17 @@ create_template_html <- function(
       output_file_qmd)
     )
   
-  # download quakr _extensions from GitHub to temp_dir
-  download.file(
-    url = "https://github.com/ThinkR-open/quakr/archive/refs/heads/main.zip",
-    destfile = file.path(temp_dir, "quakr.zip"),
-    quiet = TRUE
-    )
-
-  if (!file.exists(file.path(temp_dir, "quakr.zip"))){
-    stop("Thinkr-open/quakr zip was not properly downloaded.")
-  }
-    
-  unzip(
-    zipfile = file.path(temp_dir, "quakr.zip"),
-    exdir = file.path(temp_dir, "quakr")
-    )
-  
+  # copy quakr _extensions from {nq1h} inst
   dir.create(file.path(temp_dir, "_extensions/"))
   
   file.copy(
-    from = file.path(temp_dir, "quakr", "quakr-main", "_extensions/."),
-    to = file.path(temp_dir, "_extensions"),
-    recursive = TRUE)
+    from = system.file(
+      "_extensions",
+      package = "nq1h"
+    ),
+    to = temp_dir,
+    recursive = TRUE
+  )
   
   # define quarto project parameters
   write_yaml(

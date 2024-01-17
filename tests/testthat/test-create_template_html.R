@@ -29,11 +29,11 @@ test_that("create_template_html generate an html with proper title and theme", {
   expect_setequal(
     object = expect_extension_files,
     expected = c(
-      "thinkridentity/_extension.yml",
-      "thinkridentity/background.png",
-      "thinkridentity/logo.png",
-      "thinkridentity/logo.svg",
-      "thinkridentity/thinkridentity.scss"
+      "ThinkR-open/thinkridentity/_extension.yml",
+      "ThinkR-open/thinkridentity/background.png",
+      "ThinkR-open/thinkridentity/logo.png",
+      "ThinkR-open/thinkridentity/logo.svg",
+      "ThinkR-open/thinkridentity/thinkridentity.scss"
     )
   )
   

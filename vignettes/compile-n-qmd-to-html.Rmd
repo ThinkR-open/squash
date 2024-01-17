@@ -59,7 +59,10 @@ unlink(temp_dir, recursive = TRUE)
 
 ## `render_single_qmd()` : render a single qmd file to html with image folder
 
-    
+This compilation will use a quarto rendering profile to remove footer, logo and title background. They will be incorporated by the first and last slide template.
+
+This compilation also generates a companion folder storing all the html images.
+
 
   
 
