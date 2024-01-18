@@ -15,6 +15,14 @@ This is a speaker note, it is only visible in the speaker view.
 
 ## Slide 2
 
-{tidyr} image
+two {tidyr} images side by side
 
+::: {.columns}
+::: {.column width="50%"}
 ![](img/logo_2.png)
+
+:::
+::: {.column width="50%"}
+![](img/logo_2.png)
+:::
+::::
