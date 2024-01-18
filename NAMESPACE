@@ -2,11 +2,9 @@
 
 export(clean_rendering_files)
 export(compile_qmd_course)
-export(convert_html_to_pdf)
 export(create_template_html)
 export(extract_html_slides)
 export(render_single_qmd)
-importFrom(cli,cat_rule)
 importFrom(cli,cli_alert_danger)
 importFrom(cli,cli_alert_info)
 importFrom(cli,cli_alert_success)
