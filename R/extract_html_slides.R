@@ -60,11 +60,6 @@ extract_html_slides <- function(
         gsub(
           pattern = "title-slide",
           replacement = paste0("title-slide-", as.character(slide_number))
-        ) |>
-        # remove newline after div closure (avoid side-by-side columns to move down)
-        gsub(
-          pattern = "</div>\n",
-          replacement = "</div>"
         )
     }
   )
@@ -72,8 +67,18 @@ extract_html_slides <- function(
   # compile all slides content into a single HTML text
   html_content <- list_html_slides |>
     unlist() |>
-    paste0(collapse = "\n") |>
-    HTML()
+    paste0(collapse = "\n")
+  
+  # remove newline after div closure
+  # newlines added by read_html() can cause two columns to move one under the other
+  html_content <- html_content |> 
+    gsub(
+          pattern = "</div>\n",
+          replacement = "</div>"
+        )
+        
+  # convert back to HTML
+  html_content <- HTML(html_content)
   
   return(html_content)
 }
