@@ -9,12 +9,12 @@ dir.create(
 )
 
 file.copy(
-  from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "squash"),
+  from = system.file("courses", "M01", "M01S01", "C01-qmd1_for_test.qmd", package = "squash"),
   to = temp_dir
 )
 
 file.copy(
-  from = system.file("courses", "C01", "img", "logo_1.png", package = "squash"),
+  from = system.file("courses", "M01", "M01S01", "img", "logo_1.png", package = "squash"),
   to = file.path(temp_dir, "img")
 )
 
@@ -42,11 +42,11 @@ test_that("render_single_qmd returns message and html", {
   expect_message(
     object = {
       is_rendered <- render_single_qmd(
-        qmd = file.path(temp_dir, "qmd1_for_test.qmd"),
+        qmd = file.path(temp_dir, "C01-qmd1_for_test.qmd"),
         img_root_dir = "img_complete"
         )
   },
-  regexp = "qmd1_for_test.qmd rendered successfully"
+  regexp = "C01-qmd1_for_test.qmd rendered successfully"
   )
   
   #' @description test output is FALSE for incorrect rendering
@@ -55,7 +55,7 @@ test_that("render_single_qmd returns message and html", {
   #' @description test html output exist
   expect_true(
     file.exists(
-      file.path(temp_dir, "qmd1_for_test.html")
+      file.path(temp_dir, "C01-qmd1_for_test.html")
       )
     )
 

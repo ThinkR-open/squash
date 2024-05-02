@@ -9,12 +9,12 @@ dir.create(
 )
 
 file.copy(
-  from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "squash"),
+  from = system.file("courses", "M01", "M01S01", "C01-qmd1_for_test.qmd", package = "squash"),
   to = temp_dir
 )
 
 file.copy(
-  from = system.file("courses", "C01", "img", "logo_1.png", package = "squash"),
+  from = system.file("courses", "M01", "M01S01", "img", "logo_1.png", package = "squash"),
   to = file.path(temp_dir, "img")
 )
 
@@ -28,7 +28,7 @@ file_and_dirs_before <- list.files(
 
 # render qmd
 quarto::quarto_render(
-  input = file.path(temp_dir, "qmd1_for_test.qmd"),
+  input = file.path(temp_dir, "C01-qmd1_for_test.qmd"),
   quiet = TRUE
 )
 

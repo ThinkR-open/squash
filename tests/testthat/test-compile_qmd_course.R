@@ -3,6 +3,7 @@
 # list example qmds
 courses_path <- system.file(
   "courses",
+  "M01",
   package = "squash"
 )
 
@@ -68,9 +69,9 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
   img_path <- file.path(
     dirname(html_output),
     c(
-      "complete_course_img/C01_img/img/logo_1.png",
-      "complete_course_img/C01_img/img/logo_2.png",
-      "complete_course_img/C02_img/img/logo_1.png"
+      "complete_course_img/M01S01_img/img/logo_1.png",
+      "complete_course_img/M01S01_img/img/logo_2.png",
+      "complete_course_img/M01S02_img/img/logo_1.png"
       )
     )
 
