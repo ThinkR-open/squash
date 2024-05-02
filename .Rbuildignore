@@ -2,7 +2,7 @@
 ^LICENSE\.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^nq1h\.Rproj$
+^squash\.Rproj$
 ^README\.Rmd$
 ^\.gitlab-ci\.yml$
 ^ci/lib$

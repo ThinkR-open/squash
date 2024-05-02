@@ -26,7 +26,7 @@ if (interactive()) {
   
   cli::cat_rule(
     sprintf(
-      "[Rprofile] Checking in {nq1h} quakr version is up-to-date",
+      "[Rprofile] Checking in {squash} quakr version is up-to-date",
       branch
     )
   )
@@ -91,7 +91,7 @@ if (interactive()) {
     })
   
   # Check if all files from the last version of quakr
-  # are identical to the current version within {nq1h}
+  # are identical to the current version within {squash}
   quakr_up_to_date <- setequal(
     tools::md5sum(downloaded_quakr_files),
     tools::md5sum(quakr_files)

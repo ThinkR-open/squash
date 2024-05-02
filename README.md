@@ -1,18 +1,18 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# {nq1h}: n qmd to 1 html
+# {squash}: several quarto to single html
 
 <!-- badges: start -->
 
 [![R build
-status](https://forge.thinkr.fr/thinkr/thinkrverse/poc_and_reprex/nq1h/badges/main/pipeline.svg)](https://forge.thinkr.fr/thinkr/thinkrverse/poc_and_reprex/nq1h/-/pipelines)
+status](https://forge.thinkr.fr/thinkr/thinkrverse/squash/badges/main/pipeline.svg)](https://forge.thinkr.fr/thinkr/thinkrverse/squash/-/pipelines)
 [![Codecov test
-coverage](https://forge.thinkr.fr/thinkr/thinkrverse/poc_and_reprex/nq1h/badges/main/coverage.svg)](https://forge.thinkr.fr/thinkr/thinkrverse/poc_and_reprex/nq1h/commits/main)
+coverage](https://forge.thinkr.fr/thinkr/thinkrverse/squash/badges/main/coverage.svg)](https://forge.thinkr.fr/thinkr/thinkrverse/squash/commits/main)
 <!-- badges: end -->
 
-The goal of {nq1h} is to compile n .qmd presentations to one single html
-file.
+The goal of {squash} is to compile n .qmd presentations to one single
+html file.
 
 The main purpose of this is to create custom slide decks from several
 chapter .qmd files.
@@ -36,7 +36,7 @@ options(
 )
 
 remotes::install_git(
-  "https://forge.thinkr.fr/thinkr/thinkrverse/poc_and_reprex/nq1h", 
+  "https://forge.thinkr.fr/thinkr/thinkrverse/squash", 
   upgrade = "never"
 )
 ```
@@ -50,7 +50,7 @@ Link to quarto: [download page](https://quarto.org/docs/download/)
 ## How to use it
 
 ``` r
-library(nq1h)
+library(squash)
 ```
 
 Given a vector containing path to several .qmd chapters.
@@ -58,7 +58,7 @@ Given a vector containing path to several .qmd chapters.
 ``` r
 courses_path <- system.file(
   "courses",
-  package = "nq1h"
+  package = "squash"
 )
 
 qmds <- list.files(
@@ -69,9 +69,9 @@ qmds <- list.files(
 )
 
 qmds
-#> [1] "/home/bob/R/x86_64-pc-linux-gnu-library/4.3/nq1h/courses/C01/qmd1_for_test.qmd"
-#> [2] "/home/bob/R/x86_64-pc-linux-gnu-library/4.3/nq1h/courses/C01/qmd2_for_test.qmd"
-#> [3] "/home/bob/R/x86_64-pc-linux-gnu-library/4.3/nq1h/courses/C02/qmd3_for_test.qmd"
+#> [1] "/home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/C01/qmd1_for_test.qmd"
+#> [2] "/home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/C01/qmd2_for_test.qmd"
+#> [3] "/home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/C02/qmd3_for_test.qmd"
 ```
 
 And a directory where you want your course to be generated.
@@ -89,11 +89,12 @@ html_output <- compile_qmd_course(
   output_dir = temp_dir,
   output_html = "complete_course.html"
 )
-#> ℹ Rendering /home/bob/R/x86_64-pc-linux-gnu-library/4.3/nq1h/courses/C01/qmd1_for_test.qmd
+#> ℹ {future} is using plan("default"), to modify this use `future::plan()`
+#> ℹ Rendering /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/C01/qmd1_for_test.qmd
 #> ✔ qmd1_for_test.qmd rendered successfully
-#> ℹ Rendering /home/bob/R/x86_64-pc-linux-gnu-library/4.3/nq1h/courses/C01/qmd2_for_test.qmd
+#> ℹ Rendering /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/C01/qmd2_for_test.qmd
 #> ✔ qmd2_for_test.qmd rendered successfully
-#> ℹ Rendering /home/bob/R/x86_64-pc-linux-gnu-library/4.3/nq1h/courses/C02/qmd3_for_test.qmd
+#> ℹ Rendering /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/C02/qmd3_for_test.qmd
 #> ✔ qmd3_for_test.qmd rendered successfully
 ```
 
@@ -113,14 +114,9 @@ unlink(temp_dir, recursive = TRUE)
 
 ### Project Management
 
-The project management of this package (issues, milestones etc…) is done
-within the
-[thinkr/thinkrverse/formation](https://forge.thinkr.fr/thinkr/thinkrverse/formation/)
-repo.
-
-The general specifications the package is to meet can be found here:
-[Spécifications Techniques de l’outil de création de
-cours](https://www.notion.so/thnkr/Sp-cifications-Techniques-de-l-outil-de-cr-ation-de-cours-52bd760e477c4f64b37a1230c927d386)
+The project management of this package (milestones etc…) is done on the
+[squash notion
+page](https://www.notion.so/thnkr/squash-f2d050e0c1484ecab69d044cc7bf201c?pvs=4).
 
 ### Keeping ThinkR quarto theme up-to-date
 
@@ -131,7 +127,7 @@ for the quarto revealjs format.
 It is not a R package but a quarto extension stored in `inst/`.
 
 It should be kept in sync with the main branch of
-<https://github.com/ThinkR-open/quakr> to insure that {nq1h} is always
+<https://github.com/ThinkR-open/quakr> to insure that {squash} is always
 shipped with the latest release of quakr.
 
 #### Automatic sync check

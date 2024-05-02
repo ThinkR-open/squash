@@ -5,11 +5,11 @@ temp_dir <- tempfile(pattern = "template")
 dir.create(temp_dir)
 
 # copy qmd in tmp
-nq1h_path <- system.file(package = "nq1h")
+squash_path <- system.file(package = "squash")
 
 files_to_copy <- c(
   file.path(
-    nq1h_path,
+    squash_path,
     c("_extensions",
       "courses",
       "_quarto.yaml",

@@ -1,3 +1,7 @@
+# squash 0.2.0
+
+* Rename package
+
 # nq1h 0.1.4
 
 * Use layout syntax instead of .columns to display images side by side in test slides.

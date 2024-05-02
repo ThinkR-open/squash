@@ -80,7 +80,7 @@ extract_html_slides <- function(
 # list html files
 courses_path <- system.file(
   "courses",
-  package = "nq1h"
+  package = "squash"
 )
 
 htmls <- list.files(
@@ -99,11 +99,11 @@ temp_dir <- tempfile(pattern = "template")
 dir.create(temp_dir)
 
 # copy qmd in tmp
-nq1h_path <- system.file(package = "nq1h")
+squash_path <- system.file(package = "squash")
 
 files_to_copy <- c(
   file.path(
-    nq1h_path,
+    squash_path,
     c("_extensions",
       "courses",
       "_quarto.yaml",
@@ -200,13 +200,13 @@ create_template_html <- function(
       output_file_qmd)
     )
   
-  # copy quakr _extensions from {nq1h} inst
+  # copy quakr _extensions from {squash} inst
   dir.create(file.path(temp_dir, "_extensions/"))
   
   file.copy(
     from = system.file(
       "_extensions",
-      package = "nq1h"
+      package = "squash"
     ),
     to = temp_dir,
     recursive = TRUE
@@ -258,7 +258,7 @@ temp_dir <- tempfile(pattern = "template")
 
 # create html template
 path_to_html_template <- create_template_html(
-  path_to_qmd = system.file("template.qmd", package = "nq1h"),
+  path_to_qmd = system.file("template.qmd", package = "squash"),
   output_dir = temp_dir,
   output_file = "complete_course.html"
 )
@@ -275,7 +275,7 @@ test_that("create_template_html generate an html with proper title and theme", {
 
   # create html template
   path_to_html_template <- create_template_html(
-    path_to_qmd = system.file("template.qmd", package = "nq1h"),
+    path_to_qmd = system.file("template.qmd", package = "squash"),
     output_dir = temp_dir,
     output_file = "complete_course.html"
   )
@@ -368,12 +368,12 @@ dir.create(
 )
 
 file.copy(
-  from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "nq1h"),
+  from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "squash"),
   to = temp_dir
 )
 
 file.copy(
-  from = system.file("courses", "C01", "img", "logo_1.png", package = "nq1h"),
+  from = system.file("courses", "C01", "img", "logo_1.png", package = "squash"),
   to = file.path(temp_dir, "img")
 )
 
@@ -411,12 +411,12 @@ dir.create(
 )
 
 file.copy(
-  from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "nq1h"),
+  from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "squash"),
   to = temp_dir
 )
 
 file.copy(
-  from = system.file("courses", "C01", "img", "logo_1.png", package = "nq1h"),
+  from = system.file("courses", "C01", "img", "logo_1.png", package = "squash"),
   to = file.path(temp_dir, "img")
 )
 

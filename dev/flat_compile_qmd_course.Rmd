@@ -44,7 +44,7 @@ compile_qmd_course <- function(
     vec_qmd_path,
     output_dir,
     output_html,
-    template = system.file("template.qmd", package = "nq1h"),
+    template = system.file("template.qmd", package = "squash"),
     title = "Formation R",
     date = "01/01/01-01/01/01",
     trainer = "ThinkR",
@@ -80,7 +80,7 @@ compile_qmd_course <- function(
   
   # add compil quarto profile in each directory
   quarto_profile_copied <- file.copy(
-    from = system.file("_quarto-compil.yml", package = "nq1h"),
+    from = system.file("_quarto-compil.yml", package = "squash"),
     to = file.path(vec_qmd_dir, "_quarto-compil.yml")
   )
   # skip copy and warn if it already exists
@@ -199,7 +199,7 @@ plan(multisession, workers = 2)
 # list example qmds
 courses_path <- system.file(
   "courses",
-  package = "nq1h"
+  package = "squash"
 )
 
 qmds <- list.files(
@@ -229,7 +229,7 @@ unlink(temp_dir, recursive = TRUE)
 # list example qmds
 courses_path <- system.file(
   "courses",
-  package = "nq1h"
+  package = "squash"
 )
 
 qmds <- list.files(
@@ -357,7 +357,7 @@ test_that("compile_qmd_course works with non-default parameters", {
     vec_qmd_path = qmds[1],
     output_dir = temp_dir,
     output_html = "formation_R.html",
-    template = system.file("template_minimal.qmd", package = "nq1h"),
+    template = system.file("template_minimal.qmd", package = "squash"),
     title = "Trouloulou",
     date = "66/66/66-66/66/66",
     trainer = "Tralala",
@@ -458,12 +458,12 @@ dir.create(
 )
 
 file.copy(
-  from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "nq1h"),
+  from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "squash"),
   to = temp_dir
 )
 
 file.copy(
-  from = system.file("courses", "C01", "img", "logo_1.png", package = "nq1h"),
+  from = system.file("courses", "C01", "img", "logo_1.png", package = "squash"),
   to = file.path(temp_dir, "img")
 )
 
@@ -487,12 +487,12 @@ dir.create(
 )
 
 file.copy(
-  from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "nq1h"),
+  from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "squash"),
   to = temp_dir
 )
 
 file.copy(
-  from = system.file("courses", "C01", "img", "logo_1.png", package = "nq1h"),
+  from = system.file("courses", "C01", "img", "logo_1.png", package = "squash"),
   to = file.path(temp_dir, "img")
 )
 
