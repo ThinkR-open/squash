@@ -7,7 +7,7 @@ test_that("create_template_html generate an html with proper title and theme", {
 
   # create html template
   path_to_html_template <- create_template_html(
-    path_to_qmd = system.file("template.qmd", package = "nq1h"),
+    path_to_qmd = system.file("template.qmd", package = "squash"),
     output_dir = temp_dir,
     output_file = "complete_course.html"
   )

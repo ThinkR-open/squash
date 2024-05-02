@@ -32,7 +32,7 @@
 #' # list example qmds
 #' courses_path <- system.file(
 #'   "courses",
-#'   package = "nq1h"
+#'   package = "squash"
 #' )
 #'
 #' qmds <- list.files(
@@ -60,7 +60,7 @@ compile_qmd_course <- function(
     vec_qmd_path,
     output_dir,
     output_html,
-    template = system.file("template.qmd", package = "nq1h"),
+    template = system.file("template.qmd", package = "squash"),
     title = "Formation R",
     date = "01/01/01-01/01/01",
     trainer = "ThinkR",
@@ -96,7 +96,7 @@ compile_qmd_course <- function(
   
   # add compil quarto profile in each directory
   quarto_profile_copied <- file.copy(
-    from = system.file("_quarto-compil.yml", package = "nq1h"),
+    from = system.file("_quarto-compil.yml", package = "squash"),
     to = file.path(vec_qmd_dir, "_quarto-compil.yml")
   )
   # skip copy and warn if it already exists

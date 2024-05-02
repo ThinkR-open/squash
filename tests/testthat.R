@@ -1,4 +1,4 @@
 library(testthat)
-library(nq1h)
+library(squash)
 
-test_check("nq1h")
+test_check("squash")

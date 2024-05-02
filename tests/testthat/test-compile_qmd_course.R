@@ -3,7 +3,7 @@
 # list example qmds
 courses_path <- system.file(
   "courses",
-  package = "nq1h"
+  package = "squash"
 )
 
 qmds <- list.files(
@@ -131,7 +131,7 @@ test_that("compile_qmd_course works with non-default parameters", {
     vec_qmd_path = qmds[1],
     output_dir = temp_dir,
     output_html = "formation_R.html",
-    template = system.file("template_minimal.qmd", package = "nq1h"),
+    template = system.file("template_minimal.qmd", package = "squash"),
     title = "Trouloulou",
     date = "66/66/66-66/66/66",
     trainer = "Tralala",

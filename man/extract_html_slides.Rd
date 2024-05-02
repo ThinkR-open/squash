@@ -19,7 +19,7 @@ Extract slide content from multiple html
 # list html files
 courses_path <- system.file(
   "courses",
-  package = "nq1h"
+  package = "squash"
 )
 
 htmls <- list.files(

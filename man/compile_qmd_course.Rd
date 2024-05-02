@@ -8,7 +8,7 @@ compile_qmd_course(
   vec_qmd_path,
   output_dir,
   output_html,
-  template = system.file("template.qmd", package = "nq1h"),
+  template = system.file("template.qmd", package = "squash"),
   title = "Formation R",
   date = "01/01/01-01/01/01",
   trainer = "ThinkR",
@@ -50,7 +50,7 @@ plan(multisession, workers = 2)
 # list example qmds
 courses_path <- system.file(
   "courses",
-  package = "nq1h"
+  package = "squash"
 )
 
 qmds <- list.files(

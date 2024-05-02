@@ -23,12 +23,12 @@
 #' )
 #'
 #' file.copy(
-#'   from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "nq1h"),
+#'   from = system.file("courses", "C01", "qmd1_for_test.qmd", package = "squash"),
 #'   to = temp_dir
 #' )
 #'
 #' file.copy(
-#'   from = system.file("courses", "C01", "img", "logo_1.png", package = "nq1h"),
+#'   from = system.file("courses", "C01", "img", "logo_1.png", package = "squash"),
 #'   to = file.path(temp_dir, "img")
 #' )
 #'

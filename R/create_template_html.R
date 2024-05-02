@@ -23,7 +23,7 @@
 #'
 #' # create html template
 #' path_to_html_template <- create_template_html(
-#'   path_to_qmd = system.file("template.qmd", package = "nq1h"),
+#'   path_to_qmd = system.file("template.qmd", package = "squash"),
 #'   output_dir = temp_dir,
 #'   output_file = "complete_course.html"
 #' )
@@ -54,13 +54,13 @@ create_template_html <- function(
       output_file_qmd)
     )
   
-  # copy quakr _extensions from {nq1h} inst
+  # copy quakr _extensions from {squash} inst
   dir.create(file.path(temp_dir, "_extensions/"))
   
   file.copy(
     from = system.file(
       "_extensions",
-      package = "nq1h"
+      package = "squash"
     ),
     to = temp_dir,
     recursive = TRUE
