@@ -1,3 +1,7 @@
+# squash 0.2.1
+
+* Example courses used in {formation} are converted to qmd and included in tests
+
 # squash 0.2.0
 
 * Rename package
