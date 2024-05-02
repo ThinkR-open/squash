@@ -1,0 +1,33 @@
+---
+title: "Tour de table"
+code: "M01S01C02"
+subtitle: "Pourquoi êtes-vous la?"
+prerequis:
+  chapitre: M01S01C01
+obj_ped: "exprimer leurs attentes au formateur"
+knitr:
+  opts_chunk: 
+    fig-align: center
+---
+
+## Preséntez-vous !
+### Une phrase par point:
+
++ prénom
++ fonction
++ utilisation de R
++ attente de la formation
+
+```{r}
+#| echo: false
+#| out.width: 50%
+knitr::include_graphics("img/groupe-conversation.jpg")
+```
+
+
+::: {.notes}
+patate chaude
+:::
+
+
+

@@ -20,6 +20,7 @@ Imports:
     utils,
     yaml
 Suggests: 
+    ggplot2,
     knitr,
     rmarkdown,
     testthat,

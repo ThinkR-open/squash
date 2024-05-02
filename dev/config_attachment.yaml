@@ -6,6 +6,7 @@ dir.t: tests
 extra.suggests:
   - tools
   - testthat
+  - ggplot2
 pkg_ignore: ~
 document: yes
 normalize: yes
