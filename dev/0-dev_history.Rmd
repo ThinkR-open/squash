@@ -104,7 +104,7 @@ pkgload::load_all()
 
 # Generate documentation and deal with dependencies
 # attachment::att_amend_desc(
-#   extra.suggests = c("tools", "testthat"),
+#   extra.suggests = c("tools", "testthat", "ggplot2"),
 #   update.config = TRUE
 #   )
 

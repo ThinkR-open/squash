@@ -32,6 +32,7 @@
 #' # list example qmds
 #' courses_path <- system.file(
 #'   "courses",
+#'   "M01",
 #'   package = "squash"
 #' )
 #'

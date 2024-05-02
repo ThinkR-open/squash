@@ -68,16 +68,30 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
   img_path <- file.path(
     dirname(html_output),
     c(
-      "complete_course_img/C01_img/img/logo_1.png",
-      "complete_course_img/C01_img/img/logo_2.png",
-      "complete_course_img/C02_img/img/logo_1.png"
+      "complete_course_img/M01S01_img/img/logo_1.png",
+      "complete_course_img/M01S01_img/img/logo_2.png",
+      "complete_course_img/M01S02_img/img/logo_1.png",
+      "complete_course_img/M02S01-presentation_des_personnes_presentes_img/C03-chevalet_files/figure-revealjs/unnamed-chunk-3-1.png",
+      "complete_course_img/M02S01-presentation_des_personnes_presentes_img/C03-chevalet_files/figure-revealjs/unnamed-chunk-4-1.png",
+      "complete_course_img/M02S01-presentation_des_personnes_presentes_img/img/bonjour_smiley.png",
+      "complete_course_img/M02S01-presentation_des_personnes_presentes_img/img/chevalet_blanc.jpg",
+      "complete_course_img/M02S01-presentation_des_personnes_presentes_img/img/crayon.jpg",
+      "complete_course_img/M02S01-presentation_des_personnes_presentes_img/img/groupe-conversation.jpg",
+      "complete_course_img/M02S01-presentation_des_personnes_presentes_img/img/thinkr-hex.png"
       )
     )
 
   expected_md5 <- c(
     "ac99473759dd46bf0564047e5cfc2714", 
     "8d77c0f9921459b6fdc64f2cceb7c575", 
-    "3b740309e3746c97e95df575801e3253"
+    "3b740309e3746c97e95df575801e3253",
+    "a0952053e176919b0818139578aea232",
+    "701828c6f38c8d2ddbb4301d0d752bad",
+    "37943ef4b82d1cfb00c3ffd8b7b13948",
+    "1ccfb852f6cd8df7b3d68d51a6f6aec9",
+    "29301418b3f7fd256e1f2eb0dc88a136",
+    "8ddd7aad8372954c9513115744a719d7",
+    "e9f32cf87e5de2e683b3c667226ff127"
     )
   
   #' @description test that output image exist and are the correct ones
@@ -107,9 +121,11 @@ test_that("compile_qmd_course HTML preview looks ok", {
     browseURL(file.path(temp_dir, "complete_course.html"))
     
     questions <- c(
-      "\nYou have 11 slides, all with footer and logo ?",
+      "\nYou have 23 slides, all with footer and logo ?",
       "\nMain titles are centered, all titles are orange ?",
-      "\nImage and code chunk appear properly sized and colored ?"
+      "\nImage and code chunk appear properly sized and colored ?",
+      "\nGraphics are visible in slides 19 and 20 ?",
+      "\nTable is visible in slide 21 ?"
       )
     
     answers <- sapply(

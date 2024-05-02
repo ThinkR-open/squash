@@ -58,6 +58,7 @@ Given a vector containing path to several .qmd chapters.
 ``` r
 courses_path <- system.file(
   "courses",
+  "M01",
   package = "squash"
 )
 
@@ -69,9 +70,9 @@ qmds <- list.files(
 )
 
 qmds
-#> [1] "/home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/C01/qmd1_for_test.qmd"
-#> [2] "/home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/C01/qmd2_for_test.qmd"
-#> [3] "/home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/C02/qmd3_for_test.qmd"
+#> [1] "/home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S01/C01-qmd1_for_test.qmd"
+#> [2] "/home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S01/C02-qmd2_for_test.qmd"
+#> [3] "/home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S02/C01-qmd3_for_test.qmd"
 ```
 
 And a directory where you want your course to be generated.
@@ -89,13 +90,17 @@ html_output <- compile_qmd_course(
   output_dir = temp_dir,
   output_html = "complete_course.html"
 )
+#> ! Existing quarto compil profile (_quarto-compil.yaml) found in:
+#> /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S01
+#> /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S02
+#> It will be used for qmd rendering.
 #> ℹ {future} is using plan("default"), to modify this use `future::plan()`
-#> ℹ Rendering /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/C01/qmd1_for_test.qmd
-#> ✔ qmd1_for_test.qmd rendered successfully
-#> ℹ Rendering /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/C01/qmd2_for_test.qmd
-#> ✔ qmd2_for_test.qmd rendered successfully
-#> ℹ Rendering /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/C02/qmd3_for_test.qmd
-#> ✔ qmd3_for_test.qmd rendered successfully
+#> ℹ Rendering /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S01/C01-qmd1_for_test.qmd
+#> ✔ C01-qmd1_for_test.qmd rendered successfully
+#> ℹ Rendering /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S01/C02-qmd2_for_test.qmd
+#> ✔ C02-qmd2_for_test.qmd rendered successfully
+#> ℹ Rendering /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S02/C01-qmd3_for_test.qmd
+#> ✔ C01-qmd3_for_test.qmd rendered successfully
 ```
 
 Check out the result

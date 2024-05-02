@@ -11,7 +11,7 @@ files_to_copy <- c(
   file.path(
     squash_path,
     c("_extensions",
-      "courses",
+      file.path("courses", "M01"),
       "_quarto.yaml",
       "_quarto-render.yml")
   )

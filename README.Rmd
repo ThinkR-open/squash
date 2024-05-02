@@ -64,6 +64,7 @@ Given a vector containing path to several .qmd chapters.
 ```{r}
 courses_path <- system.file(
   "courses",
+  "M01",
   package = "squash"
 )
 

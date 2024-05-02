@@ -50,6 +50,7 @@ plan(multisession, workers = 2)
 # list example qmds
 courses_path <- system.file(
   "courses",
+  "M01",
   package = "squash"
 )
 
