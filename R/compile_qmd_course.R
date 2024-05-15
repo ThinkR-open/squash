@@ -36,8 +36,19 @@
 #'   package = "squash"
 #' )
 #'
+#' # copy course tree in tmpdir, add quarto porject file
+#' tmp_course_path <- tempfile(pattern = "course")
+#' dir.create(tmp_course_path)
+#' file.create(file.path(tmp_course_path, "_quarto.yaml"))
+#'
+#' file.copy(
+#'   from = courses_path,
+#'   to = tmp_course_path,
+#'   recursive = TRUE
+#' )
+#'
 #' qmds <- list.files(
-#'   path = courses_path,
+#'   path = tmp_course_path,
 #'   full.names = TRUE,
 #'   recursive = TRUE,
 #'   pattern = "qmd$"
@@ -57,6 +68,7 @@
 #'
 #' # clean up
 #' unlink(temp_dir, recursive = TRUE)
+#' unlink(tmp_course_path, recursive = TRUE)
 compile_qmd_course <- function(
     vec_qmd_path,
     output_dir,
@@ -96,18 +108,9 @@ compile_qmd_course <- function(
   )
   
   # add compil quarto profile in each directory
-  quarto_profile_copied <- file.copy(
-    from = system.file("_quarto-compil.yml", package = "squash"),
-    to = file.path(vec_qmd_dir, "_quarto-compil.yml")
+  tmp_compil_files <- add_compil_profile_and_extension(
+    vec_qmd_path = vec_qmd_path
   )
-  # skip copy and warn if it already exists
-  if (!all(quarto_profile_copied)){
-    cli_alert_warning(
-      paste0("Existing quarto compil profile (_quarto-compil.yaml) found in:\n",
-            paste0(vec_qmd_dir[!quarto_profile_copied], collapse = "\n"),
-            "\nIt will be used for qmd rendering.")
-    )
-  }
   
   # set main folder for image
   img_root_dir <- gsub("\\.html", "_img", output_html)
@@ -138,7 +141,8 @@ compile_qmd_course <- function(
   if (!all(render_success)){
     clean_rendering_files(
       dir = vec_qmd_dir,
-      present_before = file_present_before_rendering
+      present_before = file_present_before_rendering,
+      extra_files = tmp_compil_files
     )
     return(NULL)
   }
@@ -195,7 +199,8 @@ compile_qmd_course <- function(
   
   clean_rendering_files(
     dir = vec_qmd_dir,
-    present_before = file_present_before_rendering
+    present_before = file_present_before_rendering,
+    extra_files = tmp_compil_files
   )
   
   return(

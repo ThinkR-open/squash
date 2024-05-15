@@ -14,6 +14,7 @@ Imports:
     furrr,
     future,
     htmltools,
+    purrr,
     quarto,
     rvest,
     tools,
