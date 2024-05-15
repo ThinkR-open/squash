@@ -19,13 +19,17 @@ flat_utils.Rmd:
   path: dev/flat_utils.Rmd
   state: active
   R:
+  - R/add_compil_profile_and_extension.R
   - R/clean_rendering_files.R
+  - R/copy_if_not_already_exist.R
   - R/create_template_html.R
   - R/extract_html_slides.R
   tests:
   - tests/testthat/test-extract_html_slides.R
   - tests/testthat/test-create_template_html.R
   - tests/testthat/test-clean_rendering_files.R
+  - tests/testthat/test-add_compil_profile_and_extension.R
+  - tests/testthat/test-copy_if_not_already_exist.R
   vignettes: []
   inflate:
     flat_file: dev/flat_utils.Rmd

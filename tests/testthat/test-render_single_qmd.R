@@ -37,19 +37,13 @@ test_that("render_single_qmd return an alert for failed rendering", {
 )
 
 test_that("render_single_qmd returns message and html", {
-  
-  #' @description test cli_message in case of success in rendering
-  expect_message(
-    object = {
-      is_rendered <- render_single_qmd(
-        qmd = file.path(temp_dir, "C01-qmd1_for_test.qmd"),
-        img_root_dir = "img_complete"
-        )
-  },
-  regexp = "C01-qmd1_for_test.qmd rendered successfully"
+
+  is_rendered <- render_single_qmd(
+    qmd = file.path(temp_dir, "C01-qmd1_for_test.qmd"),
+    img_root_dir = "img_complete"
   )
   
-  #' @description test output is FALSE for incorrect rendering
+  #' @description test output is TRUE for correct rendering
   expect_true(is_rendered)
   
   #' @description test html output exist

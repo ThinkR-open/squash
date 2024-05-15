@@ -1,3 +1,9 @@
+# squash 0.3.0
+
+* No file rendering is executed inside the package file architecture
+* Rendering progress is tracked with {progressr}
+* Quarto compil profile and quakr theme are added to quarto project if not pre-existing
+
 # squash 0.2.1
 
 * Example courses used in {formation} are converted to qmd and included in tests

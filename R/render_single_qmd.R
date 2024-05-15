@@ -8,7 +8,7 @@
 #' @param img_root_dir character. Path to the main image folder to extract media to
 #' 
 #' @importFrom quarto quarto_render
-#' @importFrom cli cli_alert_info cli_alert_success cli_alert_danger
+#' @importFrom cli cli_alert_danger
 #' 
 #' @return logical. TRUE if rendering succeeded, FALSE otherwise. Side effect : render qmd as html
 #' 
@@ -52,9 +52,6 @@ render_single_qmd <- function(
     paste0(basename(chapter), "_img")
   )
   
-  # warn user of file rendered
-  cli_alert_info("Rendering {qmd}")
-  
   # try rendering qmd and warn user if successful / fail
   tryCatch(
     expr = {
@@ -66,7 +63,6 @@ render_single_qmd <- function(
         pandoc_args = c(paste0("--extract-media=", img_dir),
                         "--profile=compil")
       )
-      cli_alert_success("{basename(qmd)} rendered successfully")
       return(TRUE)
     },
     error = \(error_message) {

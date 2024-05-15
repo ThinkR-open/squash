@@ -6,8 +6,19 @@ courses_path <- system.file(
   package = "squash"
 )
 
+# copy course tree in tmpdir
+tmp_course_path <- tempfile(pattern = "course")
+dir.create(tmp_course_path)
+file.create(file.path(tmp_course_path, "_quarto.yaml"))
+
+file.copy(
+  from = courses_path,
+  to = tmp_course_path,
+  recursive = TRUE
+)
+
 qmds <- list.files(
-  path = courses_path,
+  path = tmp_course_path,
   full.names = TRUE,
   recursive = TRUE,
   pattern = "qmd$"
@@ -16,9 +27,13 @@ qmds <- list.files(
 # generate html in temp folder
 temp_dir <- tempfile(pattern = "compile")
 
-# list files present before rendering
+# list files present before rendering (add a dummy one)
+file.create(
+  file.path(tmp_course_path, "dummy_empty.R")
+)
+
 file_present_before_rendering <- list.files(
-  path = courses_path,
+  path = tmp_course_path,
   full.names = TRUE,
   include.dirs = TRUE,
   recursive = TRUE
@@ -50,7 +65,7 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
   )
   
   file_present_after_rendering <- list.files(
-    path = courses_path,
+    path = tmp_course_path,
     full.names = TRUE,
     include.dirs = TRUE,
     recursive = TRUE
@@ -176,3 +191,4 @@ test_that("compile_qmd_course works with non-default parameters", {
 
 # clean up
 unlink(temp_dir, recursive = TRUE)
+unlink(tmp_course_path, recursive = TRUE)

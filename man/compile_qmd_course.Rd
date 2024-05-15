@@ -54,8 +54,19 @@ courses_path <- system.file(
   package = "squash"
 )
 
+# copy course tree in tmpdir, add quarto porject file
+tmp_course_path <- tempfile(pattern = "course")
+dir.create(tmp_course_path)
+file.create(file.path(tmp_course_path, "_quarto.yaml"))
+
+file.copy(
+  from = courses_path,
+  to = tmp_course_path,
+  recursive = TRUE
+)
+
 qmds <- list.files(
-  path = courses_path,
+  path = tmp_course_path,
   full.names = TRUE,
   recursive = TRUE,
   pattern = "qmd$"
@@ -75,4 +86,5 @@ plan("default")
 
 # clean up
 unlink(temp_dir, recursive = TRUE)
+unlink(tmp_course_path, recursive = TRUE)
 }

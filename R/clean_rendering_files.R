@@ -6,6 +6,7 @@
 #' 
 #' @param dir character. The directory to look for rendering output recursively.
 #' @param present_before character. Path to the files and directories present before rendering.
+#' @param extra_files character. Path of additional files to remove.
 #' 
 #' @return None. Side effect: remove files that were not present before rendering
 #' 
@@ -53,9 +54,10 @@
 #' unlink(temp_dir, recursive = TRUE)
 clean_rendering_files <- function(
     dir,
-    present_before
+    present_before,
+    extra_files = NULL
 ){
-    
+
   # list files
   present_after <- unique(
     list.files(
@@ -73,6 +75,11 @@ clean_rendering_files <- function(
   
   unlink(
     x = file_created_by_rendering,
+    recursive = TRUE
+  )
+  
+  unlink(
+    x = extra_files,
     recursive = TRUE
   )
   
