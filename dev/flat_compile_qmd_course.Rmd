@@ -35,7 +35,8 @@ pkgload::load_all(export_all = TRUE)
 #' @importFrom htmltools htmlTemplate renderDocument save_html
 #' @importFrom furrr future_map_lgl furrr_options
 #' @importFrom future plan
-#' @importFrom cli cli_alert_info cli_alert_warning
+#' @importFrom cli cli_alert_info cli_alert_warning cli_alert_success
+#' @importFrom progressr handlers progressor with_progress
 #'
 #' @return character. The path to the resulting html file
 #'
@@ -99,15 +100,21 @@ compile_qmd_course <- function(
     "to modify this use {.code future::plan()}"
   ))
   
+  # setup progress report with {progressr}
+  handlers("progress")
+  p <- progressor(along = vec_qmd_path)
+  
   # render each course in parallel
   render_success <- future_map_lgl(
     .x = vec_qmd_path,
-    .f = render_single_qmd,
-    img_root_dir = img_root_dir,
+    .f = \(x){
+      p(sprintf("rendering %s", basename(x)), class = "sticky")
+      render_single_qmd(x, img_root_dir = img_root_dir)
+    },
     # make random number generation reproducible
     .options = furrr_options(seed = TRUE)
-    )
-  
+  )
+
   # exit and clean if some rendering failed
   if (!all(render_success)){
     clean_rendering_files(
@@ -116,6 +123,8 @@ compile_qmd_course <- function(
       extra_files = tmp_compil_files
     )
     return(NULL)
+  } else {
+    cli_alert_success("All qmd rendered.")
   }
 
   # read html and extract slides elements
@@ -442,7 +451,7 @@ This compilation also generates a companion folder storing all the html images.
 #' @param img_root_dir character. Path to the main image folder to extract media to
 #' 
 #' @importFrom quarto quarto_render
-#' @importFrom cli cli_alert_info cli_alert_success cli_alert_danger
+#' @importFrom cli cli_alert_danger
 #' 
 #' @return logical. TRUE if rendering succeeded, FALSE otherwise. Side effect : render qmd as html
 #' 
@@ -459,9 +468,6 @@ render_single_qmd <- function(
     paste0(basename(chapter), "_img")
   )
   
-  # warn user of file rendered
-  cli_alert_info("Rendering {qmd}")
-  
   # try rendering qmd and warn user if successful / fail
   tryCatch(
     expr = {
@@ -473,7 +479,6 @@ render_single_qmd <- function(
         pandoc_args = c(paste0("--extract-media=", img_dir),
                         "--profile=compil")
       )
-      cli_alert_success("{basename(qmd)} rendered successfully")
       return(TRUE)
     },
     error = \(error_message) {
@@ -553,19 +558,13 @@ test_that("render_single_qmd return an alert for failed rendering", {
 )
 
 test_that("render_single_qmd returns message and html", {
-  
-  #' @description test cli_message in case of success in rendering
-  expect_message(
-    object = {
-      is_rendered <- render_single_qmd(
-        qmd = file.path(temp_dir, "C01-qmd1_for_test.qmd"),
-        img_root_dir = "img_complete"
-        )
-  },
-  regexp = "C01-qmd1_for_test.qmd rendered successfully"
+
+  is_rendered <- render_single_qmd(
+    qmd = file.path(temp_dir, "C01-qmd1_for_test.qmd"),
+    img_root_dir = "img_complete"
   )
   
-  #' @description test output is FALSE for incorrect rendering
+  #' @description test output is TRUE for correct rendering
   expect_true(is_rendered)
   
   #' @description test html output exist

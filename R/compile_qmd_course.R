@@ -18,7 +18,8 @@
 #' @importFrom htmltools htmlTemplate renderDocument save_html
 #' @importFrom furrr future_map_lgl furrr_options
 #' @importFrom future plan
-#' @importFrom cli cli_alert_info cli_alert_warning
+#' @importFrom cli cli_alert_info cli_alert_warning cli_alert_success
+#' @importFrom progressr handlers progressor with_progress
 #'
 #' @return character. The path to the resulting html file
 #'
@@ -128,15 +129,21 @@ compile_qmd_course <- function(
     "to modify this use {.code future::plan()}"
   ))
   
+  # setup progress report with {progressr}
+  handlers("progress")
+  p <- progressor(along = vec_qmd_path)
+  
   # render each course in parallel
   render_success <- future_map_lgl(
     .x = vec_qmd_path,
-    .f = render_single_qmd,
-    img_root_dir = img_root_dir,
+    .f = \(x){
+      p(sprintf("rendering %s", basename(x)), class = "sticky")
+      render_single_qmd(x, img_root_dir = img_root_dir)
+    },
     # make random number generation reproducible
     .options = furrr_options(seed = TRUE)
-    )
-  
+  )
+
   # exit and clean if some rendering failed
   if (!all(render_success)){
     clean_rendering_files(
@@ -145,6 +152,8 @@ compile_qmd_course <- function(
       extra_files = tmp_compil_files
     )
     return(NULL)
+  } else {
+    cli_alert_success("All qmd rendered.")
   }
 
   # read html and extract slides elements

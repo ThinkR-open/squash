@@ -56,23 +56,37 @@ library(squash)
 Given a vector containing path to several .qmd chapters.
 
 ``` r
+# list example qmds from /inst
 courses_path <- system.file(
   "courses",
   "M01",
   package = "squash"
 )
 
+# copy example qmds in a tempdir alongside a quarto project file
+tmp_course_path <- tempfile(pattern = "course")
+dir.create(tmp_course_path)
+file.create(file.path(tmp_course_path, "_quarto.yaml"))
+#> [1] TRUE
+
+file.copy(
+  from = courses_path,
+  to = tmp_course_path,
+  recursive = TRUE
+)
+#> [1] TRUE
+
 qmds <- list.files(
-  path = courses_path,
+  path = tmp_course_path,
   full.names = TRUE,
   recursive = TRUE,
   pattern = "qmd$"
 )
 
 qmds
-#> [1] "/home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S01/C01-qmd1_for_test.qmd"
-#> [2] "/home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S01/C02-qmd2_for_test.qmd"
-#> [3] "/home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S02/C01-qmd3_for_test.qmd"
+#> [1] "/tmp/RtmpQsXnVM/course113ccd64bb0f14/M01/M01S01/C01-qmd1_for_test.qmd"
+#> [2] "/tmp/RtmpQsXnVM/course113ccd64bb0f14/M01/M01S01/C02-qmd2_for_test.qmd"
+#> [3] "/tmp/RtmpQsXnVM/course113ccd64bb0f14/M01/M01S02/C01-qmd3_for_test.qmd"
 ```
 
 And a directory where you want your course to be generated.
@@ -84,23 +98,20 @@ temp_dir <- tempfile(pattern = "compile")
 
 You can use the function `compile_qmd_course()` to compile a course.
 
+> We wrap the function call inside a `progressr::with_progress()` to see
+> the progress bar. You can also set it in the console with
+> `progressr::handlers(global = TRUE)`
+
 ``` r
-html_output <- compile_qmd_course(
-  vec_qmd_path = qmds,
-  output_dir = temp_dir,
-  output_html = "complete_course.html"
+html_output <- progressr::with_progress(
+  compile_qmd_course(
+    vec_qmd_path = qmds,
+    output_dir = temp_dir,
+    output_html = "complete_course.html"
+  )
 )
-#> ! Existing quarto compil profile (_quarto-compil.yaml) found in:
-#> /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S01
-#> /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S02
-#> It will be used for qmd rendering.
 #> ℹ {future} is using plan("default"), to modify this use `future::plan()`
-#> ℹ Rendering /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S01/C01-qmd1_for_test.qmd
-#> ✔ C01-qmd1_for_test.qmd rendered successfully
-#> ℹ Rendering /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S01/C02-qmd2_for_test.qmd
-#> ✔ C02-qmd2_for_test.qmd rendered successfully
-#> ℹ Rendering /home/swann/R/x86_64-pc-linux-gnu-library/4.3/squash/courses/M01/M01S02/C01-qmd3_for_test.qmd
-#> ✔ C01-qmd3_for_test.qmd rendered successfully
+#> ✔ All qmd rendered.
 ```
 
 Check out the result
@@ -113,6 +124,7 @@ Clean temporary example directory.
 
 ``` r
 unlink(temp_dir, recursive = TRUE)
+unlink(tmp_course_path, recursive = TRUE)
 ```
 
 ## Devs
