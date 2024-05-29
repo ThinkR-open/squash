@@ -25,7 +25,7 @@ chapter .qmd files.
 
 The resulting html file follows the ThinkR quarto theme: [thinkr-open/quakr](https://github.com/ThinkR-open/quakr)
 
-![](inst/schemas/schema_readme.png)
+![](reference/figures/schema_readme.png)
 
 ## Installation
 
@@ -128,6 +128,10 @@ unlink(tmp_course_path, recursive = TRUE)
 ### Project Management
 
 The project management of this package (milestones etc...) is done on the [squash notion page](https://www.notion.so/thnkr/squash-f2d050e0c1484ecab69d044cc7bf201c?pvs=4).
+
+### Check
+
+Some tests manually verify the appearance of the slides. To trigger them, please run `devtools::test()` interactively.
 
 ### Keeping ThinkR quarto theme up-to-date
 

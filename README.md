@@ -20,7 +20,7 @@ chapter .qmd files.
 The resulting html file follows the ThinkR quarto theme:
 [thinkr-open/quakr](https://github.com/ThinkR-open/quakr)
 
-![](inst/schemas/schema_readme.png)
+![](reference/figures/schema_readme.png)
 
 ## Installation
 
@@ -84,9 +84,9 @@ qmds <- list.files(
 )
 
 qmds
-#> [1] "/tmp/RtmpQsXnVM/course113ccd64bb0f14/M01/M01S01/C01-qmd1_for_test.qmd"
-#> [2] "/tmp/RtmpQsXnVM/course113ccd64bb0f14/M01/M01S01/C02-qmd2_for_test.qmd"
-#> [3] "/tmp/RtmpQsXnVM/course113ccd64bb0f14/M01/M01S02/C01-qmd3_for_test.qmd"
+#> [1] "/tmp/RtmpZ9jHB2/course19fdb35bb8de60/M01/M01S01/C01-qmd1_for_test.qmd"
+#> [2] "/tmp/RtmpZ9jHB2/course19fdb35bb8de60/M01/M01S01/C02-qmd2_for_test.qmd"
+#> [3] "/tmp/RtmpZ9jHB2/course19fdb35bb8de60/M01/M01S02/C01-qmd3_for_test.qmd"
 ```
 
 And a directory where you want your course to be generated.
@@ -134,6 +134,11 @@ unlink(tmp_course_path, recursive = TRUE)
 The project management of this package (milestones etc…) is done on the
 [squash notion
 page](https://www.notion.so/thnkr/squash-f2d050e0c1484ecab69d044cc7bf201c?pvs=4).
+
+### Check
+
+Some tests manually verify the appearance of the slides. To trigger
+them, please run `devtools::test()` interactively.
 
 ### Keeping ThinkR quarto theme up-to-date
 
