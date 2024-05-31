@@ -1,3 +1,7 @@
+# squash 0.3.1
+
+* Look for quarto project using directory path
+
 # squash 0.3.0
 
 * No file rendering is executed inside the package file architecture
