@@ -38,8 +38,14 @@ add_compil_profile_and_extension <- function(
   qmd_dir <- dirname(vec_qmd_path)
   
   quarto_proj <- map(
-    .x = vec_qmd_path,
-    .f = \(x){quarto_inspect(x)$project$dir}
+    .x = qmd_dir,
+    .f = \(x){
+      # return NULL if dir is not a quarto project
+      tryCatch(
+        expr = {quarto_inspect(x)$dir},
+        error = \(e){NULL}
+        )
+      }
     )
   
   no_quarto_proj <- map_lgl(quarto_proj, is.null)
