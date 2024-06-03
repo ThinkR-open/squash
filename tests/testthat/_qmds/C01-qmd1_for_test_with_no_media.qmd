@@ -1,0 +1,25 @@
+---
+title: "Premier Chapitre"
+subtitle: "alpha"
+---
+
+## Slide 1
+
+An example code chunk
+
+```{r}
+8 * 8
+```
+
+An example fenced code chunk
+
+```{r}
+#| echo: fenced
+6 * 6
+```
+
+---
+
+## Slide 1
+
+{dplyr} image
