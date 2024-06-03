@@ -44,7 +44,7 @@ create_template_html <- function(
   
   # copy qmd template to temp_dir with new name
   if (!file.exists(temp_dir)){
-    dir.create(temp_dir)
+    dir.create(temp_dir, recursive = TRUE)
   }
   
   file.copy(
@@ -89,7 +89,7 @@ create_template_html <- function(
   )
   
   if (!file.exists(output_dir)){
-    dir.create(output_dir)
+    dir.create(output_dir, recursive = TRUE)
   }
   
   file.copy(
