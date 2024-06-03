@@ -1,3 +1,7 @@
+# squash 0.3.3
+
+* Create output directory recursively if does not exist
+
 # squash 0.3.2
 
 * Do not try to fetch img dir when no media is extracted from a qmd
