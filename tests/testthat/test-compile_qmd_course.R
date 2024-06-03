@@ -244,6 +244,44 @@ test_that("compile_qmd_course clean after exit for qmd with failed rendering", {
   )
 })
 
+test_that("compile_qmd_course account for qmd with no media output dir", {
+  
+  # add a qmd that has no media (plot / img)
+  qmd_with_no_media <- file.path(
+    tmp_course_path,
+    "courses",
+    "M03",
+    "M03S01-qmd-no-media",
+    "C01-qmd1_for_test_with_no_media.qmd"
+  )
+  dir.create(dirname(qmd_with_no_media), recursive = TRUE)
+  
+  file.copy(
+    from = testthat::test_path("_qmds", "C01-qmd1_for_test_with_no_media.qmd"),
+    to = qmd_with_no_media
+  )
+  
+  # run function
+  expect_warning(
+    object = {
+      html_output <- compile_qmd_course(
+        vec_qmd_path = c(qmds[1:2], qmd_with_no_media),
+        output_dir = temp_dir,
+        output_html = "complete_course.html"
+      )
+    },
+    regexp = NA
+  )
+  
+  #' @description test that no img dir is present for qmd with no media
+  expect_false(
+    dir.exists(
+      file.path(temp_dir, "complete_course_img", "M03S01-qmd-no-media")
+    )
+  )
+  
+})
+
 # clean up
 unlink(temp_dir, recursive = TRUE)
 unlink(tmp_course_path, recursive = TRUE)

@@ -1,6 +1,6 @@
 Package: squash
 Title: Several Quarto As Single HTML
-Version: 0.3.1
+Version: 0.3.2
 Authors@R: c(
     person("Antoine", "Languillaume", , "antoine@thinkr.fr", role = c("aut", "cre")),
     person("Colin", "Fay", , "colin@thinkr.fr", role = "aut"),

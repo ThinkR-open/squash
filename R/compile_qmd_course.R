@@ -200,6 +200,9 @@ compile_qmd_course <- function(
     paste0(basename(vec_qmd_dir), "_img")
   )
   
+  # copy img dir if they are present
+  vec_img_dir <- vec_img_dir[dir.exists(vec_img_dir)]
+  
   file.copy(
     from = unique(vec_img_dir),
     to = output_img_dir,
