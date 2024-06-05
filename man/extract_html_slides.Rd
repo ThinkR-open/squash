@@ -4,10 +4,12 @@
 \alias{extract_html_slides}
 \title{Extract html slide content}
 \usage{
-extract_html_slides(vec_html_path)
+extract_html_slides(vec_html_path, use_metadata = TRUE)
 }
 \arguments{
 \item{vec_html_path}{character. The vector of path to individual html files}
+
+\item{use_metadata}{logical. Use the keywords metadata for building the slide's url}
 }
 \value{
 HTML. The HTML slide content of all html files combined together.
