@@ -39,21 +39,25 @@ htmls <- list.files(
 )
   
 test_that("extract_html_slides returns all html slide classes in correct order", {
-    
+  
   # run function with slide order 1-2-3
   html_slide_content <- extract_html_slides(
-    vec_html_path = htmls
-    )
+    vec_html_path = htmls,
+    use_metadata = TRUE
+  )
   
   #' @description test with three html files in order 1-2-3
   expect_snapshot(x = html_slide_content)
   
   # run function with slide order 2-1-3
-  html_slide_content_reordered <- extract_html_slides(vec_html_path = htmls[c(2, 1, 3)])
+  html_slide_content_reordered <- extract_html_slides(
+    vec_html_path = htmls[c(2, 1, 3)],
+    use_metadata = TRUE
+  )
   
   #' @description test with three htmls in order 2-1-3
   expect_snapshot(x = html_slide_content_reordered)
-
+  
 })
 
 # clean up

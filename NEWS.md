@@ -1,3 +1,7 @@
+# squash 0.3.4
+
+* Use keywords metadata as slide url id if present and check for duplicates
+
 # squash 0.3.3
 
 * Create output directory recursively if does not exist

@@ -3,7 +3,7 @@
     Code
       html_slide_content
     Output
-      <section id="title-slide-1" data-background-image="../../_extensions/ThinkR-open/thinkridentity/background.png" class="quarto-title-block center"><h1 class="title">Premier Chapitre</h1>
+      <section id="M01S01-1" data-background-image="../../_extensions/ThinkR-open/thinkridentity/background.png" class="quarto-title-block center"><h1 class="title">Premier Chapitre</h1>
         <p class="subtitle">alpha</p>
       
       <div class="quarto-title-authors">
@@ -13,16 +13,16 @@
       <section id="slide-1" class="slide level2"><h2>Slide 1</h2>
       <p>An example code chunk</p>
       <div class="cell">
-      <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="dv">8</span> <span class="sc">*</span> <span class="dv">8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+      <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="dv">8</span> <span class="sc">*</span> <span class="dv">8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
       <div class="cell-output cell-output-stdout">
       <pre><code>[1] 64</code></pre>
       </div>
       </div>
       <p>An example fenced code chunk</p>
       <div class="cell">
-      <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href=""></a><span class="in">```{r}</span></span>
-      <span id="cb3-2"><a href=""></a><span class="in">6 * 6</span></span>
-      <span id="cb3-3"><a href=""></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+      <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1"></a><span class="in">```{r}</span></span>
+      <span id="cb3-2"><a href="#cb3-2"></a><span class="dv">6</span> <span class="sc">*</span> <span class="dv">6</span></span>
+      <span id="cb3-3"><a href="#cb3-3"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
       <div class="cell-output cell-output-stdout">
       <pre><code>[1] 36</code></pre>
       </div>
@@ -31,11 +31,9 @@
       <section id="slide-1-1" class="slide level2"><h2>Slide 1</h2>
       <p>{dplyr} image</p>
       <p><img data-src="img/logo_1.png"></p>
-      <div class="quarto-auto-generated-content">
       <p><img src="../../_extensions/ThinkR-open/thinkridentity/logo.png" class="slide-logo"></p>
       <div class="footer footer-default">
       <p><strong><i class="las la-book"></i> Premier Chapitre</strong> | Retrouvez nous sur <a href="https://thinkr.fr" class="uri">https://thinkr.fr</a></p>
-      </div>
       </div>
       </section>
       <section id="title-slide-2" data-background-image="../../_extensions/ThinkR-open/thinkridentity/background.png" class="quarto-title-block center"><h1 class="title">Deuxième Chapitre</h1>
@@ -61,8 +59,8 @@
             }</style></aside></section>
       <section id="layout" class="slide level2"><h2>Layout</h2>
       <p>two {tidyr} images side by side</p>
-      <div class="quarto-layout-panel" data-layout-ncol="2">
-      <div class="quarto-layout-row">
+      <div class="quarto-layout-panel">
+      <div class="quarto-layout-row quarto-layout-valign-top">
       <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
       <p><img data-src="img/logo_2.png"></p>
       </div>
@@ -71,14 +69,12 @@
       </div>
       </div>
       </div>
-      <div class="quarto-auto-generated-content">
       <p><img src="../../_extensions/ThinkR-open/thinkridentity/logo.png" class="slide-logo"></p>
       <div class="footer footer-default">
       <p><strong><i class="las la-book"></i> Deuxième Chapitre</strong> | Retrouvez nous sur <a href="https://thinkr.fr" class="uri">https://thinkr.fr</a></p>
       </div>
-      </div>
       </section>
-      <section id="title-slide-3" data-background-image="../../_extensions/ThinkR-open/thinkridentity/background.png" class="quarto-title-block center"><h1 class="title">Troisième Chapitre</h1>
+      <section id="M01S02-1" data-background-image="../../_extensions/ThinkR-open/thinkridentity/background.png" class="quarto-title-block center"><h1 class="title">Troisième Chapitre</h1>
         <p class="subtitle">youpi</p>
       
       <div class="quarto-title-authors">
@@ -91,11 +87,9 @@
       <section id="slide-3-1" class="slide level2"><h2>Slide 3</h2>
       <p>{ggplot2} image</p>
       <p><img data-src="img/logo_1.png"></p>
-      <div class="quarto-auto-generated-content">
       <p><img src="../../_extensions/ThinkR-open/thinkridentity/logo.png" class="slide-logo"></p>
       <div class="footer footer-default">
       <p><strong><i class="las la-book"></i> Troisième Chapitre</strong> | Retrouvez nous sur <a href="https://thinkr.fr" class="uri">https://thinkr.fr</a></p>
-      </div>
       </div>
       </section>
 
@@ -127,8 +121,8 @@
             }</style></aside></section>
       <section id="layout" class="slide level2"><h2>Layout</h2>
       <p>two {tidyr} images side by side</p>
-      <div class="quarto-layout-panel" data-layout-ncol="2">
-      <div class="quarto-layout-row">
+      <div class="quarto-layout-panel">
+      <div class="quarto-layout-row quarto-layout-valign-top">
       <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
       <p><img data-src="img/logo_2.png"></p>
       </div>
@@ -137,14 +131,12 @@
       </div>
       </div>
       </div>
-      <div class="quarto-auto-generated-content">
       <p><img src="../../_extensions/ThinkR-open/thinkridentity/logo.png" class="slide-logo"></p>
       <div class="footer footer-default">
       <p><strong><i class="las la-book"></i> Deuxième Chapitre</strong> | Retrouvez nous sur <a href="https://thinkr.fr" class="uri">https://thinkr.fr</a></p>
       </div>
-      </div>
       </section>
-      <section id="title-slide-2" data-background-image="../../_extensions/ThinkR-open/thinkridentity/background.png" class="quarto-title-block center"><h1 class="title">Premier Chapitre</h1>
+      <section id="M01S01-1" data-background-image="../../_extensions/ThinkR-open/thinkridentity/background.png" class="quarto-title-block center"><h1 class="title">Premier Chapitre</h1>
         <p class="subtitle">alpha</p>
       
       <div class="quarto-title-authors">
@@ -154,16 +146,16 @@
       <section id="slide-1" class="slide level2"><h2>Slide 1</h2>
       <p>An example code chunk</p>
       <div class="cell">
-      <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="dv">8</span> <span class="sc">*</span> <span class="dv">8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+      <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="dv">8</span> <span class="sc">*</span> <span class="dv">8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
       <div class="cell-output cell-output-stdout">
       <pre><code>[1] 64</code></pre>
       </div>
       </div>
       <p>An example fenced code chunk</p>
       <div class="cell">
-      <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href=""></a><span class="in">```{r}</span></span>
-      <span id="cb3-2"><a href=""></a><span class="in">6 * 6</span></span>
-      <span id="cb3-3"><a href=""></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+      <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1"></a><span class="in">```{r}</span></span>
+      <span id="cb3-2"><a href="#cb3-2"></a><span class="dv">6</span> <span class="sc">*</span> <span class="dv">6</span></span>
+      <span id="cb3-3"><a href="#cb3-3"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
       <div class="cell-output cell-output-stdout">
       <pre><code>[1] 36</code></pre>
       </div>
@@ -172,14 +164,12 @@
       <section id="slide-1-1" class="slide level2"><h2>Slide 1</h2>
       <p>{dplyr} image</p>
       <p><img data-src="img/logo_1.png"></p>
-      <div class="quarto-auto-generated-content">
       <p><img src="../../_extensions/ThinkR-open/thinkridentity/logo.png" class="slide-logo"></p>
       <div class="footer footer-default">
       <p><strong><i class="las la-book"></i> Premier Chapitre</strong> | Retrouvez nous sur <a href="https://thinkr.fr" class="uri">https://thinkr.fr</a></p>
       </div>
-      </div>
       </section>
-      <section id="title-slide-3" data-background-image="../../_extensions/ThinkR-open/thinkridentity/background.png" class="quarto-title-block center"><h1 class="title">Troisième Chapitre</h1>
+      <section id="M01S02-1" data-background-image="../../_extensions/ThinkR-open/thinkridentity/background.png" class="quarto-title-block center"><h1 class="title">Troisième Chapitre</h1>
         <p class="subtitle">youpi</p>
       
       <div class="quarto-title-authors">
@@ -192,11 +182,9 @@
       <section id="slide-3-1" class="slide level2"><h2>Slide 3</h2>
       <p>{ggplot2} image</p>
       <p><img data-src="img/logo_1.png"></p>
-      <div class="quarto-auto-generated-content">
       <p><img src="../../_extensions/ThinkR-open/thinkridentity/logo.png" class="slide-logo"></p>
       <div class="footer footer-default">
       <p><strong><i class="las la-book"></i> Troisième Chapitre</strong> | Retrouvez nous sur <a href="https://thinkr.fr" class="uri">https://thinkr.fr</a></p>
-      </div>
       </div>
       </section>
 

@@ -12,7 +12,7 @@ test_that("copy_if_not_already_exist works", {
   #' @description test that first copy create the dir
   expect_true(dir.exists(output))
   
-  #' @description test that second copy doesnothing
+  #' @description test that second copy does nothing
   expect_message(
     {
       output <- copy_if_not_already_exist(
