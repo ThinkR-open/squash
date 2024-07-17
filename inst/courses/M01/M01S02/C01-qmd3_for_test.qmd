@@ -12,7 +12,7 @@ Some text
 
 Some text again
 
-## Slide with {ggplot2} image
+## Slide with image
 
 {ggplot2} image
 

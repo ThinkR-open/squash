@@ -13,10 +13,10 @@
       [7] "Pour aider ceux qui ne retiennent pas les prénoms"
       
       [[2]]
-      [1] "Slide with code"                "Slide {dplyr} with image"      
+      [1] "Slide with code"                "Slide with image"              
       [3] "Slide with speaker note"        "Slide with side-by-side layout"
       [5] "Slide with text"                "Slide with text"               
-      [7] "Slide with {ggplot2} image"     "Preséntez-vous !"              
+      [7] "Slide with image"               "Preséntez-vous !"              
       [9] "ThinkR"                        
       
       [[3]]

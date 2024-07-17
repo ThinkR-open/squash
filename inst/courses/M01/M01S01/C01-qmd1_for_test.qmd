@@ -21,7 +21,7 @@ An example fenced code chunk
 
 ---
 
-## Slide {dplyr} with image
+## Slide with image
 
 {dplyr} image
 

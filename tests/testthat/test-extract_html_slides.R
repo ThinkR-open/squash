@@ -55,15 +55,15 @@ test_that("extract_html_slides returns all html slide classes in correct order",
     object = section_title,
     expected = c(
       "M01S01-1",
-      "slide-with-code",
-      "slide-dplyr-with-image",
+      "1-slide-with-code",
+      "1-slide-with-image",
       "title-slide-2",
-      "slide-with-speaker-note",
-      "slide-with-side-by-side-layout",
+      "2-slide-with-speaker-note",
+      "2-slide-with-side-by-side-layout",
       "M01S02-1",
-      "slide-with-text",
-      "slide-with-text-1",
-      "slide-with-ggplot2-image"
+      "3-slide-with-text",
+      "3-slide-with-text-1",
+      "3-slide-with-image"
     )
   )
   
@@ -82,15 +82,15 @@ test_that("extract_html_slides returns all html slide classes in correct order",
     object = section_title_reordered,
     expected = c(
       "title-slide-1",
-      "slide-with-speaker-note",
-      "slide-with-side-by-side-layout",
+      "1-slide-with-speaker-note",
+      "1-slide-with-side-by-side-layout",
       "M01S01-1",
-      "slide-with-code",
-      "slide-dplyr-with-image",
+      "2-slide-with-code",
+      "2-slide-with-image",
       "M01S02-1",
-      "slide-with-text",
-      "slide-with-text-1",
-      "slide-with-ggplot2-image"
+      "3-slide-with-text",
+      "3-slide-with-text-1",
+      "3-slide-with-image"
     )
   )
 })
