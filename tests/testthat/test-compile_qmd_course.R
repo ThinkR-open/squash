@@ -120,10 +120,10 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
   slide_content_by_cat <- purrr::map(.x = c("h1", "h2", "h3", "code"), .f = \(x) {
     slide_content |>
       html_elements(x) |>
-      as.character()
+      rvest::html_text()
   })
   
-  #' @description test html p content is present
+  #' @description test html content is present
   expect_snapshot(x = slide_content_by_cat)
 
 })
