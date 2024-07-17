@@ -94,9 +94,14 @@ extract_html_slides <- function(
     X = seq_along(list_html_slides),
     FUN = \(slide_number) {
       list_html_slides[[slide_number]] |>
-        # rename 1st slide to avoid duplicated title-slide ids
+        # add chapter number as prefix to avoid duplicated subtitles across htmls
         gsub(
-          pattern = "title-slide",
+          pattern = "<section id=\"([^\"]*)\"([^>]*)>",
+          replacement = paste0("<section id=\"", slide_number, "-\\1\"\\2>")
+        ) |> 
+        # rename 1st slide with keyword or chapter number
+        gsub(
+          pattern = paste0(slide_number, "-title-slide"),
           replacement = list_slide_id[[slide_number]]
         )
     }
@@ -177,7 +182,25 @@ test_that("extract_html_slides returns all html slide classes in correct order",
   )
   
   #' @description test with three html files in order 1-2-3
-  expect_snapshot(x = html_slide_content)
+  section_title <- html_slide_content |>
+    read_html() |>
+    html_elements(css = "section") |>
+    html_attr("id")
+  expect_equal(
+    object = section_title,
+    expected = c(
+      "M01S01-1",
+      "1-slide-with-code",
+      "1-slide-with-image",
+      "title-slide-2",
+      "2-slide-with-speaker-note",
+      "2-slide-with-side-by-side-layout",
+      "M01S02-1",
+      "3-slide-with-text",
+      "3-slide-with-text-1",
+      "3-slide-with-image"
+    )
+  )
   
   # run function with slide order 2-1-3
   html_slide_content_reordered <- extract_html_slides(
@@ -186,8 +209,25 @@ test_that("extract_html_slides returns all html slide classes in correct order",
   )
   
   #' @description test with three htmls in order 2-1-3
-  expect_snapshot(x = html_slide_content_reordered)
-  
+  section_title_reordered <- html_slide_content_reordered |>
+    read_html() |>
+    html_elements(css = "section") |>
+    html_attr("id")
+  expect_equal(
+    object = section_title_reordered,
+    expected = c(
+      "title-slide-1",
+      "1-slide-with-speaker-note",
+      "1-slide-with-side-by-side-layout",
+      "M01S01-1",
+      "2-slide-with-code",
+      "2-slide-with-image",
+      "M01S02-1",
+      "3-slide-with-text",
+      "3-slide-with-text-1",
+      "3-slide-with-image"
+    )
+  )
 })
 
 # clean up
@@ -330,7 +370,11 @@ test_that("create_template_html generate an html with proper title and theme", {
   slide_content <- path_to_html_template |>
     read_html() |>
     html_elements(css = ".slides") |>
-    html_children() |>
+    html_children()
+  slide_id <- slide_content |>
+    html_attr(name = "id")
+  slide_text <- slide_content |> 
+    html_elements("p") |> 
     as.character()
   
   #' @description test quakr extension dir is correctly copied
@@ -345,8 +389,19 @@ test_that("create_template_html generate an html with proper title and theme", {
     )
   )
   
-  #' @description test html content of template has correct theme and title
-  expect_snapshot(x = slide_content)
+  #' @description test html content of template has correct title and text
+  expect_equal(
+    object = slide_id,
+    expected = c("title-slide", NA, "include_trainer")
+  )
+  expect_contains(
+    object = slide_text,
+    expected = c(
+      "<p>{{ include_html_content }}</p>",
+      "<p><strong>{{ include_phone }}</strong></p>",
+      "<p><strong>{{ include_mail }}</strong></p>"
+    )
+  )
   
 })
 

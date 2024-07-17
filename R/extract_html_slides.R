@@ -92,9 +92,14 @@ extract_html_slides <- function(
     X = seq_along(list_html_slides),
     FUN = \(slide_number) {
       list_html_slides[[slide_number]] |>
-        # rename 1st slide to avoid duplicated title-slide ids
+        # add chapter number as prefix to avoid duplicated subtitles across htmls
         gsub(
-          pattern = "title-slide",
+          pattern = "<section id=\"([^\"]*)\"([^>]*)>",
+          replacement = paste0("<section id=\"", slide_number, "-\\1\"\\2>")
+        ) |> 
+        # rename 1st slide with keyword or chapter number
+        gsub(
+          pattern = paste0(slide_number, "-title-slide"),
           replacement = list_slide_id[[slide_number]]
         )
     }

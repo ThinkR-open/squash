@@ -4,11 +4,15 @@ subtitle: "youpi"
 keywords: "M01S02-1"
 ---
 
-## Slide 3
+## Slide with text
 
-Texte 3
+Some text
 
-## Slide 3
+## Slide with text
+
+Some text again
+
+## Slide with image
 
 {ggplot2} image
 

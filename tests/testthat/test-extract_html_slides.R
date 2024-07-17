@@ -47,7 +47,25 @@ test_that("extract_html_slides returns all html slide classes in correct order",
   )
   
   #' @description test with three html files in order 1-2-3
-  expect_snapshot(x = html_slide_content)
+  section_title <- html_slide_content |>
+    read_html() |>
+    html_elements(css = "section") |>
+    html_attr("id")
+  expect_equal(
+    object = section_title,
+    expected = c(
+      "M01S01-1",
+      "1-slide-with-code",
+      "1-slide-with-image",
+      "title-slide-2",
+      "2-slide-with-speaker-note",
+      "2-slide-with-side-by-side-layout",
+      "M01S02-1",
+      "3-slide-with-text",
+      "3-slide-with-text-1",
+      "3-slide-with-image"
+    )
+  )
   
   # run function with slide order 2-1-3
   html_slide_content_reordered <- extract_html_slides(
@@ -56,8 +74,25 @@ test_that("extract_html_slides returns all html slide classes in correct order",
   )
   
   #' @description test with three htmls in order 2-1-3
-  expect_snapshot(x = html_slide_content_reordered)
-  
+  section_title_reordered <- html_slide_content_reordered |>
+    read_html() |>
+    html_elements(css = "section") |>
+    html_attr("id")
+  expect_equal(
+    object = section_title_reordered,
+    expected = c(
+      "title-slide-1",
+      "1-slide-with-speaker-note",
+      "1-slide-with-side-by-side-layout",
+      "M01S01-1",
+      "2-slide-with-code",
+      "2-slide-with-image",
+      "M01S02-1",
+      "3-slide-with-text",
+      "3-slide-with-text-1",
+      "3-slide-with-image"
+    )
+  )
 })
 
 # clean up
