@@ -113,16 +113,18 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
   expect_true(all(file.exists(img_path)))
   expect_true(all(tools::md5sum(img_path) == expected_md5))
   
-  slide_p_content <- html_output |>
+  slide_content <- html_output |>
     read_html() |>
-    html_elements(css = ".slides") |>
-    html_children() |>
-    html_children() |> 
-    html_elements("p") |> 
-    as.character()
+    html_elements(css = ".slides")
+  
+  slide_content_by_cat <- purrr::map(.x = c("h1", "h2", "h3", "code"), .f = \(x) {
+    slide_content |>
+      html_elements(x) |>
+      as.character()
+  })
   
   #' @description test html p content is present
-  expect_snapshot(x = slide_p_content)
+  expect_snapshot(x = slide_content_by_cat)
 
 })
 
@@ -138,7 +140,7 @@ test_that("compile_qmd_course HTML preview looks ok", {
     browseURL(file.path(temp_dir, "complete_course.html"))
     
     questions <- c(
-      "\nYou have 23 slides, all with footer and logo ?",
+      "\nYou have 24 slides, all with footer and logo ?",
       "\nMain titles are centered, all titles are orange ?",
       "\nImage and code chunk appear properly sized and colored ?",
       "\nGraphics are visible in slides 19 and 20 ?",
