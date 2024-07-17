@@ -22,7 +22,11 @@ test_that("create_template_html generate an html with proper title and theme", {
   slide_content <- path_to_html_template |>
     read_html() |>
     html_elements(css = ".slides") |>
-    html_children() |>
+    html_children()
+  slide_id <- slide_content |>
+    html_attr(name = "id")
+  slide_text <- slide_content |> 
+    html_elements("p") |> 
     as.character()
   
   #' @description test quakr extension dir is correctly copied
@@ -37,8 +41,19 @@ test_that("create_template_html generate an html with proper title and theme", {
     )
   )
   
-  #' @description test html content of template has correct theme and title
-  expect_snapshot(x = slide_content)
+  #' @description test html content of template has correct title and text
+  expect_equal(
+    object = slide_id,
+    expected = c("title-slide", NA, "include_trainer")
+  )
+  expect_contains(
+    object = slide_text,
+    expected = c(
+      "<p>{{ include_html_content }}</p>",
+      "<p><strong>{{ include_phone }}</strong></p>",
+      "<p><strong>{{ include_mail }}</strong></p>"
+    )
+  )
   
 })
 

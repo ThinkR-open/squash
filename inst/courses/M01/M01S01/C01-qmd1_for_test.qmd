@@ -4,7 +4,7 @@ subtitle: "alpha"
 keywords: "M01S01-1"
 ---
 
-## Slide 1
+## Slide with code
 
 An example code chunk
 
@@ -21,7 +21,7 @@ An example fenced code chunk
 
 ---
 
-## Slide 1
+## Slide {dplyr} with image
 
 {dplyr} image
 

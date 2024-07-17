@@ -3,9 +3,9 @@ title: "Deuxième Chapitre"
 subtitle: "omega"
 ---
 
-## Slide 2
+## Slide with speaker note
 
-Texte 2
+Some text
 
 ::: {.notes}
 This is a speaker note, it is only visible in the speaker view.
@@ -13,7 +13,7 @@ This is a speaker note, it is only visible in the speaker view.
 
 ---
 
-## Layout
+## Slide with side-by-side layout
 
 two {tidyr} images side by side
 

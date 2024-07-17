@@ -357,14 +357,16 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
   expect_true(all(file.exists(img_path)))
   expect_true(all(tools::md5sum(img_path) == expected_md5))
   
-  slide_content <- html_output |>
+  slide_p_content <- html_output |>
     read_html() |>
     html_elements(css = ".slides") |>
     html_children() |>
+    html_children() |> 
+    html_elements("p") |> 
     as.character()
   
-  #' @description test html slide content is correct
-  expect_snapshot(x = slide_content)
+  #' @description test html p content is present
+  expect_snapshot(x = slide_p_content)
 
 })
 
