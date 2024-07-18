@@ -13,7 +13,8 @@ compile_qmd_course(
   date = "01/01/01-01/01/01",
   trainer = "ThinkR",
   mail = "thinkr.fr",
-  phone = "+33 0 00 00 00 00"
+  phone = "+33 0 00 00 00 00",
+  quiet = TRUE
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ compile_qmd_course(
 \item{mail}{character. Mail of the trainer}
 
 \item{phone}{character. Phone number of the trainer}
+
+\item{quiet}{logical. Output info in user console}
 }
 \value{
 character. The path to the resulting html file

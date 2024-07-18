@@ -1,6 +1,6 @@
 ---
-title: "Troisième Chapitre"
-subtitle: "youpi"
+title: "Third chapter"
+subtitle: "basic slides"
 keywords: "M01S02-1"
 ---
 
@@ -10,10 +10,12 @@ Some text
 
 ## Slide with text
 
-Some text again
+Some text again, appear in a new slide
 
 ## Slide with image
 
-{ggplot2} image
+Slide with chapter name and png file name identical to a slide from the first chapter.
+
+This should be a {ggplot2} image.
 
 ![](img/logo_1.png)

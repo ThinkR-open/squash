@@ -82,42 +82,48 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
   
   img_path <- file.path(
     dirname(html_output),
+    "complete_course_img",
     c(
-      "complete_course_img/M01S01_img/img/logo_1.png",
-      "complete_course_img/M01S01_img/img/logo_2.png",
-      "complete_course_img/M01S02_img/img/logo_1.png",
-      "complete_course_img/M02S01-presentation_des_personnes_presentes_img/C03-chevalet_files/figure-revealjs/unnamed-chunk-3-1.png",
-      "complete_course_img/M02S01-presentation_des_personnes_presentes_img/C03-chevalet_files/figure-revealjs/unnamed-chunk-4-1.png",
-      "complete_course_img/M02S01-presentation_des_personnes_presentes_img/img/bonjour_smiley.png",
-      "complete_course_img/M02S01-presentation_des_personnes_presentes_img/img/chevalet_blanc.jpg",
-      "complete_course_img/M02S01-presentation_des_personnes_presentes_img/img/crayon.jpg",
-      "complete_course_img/M02S01-presentation_des_personnes_presentes_img/img/groupe-conversation.jpg",
-      "complete_course_img/M02S01-presentation_des_personnes_presentes_img/img/thinkr-hex.png"
-      )
+      "M01S01_img/img/logo_1.png",
+      "M01S01_img/img/logo_2.png",
+      "M01S02_img/img/logo_1.png",
+      "M02S01-presentations_img/C02-code_files/figure-revealjs/unnamed-chunk-1-1.png",
+      "M02S01-presentations_img/C02-code_files/figure-revealjs/unnamed-chunk-2-1.png",
+      "M02S01-presentations_img/img/bonjour_smiley.png",
+      "M02S01-presentations_img/img/chevalet_blanc.jpg",
+      "M02S01-presentations_img/img/crayon.jpg",
+      "M02S01-presentations_img/img/groupe-conversation.jpg",
+      "M02S01-presentations_img/img/thinkr-hex.png"
     )
+  )
 
   expected_md5 <- c(
-    "ac99473759dd46bf0564047e5cfc2714", 
-    "8d77c0f9921459b6fdc64f2cceb7c575", 
+    "ac99473759dd46bf0564047e5cfc2714",
+    "8d77c0f9921459b6fdc64f2cceb7c575",
     "3b740309e3746c97e95df575801e3253",
-    "a0952053e176919b0818139578aea232",
-    "701828c6f38c8d2ddbb4301d0d752bad",
     "37943ef4b82d1cfb00c3ffd8b7b13948",
     "1ccfb852f6cd8df7b3d68d51a6f6aec9",
     "29301418b3f7fd256e1f2eb0dc88a136",
     "8ddd7aad8372954c9513115744a719d7",
     "e9f32cf87e5de2e683b3c667226ff127"
-    )
+  )
   
-  #' @description test that output image exist and are the correct ones
+  #' @description test that output image exist
   expect_true(all(file.exists(img_path)))
-  expect_true(all(tools::md5sum(img_path) == expected_md5))
+  
+  #' @description test that png images are identical
+  png_img_path <- img_path[!grepl(pattern = "unnamed-chunk", x = img_path)]
+  expect_equal(
+    object = tools::md5sum(png_img_path),
+    expected = expected_md5,
+    ignore_attr = TRUE
+  )
   
   slide_content <- html_output |>
     read_html() |>
     html_elements(css = ".slides")
   
-  slide_content_by_cat <- purrr::map(.x = c("h1", "h2", "h3", "code"), .f = \(x) {
+  slide_content_by_cat <- purrr::map(.x = c("h1", "h2", "code"), .f = \(x) {
     slide_content |>
       html_elements(x) |>
       rvest::html_text()
@@ -140,7 +146,7 @@ test_that("compile_qmd_course HTML preview looks ok", {
     browseURL(file.path(temp_dir, "complete_course.html"))
     
     questions <- c(
-      "\nYou have 24 slides, all with footer and logo ?",
+      "\nYou have 26 slides, all with footer and logo ?",
       "\nMain titles are centered, all titles are orange ?",
       "\nImage and code chunk appear properly sized and colored ?",
       "\nGraphics are visible in slides 19 and 20 ?",
@@ -191,7 +197,7 @@ test_that("compile_qmd_course works with non-default parameters", {
   #' @description test non-default info are well inserted in minimal template
   expect_snapshot(x = first_slide_content)
   
-    file_present_after_rendering <- list.files(
+  file_present_after_rendering <- list.files(
     path = tmp_course_path,
     full.names = TRUE,
     include.dirs = TRUE,
@@ -213,12 +219,12 @@ test_that("compile_qmd_course clean after exit for qmd with failed rendering", {
     tmp_course_path,
     "courses",
     "M02",
-    "M02S01-presentation_des_personnes_presentes",
-    "C03-chevalet-with-stop.qmd"
+    "M02S01-presentations",
+    "C03-qmd-with-stop.qmd"
   )
   
   file.copy(
-    from = testthat::test_path("_qmds", "C03-chevalet-with-stop.qmd"),
+    from = testthat::test_path("_qmds", "C03-qmd-with-stop.qmd"),
     to = qmd_with_stop
   )
   

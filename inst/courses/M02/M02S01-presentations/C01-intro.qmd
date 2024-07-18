@@ -1,0 +1,63 @@
+---
+title: "Fourth chapter"
+code: "M01S01C02"
+subtitle: "Some text and image format"
+knitr:
+  opts_chunk: 
+    fig-align: center
+---
+
+## A ch@ptér wïth spéciàl character$%
+
+Thï$ îs fûll of spéciàl characters%
+
+## A bullet point list
+
++ with **bold**
++ with _italic_
+
+> a note
+>
+>> a note inside a note
+
+
+## A graph printed with knitr
+
+This is a centered figure.
+
+```{r}
+#| echo: false
+#| out.width: 50%
+knitr::include_graphics("img/groupe-conversation.jpg")
+```
+
+## An embedded image
+
+This is a centered hex image with a title and an alt text.
+
+![the hex title](img/thinkr-hex.png "Title: the hex alt text"){height=20%}
+
+## Two jpg images printed with knitr
+
+Tow jpg images, they appear one above the other.
+
+```{r}
+#| echo: false
+#| out.width: 30%
+knitr::include_graphics("img/chevalet_blanc.jpg")
+knitr::include_graphics("img/crayon.jpg")
+```
+
+## One png image printed with knitr
+
+A png image
+
+```{r}
+#| echo: false
+#| out.width: 50%
+knitr::include_graphics("img/bonjour_smiley.png")
+```
+
+
+
+

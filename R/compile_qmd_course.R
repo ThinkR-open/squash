@@ -13,6 +13,7 @@
 #' @param trainer character. Name of the trainer
 #' @param mail character. Mail of the trainer
 #' @param phone character. Phone number of the trainer
+#' @param quiet logical. Output info in user console
 #'
 #' @importFrom tools file_ext
 #' @importFrom htmltools htmlTemplate renderDocument save_html
@@ -79,7 +80,8 @@ compile_qmd_course <- function(
     date = "01/01/01-01/01/01",
     trainer = "ThinkR",
     mail = "thinkr.fr",
-    phone = "+33 0 00 00 00 00"
+    phone = "+33 0 00 00 00 00",
+    quiet = TRUE
 ) {
   # check paths
   not_all_files_are_qmd <- any(
@@ -117,18 +119,20 @@ compile_qmd_course <- function(
   img_root_dir <- gsub("\\.html", "_img", output_html)
   
   # warn user about {furrr} strategy (e.g. parallel, sequential, default)
-  future_setting <- attr(plan(), "call")
-  future_setting <- ifelse(
-    test = is.null(future_setting),
-    yes = 'plan("default")',
-    no = deparse(future_setting)
+  if (isFALSE(quiet)){
+    future_setting <- attr(plan(), "call")
+    future_setting <- ifelse(
+      test = is.null(future_setting),
+      yes = 'plan("default")',
+      no = deparse(future_setting)
     )
-  
-  cli_alert_info(paste(
-    "{{future}} is using {future_setting},",
-    "to modify this use {.code future::plan()}"
-  ))
-  
+    
+    cli_alert_info(paste(
+      "{{future}} is using {future_setting},",
+      "to modify this use {.code future::plan()}"
+    ))
+  }
+
   # setup progress report with {progressr}
   handlers("progress")
   p <- progressor(along = vec_qmd_path)
@@ -153,9 +157,11 @@ compile_qmd_course <- function(
     )
     return(NULL)
   } else {
-    cli_alert_success("All qmd rendered.")
+    if(isFALSE(quiet)){
+      cli_alert_success("All qmd rendered.")
+    }
   }
-
+  
   # read html and extract slides elements
   vec_html_path <- gsub("\\.qmd", "\\.html", vec_qmd_path)
   

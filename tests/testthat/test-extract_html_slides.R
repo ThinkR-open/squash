@@ -27,6 +27,7 @@ file.copy(
 # remove as_job to not run as background jobs
 quarto::quarto_render(
   input = temp_dir,
+  quiet = TRUE,
   as_job = FALSE
 )
 
@@ -56,10 +57,13 @@ test_that("extract_html_slides returns all html slide classes in correct order",
     expected = c(
       "M01S01-1",
       "1-slide-with-code",
+      "1-slide-with-speaker-note",
       "1-slide-with-image",
       "title-slide-2",
-      "2-slide-with-speaker-note",
-      "2-slide-with-side-by-side-layout",
+      "2-slide-with-side-by-side-image-layout",
+      "2-slide-with-side-by-side-image-columns",
+      "2-slide-with-side-by-side-chunk-layout",
+      "2-slide-with-side-by-side-chunk-columns",
       "M01S02-1",
       "3-slide-with-text",
       "3-slide-with-text-1",
@@ -82,10 +86,13 @@ test_that("extract_html_slides returns all html slide classes in correct order",
     object = section_title_reordered,
     expected = c(
       "title-slide-1",
-      "1-slide-with-speaker-note",
-      "1-slide-with-side-by-side-layout",
+      "1-slide-with-side-by-side-image-layout",
+      "1-slide-with-side-by-side-image-columns",
+      "1-slide-with-side-by-side-chunk-layout",
+      "1-slide-with-side-by-side-chunk-columns",
       "M01S01-1",
       "2-slide-with-code",
+      "2-slide-with-speaker-note",
       "2-slide-with-image",
       "M01S02-1",
       "3-slide-with-text",
