@@ -1,3 +1,8 @@
+# squash 0.3.5
+
+* Improve test slides description text to ease visual check
+* Remove fusen structure
+
 # squash 0.3.4
 
 * Use keywords metadata as slide url id if present and check for duplicates
