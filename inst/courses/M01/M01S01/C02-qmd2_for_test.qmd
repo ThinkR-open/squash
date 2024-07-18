@@ -1,19 +1,9 @@
 ---
-title: "Deuxième Chapitre"
-subtitle: "omega"
+title: "Second chapter"
+subtitle: "columns and layouts"
 ---
 
-## Slide with speaker note
-
-Some text
-
-::: {.notes}
-This is a speaker note, it is only visible in the speaker view.
-:::
-
----
-
-## Slide with side-by-side layout
+## Slide with side-by-side image layout
 
 two {tidyr} images side by side
 
@@ -22,3 +12,67 @@ two {tidyr} images side by side
 
 ![](img/logo_2.png)
 :::
+
+## Slide with side-by-side image columns
+
+two {tidyr} images side by side
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![](img/logo_2.png)
+:::
+
+::: {.column width="50%"}
+![](img/logo_2.png)
+:::
+
+::::
+
+## Slide with side-by-side chunk layout
+
+a central chunk with two outputs side-by-side
+
+:::: {layout="[ 50, 50 ]"}
+
+::: {#left-chunk}
+
+```{r}
+cat("I'm the left chunk output")
+```
+
+:::
+
+::: {#right-chunk}
+
+```{r}
+cat("I'm the right chunk output")
+```
+
+:::
+
+::::
+
+## Slide with side-by-side chunk columns
+
+two independent chunks and their separate outputs
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r}
+cat("I'm the left chunk output")
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+cat("I'm the right chunk output")
+```
+
+:::
+
+::::

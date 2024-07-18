@@ -1,0 +1,47 @@
+---
+title: "Fifth chapter"
+code: M01S01C03
+subtitle: 'ggplot output'
+knitr:
+  opts_chunk: 
+    fig-align: center
+---
+
+## A ggplot graph
+
+It will be stored in `figure-html/`
+
+```{r}
+#| echo: false
+#| out.width: 50%
+library(ggplot2)
+ggplot(mtcars) +
+  aes(x = mpg, y = cyl) +
+  geom_point()
+```
+
+
+## A plot 
+
+With `plot()`
+
+```{r}
+plot(1:10, 1:10)
+```
+
+
+## Reading and printing data from csv
+
+```{r}
+#| eval: false
+# export command line
+write.csv(mtcars, here::here("inst/courses/M02/M02S01-presentations/data/mtcars.csv"))
+```
+
+Read csv file and show the dataset.
+
+```{r}
+my_data <- read.csv("data/mtcars.csv")
+head(my_data)
+```
+

@@ -1,6 +1,6 @@
 ---
-title: "Premier Chapitre"
-subtitle: "alpha"
+title: "First chapter"
+subtitle: "basic slides"
 keywords: "M01S01-1"
 ---
 
@@ -19,7 +19,13 @@ An example fenced code chunk
 6 * 6
 ```
 
----
+## Slide with speaker note
+
+Some text
+
+::: {.notes}
+This is a speaker note, it is only visible in the speaker view.
+:::
 
 ## Slide with image
 
