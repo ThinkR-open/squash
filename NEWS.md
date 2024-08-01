@@ -1,3 +1,7 @@
+# squash 0.3.6
+
+* Add admin file to install {squash} on dev containers
+
 # squash 0.3.5
 
 * Improve test slides description text to ease visual check
