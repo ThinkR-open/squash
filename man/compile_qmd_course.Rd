@@ -11,6 +11,7 @@ compile_qmd_course(
   template = system.file("template.qmd", package = "squash"),
   title = "Formation R",
   date = "01/01/01-01/01/01",
+  footer = "**<i class='las la-book'></i> Formation R**",
   trainer = "ThinkR",
   mail = "thinkr.fr",
   phone = "+33 0 00 00 00 00",
@@ -29,6 +30,8 @@ compile_qmd_course(
 \item{title}{character. Title of the presentation}
 
 \item{date}{character. Start and end dates of the training}
+
+\item{footer}{character. Footer appearing in all slides}
 
 \item{trainer}{character. Name of the trainer}
 

@@ -8,6 +8,7 @@
 #' @param template character. Path to the template qmd to use. Content will be included at the positions inside double-brackets
 #' @param title character. Title of the presentation
 #' @param date character. Start and end dates of the training
+#' @param footer character. Footer appearing in all slides
 #' @param trainer character. Name of the trainer
 #' @param mail character. Mail of the trainer
 #' @param phone character. Phone number of the trainer
@@ -76,6 +77,7 @@ compile_qmd_course <- function(
     template = system.file("template.qmd", package = "squash"),
     title = "Formation R",
     date = "01/01/01-01/01/01",
+    footer = "**<i class='las la-book'></i> Formation R**",
     trainer = "ThinkR",
     mail = "thinkr.fr",
     phone = "+33 0 00 00 00 00",
@@ -95,7 +97,8 @@ compile_qmd_course <- function(
     output_dir = output_dir,
     output_file = output_html,
     title = title,
-    date = date
+    date = date,
+    footer = footer
   )
   
   # list courses files present before rendering

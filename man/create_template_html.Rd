@@ -10,6 +10,7 @@ create_template_html(
   output_dir,
   title = "Formation R",
   date = "01/01/01-01/01/01",
+  footer = "**<i class='las la-book'></i> Formation R**",
   temp_dir = tempfile(pattern = "template")
 )
 }
@@ -23,6 +24,8 @@ create_template_html(
 \item{title}{character. Title of the presentation}
 
 \item{date}{character. Start and end dates of the training}
+
+\item{footer}{character. Footer appearing in all slides}
 
 \item{temp_dir}{character. Path to the temp_dir where template will be rendered}
 }
