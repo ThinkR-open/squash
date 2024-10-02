@@ -1,3 +1,7 @@
+# squash 0.3.7
+
+* New feature: add a footer to the html
+
 # squash 0.3.6
 
 * Add admin file to install {squash} on dev containers
