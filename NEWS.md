@@ -1,3 +1,7 @@
+# squash 0.3.8
+
+* Update quakr to increase text size in slides
+
 # squash 0.3.7
 
 * New feature: add a footer to the html
