@@ -38,18 +38,18 @@ $presentation-h3-font-size: 1.25em;
   font-family: 'Yanone Kaffeesatz';
   }
 
-  .subtitle {
-  color: $black;
-  font-weight: 600;
-  font-family: 'Yanone Kaffeesatz';
-  font-size: $presentation-h2-font-size;
-  }
-
   .quarto-title-author {
     color: $black;
   }
 }
 
+.subtitle {
+  color: $black;
+  font-weight: 600;
+  font-family: 'Yanone Kaffeesatz';
+  font-size: $presentation-h2-font-size;
+}
+  
 .reveal h1 {
   color: $orange !important;
   font-family: 'Yanone Kaffeesatz', sans-serif !important;
@@ -61,6 +61,7 @@ $presentation-h3-font-size: 1.25em;
   font-family: 'Yanone Kaffeesatz', sans-serif !important;
   font-weight: 600 !important;
 }
+
 .reveal h3 {
   font-family: 'Yanone Kaffeesatz', sans-serif !important;
   font-weight: 600 !important;
@@ -104,7 +105,7 @@ $presentation-h3-font-size: 1.25em;
 }
 
 .reveal h3 code {
-  font-size: calc($presentation-h3-font-size - 1em);
+  font-size: calc($presentation-h3-font-size - 0.5em);
 }
 
 .reveal p code {
@@ -116,11 +117,16 @@ $presentation-h3-font-size: 1.25em;
   padding: 6px 9px;
   line-height: 1.5em;
   font-size: calc($presentation-font-size-root - 8px);
+  margin-bottom: 10px;
 }
 
 .reveal div.sourceCode {
   border: 1px solid #c8c8c8;
-  margin: 0 0 10px 0 !important;
+  margin-bottom: 10px !important;
+}
+
+.sourceCode {
+  margin-bottom: 0 !important;
 }
 
 code span.fu {
