@@ -15,7 +15,8 @@ compile_qmd_course(
   trainer = "ThinkR",
   mail = "thinkr.fr",
   phone = "+33 0 00 00 00 00",
-  quiet = TRUE
+  quiet = TRUE,
+  fix_img_path = FALSE
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ compile_qmd_course(
 \item{phone}{character. Phone number of the trainer}
 
 \item{quiet}{logical. Output info in user console}
+
+\item{fix_img_path}{logical. If image path are present as raw html inside files,
+use this option to correctly edit their path.}
 }
 \value{
 character. The path to the resulting html file

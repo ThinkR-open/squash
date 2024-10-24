@@ -2,9 +2,6 @@
 title: "Fourth chapter"
 code: "M01S01C02"
 subtitle: "Some text and image format"
-knitr:
-  opts_chunk: 
-    fig-align: center
 ---
 
 ## A ch@ptér wïth spéciàl character$%
@@ -28,33 +25,40 @@ This is a centered figure.
 ```{r}
 #| echo: false
 #| out.width: 50%
+#| fig-align: center
 knitr::include_graphics("img/groupe-conversation.jpg")
 ```
 
 ## An embedded image
 
-This is a centered hex image with a title and an alt text.
+This is a tiny left-aligned hex image with a title and an alt text.
 
-![the hex title](img/thinkr-hex.png "Title: the hex alt text"){height=20%}
+![the hex title](img/thinkr-hex.png "Title: the hex alt text"){height=100px fig-align=left}
+
+This is the same image, centered and slightly larger.
+
+<img src="img/thinkr-hex.png" height="200px" class="centered">
 
 ## Two jpg images printed with knitr
 
-Tow jpg images, they appear one above the other.
+Tow jpg images, they appear centered and one above the other.
 
 ```{r}
 #| echo: false
 #| out.width: 30%
+#| fig-align: center
 knitr::include_graphics("img/chevalet_blanc.jpg")
 knitr::include_graphics("img/crayon.jpg")
 ```
 
 ## One png image printed with knitr
 
-A png image
+A png image aligned on right
 
 ```{r}
 #| echo: false
 #| out.width: 50%
+#| fig-align: right
 knitr::include_graphics("img/bonjour_smiley.png")
 ```
 

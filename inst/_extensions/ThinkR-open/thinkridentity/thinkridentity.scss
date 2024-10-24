@@ -186,3 +186,10 @@ code span.fu {
 .dashed-box-blue {
   @include dashed-box($color: $blue);
 }
+
+// image
+
+.reveal img.centered {
+  display: block;
+  margin: auto;
+}
