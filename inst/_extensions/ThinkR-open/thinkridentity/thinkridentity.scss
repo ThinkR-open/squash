@@ -41,9 +41,16 @@ $presentation-h3-font-size: 1.25em;
   .quarto-title-author {
     color: $black;
   }
+  
+  .subtitle {
+  color: $black;
+  font-weight: 600;
+  font-family: 'Yanone Kaffeesatz';
+  font-size: $presentation-h2-font-size;
+  }
 }
 
-.subtitle {
+.reveal p.subtitle {
   color: $black;
   font-weight: 600;
   font-family: 'Yanone Kaffeesatz';
@@ -118,6 +125,15 @@ $presentation-h3-font-size: 1.25em;
   line-height: 1.5em;
   font-size: calc($presentation-font-size-root - 8px);
   margin-bottom: 10px;
+  max-height: 600px;
+}
+
+.reveal pre.sourceCode code {
+  max-height: 600px;
+}
+
+.reveal pre.smallcode code {
+  font-size: calc($presentation-font-size-root - 12px);
 }
 
 .reveal div.sourceCode {
