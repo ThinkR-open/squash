@@ -11,10 +11,12 @@ compile_qmd_course(
   template = system.file("template.qmd", package = "squash"),
   title = "Formation R",
   date = "01/01/01-01/01/01",
+  footer = "**<i class='las la-book'></i> Formation R**",
   trainer = "ThinkR",
   mail = "thinkr.fr",
   phone = "+33 0 00 00 00 00",
-  quiet = TRUE
+  quiet = TRUE,
+  fix_img_path = FALSE
 )
 }
 \arguments{
@@ -30,6 +32,8 @@ compile_qmd_course(
 
 \item{date}{character. Start and end dates of the training}
 
+\item{footer}{character. Footer appearing in all slides}
+
 \item{trainer}{character. Name of the trainer}
 
 \item{mail}{character. Mail of the trainer}
@@ -37,6 +41,9 @@ compile_qmd_course(
 \item{phone}{character. Phone number of the trainer}
 
 \item{quiet}{logical. Output info in user console}
+
+\item{fix_img_path}{logical. If image path are present as raw html inside files,
+use this option to correctly edit their path.}
 }
 \value{
 character. The path to the resulting html file

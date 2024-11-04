@@ -34,6 +34,7 @@ create_template_html <- function(
   output_dir,
   title = "Formation R",
   date = '01/01/01-01/01/01',
+  footer = "**<i class='las la-book'></i> Formation R**",
   temp_dir = tempfile(pattern = "template")
   ){
     
@@ -69,8 +70,12 @@ create_template_html <- function(
     x = list(
       "title" = title,
       "subtitle" = date,
-      "format" = "thinkridentity-revealjs"
-      ),
+      "format" = list(
+        "thinkridentity-revealjs" = list(
+          "footer" = footer
+        )
+      )
+    ),
     file = file.path(temp_dir, "_quarto.yml")
   )
   

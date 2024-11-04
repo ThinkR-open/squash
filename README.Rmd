@@ -25,8 +25,6 @@ chapter .qmd files.
 
 The resulting html file follows the ThinkR quarto theme: [thinkr-open/quakr](https://github.com/ThinkR-open/quakr)
 
-![](reference/figures/schema_readme.png)
-
 ## Installation
 
 ```{r eval=FALSE}

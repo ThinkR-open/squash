@@ -8,14 +8,18 @@
 #' @param template character. Path to the template qmd to use. Content will be included at the positions inside double-brackets
 #' @param title character. Title of the presentation
 #' @param date character. Start and end dates of the training
+#' @param footer character. Footer appearing in all slides
 #' @param trainer character. Name of the trainer
 #' @param mail character. Mail of the trainer
 #' @param phone character. Phone number of the trainer
 #' @param quiet logical. Output info in user console
+#' @param fix_img_path logical. If image path are present as raw html inside files,
+#' use this option to correctly edit their path.
 #'
 #' @importFrom tools file_ext
 #' @importFrom htmltools htmlTemplate renderDocument save_html
 #' @importFrom furrr future_map_lgl furrr_options
+#' @importFrom purrr walk
 #' @importFrom future plan
 #' @importFrom cli cli_alert_info cli_alert_warning cli_alert_success
 #' @importFrom progressr handlers progressor with_progress
@@ -76,10 +80,12 @@ compile_qmd_course <- function(
     template = system.file("template.qmd", package = "squash"),
     title = "Formation R",
     date = "01/01/01-01/01/01",
+    footer = "**<i class='las la-book'></i> Formation R**",
     trainer = "ThinkR",
     mail = "thinkr.fr",
     phone = "+33 0 00 00 00 00",
-    quiet = TRUE
+    quiet = TRUE,
+    fix_img_path = FALSE
 ) {
   # check paths
   not_all_files_are_qmd <- any(
@@ -95,7 +101,8 @@ compile_qmd_course <- function(
     output_dir = output_dir,
     output_file = output_html,
     title = title,
-    date = date
+    date = date,
+    footer = footer
   )
   
   # list courses files present before rendering
@@ -160,9 +167,16 @@ compile_qmd_course <- function(
     }
   }
   
-  # read html and extract slides elements
+  # correct remaining img path
   vec_html_path <- gsub("\\.qmd", "\\.html", vec_qmd_path)
   
+  if (fix_img_path) {
+    walk(.x = vec_html_path, .f = \(x) {
+      copy_img_and_edit_path(html_path = x, img_root_dir = img_root_dir)
+    })
+  }
+  
+  # read html and extract slides elements
   html_content <- extract_html_slides(
     vec_html_path = vec_html_path
   )

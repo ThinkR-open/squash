@@ -18,4 +18,4 @@ Slide with chapter name and png file name identical to a slide from the first ch
 
 This should be a {ggplot2} image.
 
-![](img/logo_1.png)
+<img src="img/logo_1.png">

@@ -20,8 +20,6 @@ chapter .qmd files.
 The resulting html file follows the ThinkR quarto theme:
 [thinkr-open/quakr](https://github.com/ThinkR-open/quakr)
 
-![](reference/figures/schema_readme.png)
-
 ## Installation
 
 ``` r
@@ -84,9 +82,9 @@ qmds <- list.files(
 )
 
 qmds
-#> [1] "/tmp/RtmpZ9jHB2/course19fdb35bb8de60/M01/M01S01/C01-qmd1_for_test.qmd"
-#> [2] "/tmp/RtmpZ9jHB2/course19fdb35bb8de60/M01/M01S01/C02-qmd2_for_test.qmd"
-#> [3] "/tmp/RtmpZ9jHB2/course19fdb35bb8de60/M01/M01S02/C01-qmd3_for_test.qmd"
+#> [1] "/tmp/RtmpQxxkMo/coursefcc42267730e/M01/M01S01/C01-qmd1_for_test.qmd"
+#> [2] "/tmp/RtmpQxxkMo/coursefcc42267730e/M01/M01S01/C02-qmd2_for_test.qmd"
+#> [3] "/tmp/RtmpQxxkMo/coursefcc42267730e/M01/M01S02/C01-qmd3_for_test.qmd"
 ```
 
 And a directory where you want your course to be generated.
@@ -110,8 +108,6 @@ html_output <- progressr::with_progress(
     output_html = "complete_course.html"
   )
 )
-#> ℹ {future} is using plan("default"), to modify this use `future::plan()`
-#> ✔ All qmd rendered.
 ```
 
 Check out the result

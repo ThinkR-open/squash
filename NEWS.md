@@ -1,3 +1,15 @@
+# squash 0.4.0
+
+* New feature : set `fix_img_path` to TRUE to enable img embedding with html code.
+
+# squash 0.3.8
+
+* Update quakr to increase text size in slides
+
+# squash 0.3.7
+
+* New feature: add a footer to the html
+
 # squash 0.3.6
 
 * Add admin file to install {squash} on dev containers

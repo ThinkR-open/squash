@@ -59,7 +59,8 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
   html_output <- compile_qmd_course(
     vec_qmd_path = qmds,
     output_dir = temp_dir,
-    output_html = "complete_course.html"
+    output_html = "complete_course.html",
+    fix_img_path = TRUE
   )
   
   file_present_after_rendering <- list.files(
@@ -127,6 +128,9 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
       rvest::html_text()
   })
   
+  #' @description test that img path from embedded html is correct
+  expect_true(grepl("complete_course_img/M01S02_img/img/logo_1.png", slide_content))
+
   #' @description test html content is present
   expect_snapshot(x = slide_content_by_cat)
 
@@ -147,8 +151,8 @@ test_that("compile_qmd_course HTML preview looks ok", {
       "\nYou have 26 slides, all with footer and logo ?",
       "\nMain titles are centered, all titles are orange ?",
       "\nImage and code chunk appear properly sized and colored ?",
-      "\nGraphics are visible in slides 19 and 20 ?",
-      "\nTable is visible in slide 21 ?"
+      "\nGraphics are visible in slides 23 and 24 ?",
+      "\nTable is visible in slide 25 ?"
       )
     
     answers <- sapply(
