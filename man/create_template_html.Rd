@@ -8,10 +8,12 @@ create_template_html(
   path_to_qmd,
   output_file,
   output_dir,
+  output_format = "thinkridentity-revealjs",
   title = "Formation R",
   date = "01/01/01-01/01/01",
   footer = "**<i class='las la-book'></i> Formation R**",
-  temp_dir = tempfile(pattern = "template")
+  temp_dir = tempfile(pattern = "template"),
+  ext_dir = system.file("_extensions", package = "squash")
 )
 }
 \arguments{
@@ -21,6 +23,8 @@ create_template_html(
 
 \item{output_dir}{character. Output path to store html files and companion folders}
 
+\item{output_format}{character. Output format of the qmd, default to "revealjs". Can be adapted for specific themes.}
+
 \item{title}{character. Title of the presentation}
 
 \item{date}{character. Start and end dates of the training}
@@ -28,6 +32,8 @@ create_template_html(
 \item{footer}{character. Footer appearing in all slides}
 
 \item{temp_dir}{character. Path to the temp_dir where template will be rendered}
+
+\item{ext_dir}{character. Path to the _extensions directory to use when compiling qmd}
 }
 \value{
 character. Path to the html template
