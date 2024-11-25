@@ -12,6 +12,7 @@ License: MIT + file LICENSE
 Imports: 
     cli,
     dplyr,
+    fs,
     furrr,
     future,
     htmltools,

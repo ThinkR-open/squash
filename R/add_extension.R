@@ -57,26 +57,25 @@ add_extension <- function(
   if (length(qmd_dir) > 0){
 
     # add quakr extension
-    quarto_quakr_added <- file.path(
+    quarto_ext_added <- file.path(
       qmd_dir,
       "_extensions"
     )
     
-    copied_quakr <- map(
-      .x = quarto_quakr_added,
+    copied_ext <- map(
+      .x = quarto_ext_added,
       .f = \(x){
         copy_if_not_already_exist(
           from = ext_dir,
-          to = x,
-          copy_type = "dir"
+          to = x
         )
       }
     )
+
   } else {
-    copied_quakr <- NULL
+    copied_ext <- NULL
   }
 
-  # return list of created files
-  copied_files <- as.character(copied_quakr)
-  return(copied_files)
+  # return list of created dir
+  return(as.character(copied_ext))
 }
