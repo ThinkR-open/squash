@@ -121,8 +121,8 @@ compile_qmd_course <- function(
     recursive = TRUE
   )
   
-  # add compil quarto profile in each directory
-  tmp_compil_files <- add_compil_profile_and_extension(
+  # add extension in each directory
+  tmp_ext_dir <- add_extension(
     vec_qmd_path = vec_qmd_path
   )
   
@@ -163,8 +163,7 @@ compile_qmd_course <- function(
   if (!all(render_success)){
     clean_rendering_files(
       dir = vec_qmd_dir,
-      present_before = file_present_before_rendering,
-      extra_files = tmp_compil_files
+      present_before = file_present_before_rendering
     )
     return(NULL)
   } else {
@@ -235,8 +234,7 @@ compile_qmd_course <- function(
   
   clean_rendering_files(
     dir = vec_qmd_dir,
-    present_before = file_present_before_rendering,
-    extra_files = tmp_compil_files
+    present_before = file_present_before_rendering
   )
   
   return(

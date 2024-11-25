@@ -43,13 +43,16 @@ copy_if_not_already_exist <- function(
   }
   
   if (!already_present){
+    
+    to_copied_path <- to
+    
     if (copy_type == "dir"){
+
       if (!dir.exists(dirname(to))){
         dir.create(
           dirname(to),
           recursive = TRUE
         )
-        to_copied_path <- dirname(to)
       }
       
       file.copy(
@@ -58,11 +61,12 @@ copy_if_not_already_exist <- function(
         recursive = TRUE
       )
     } else {
+      
       file.copy(
         from = from,
         to = to
       )
-      to_copied_path <- to
+      
     }
   }
   # return path that has been created
