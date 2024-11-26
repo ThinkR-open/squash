@@ -33,11 +33,11 @@ knitr::include_graphics("img/groupe-conversation.jpg")
 
 This is a tiny left-aligned hex image with a title and an alt text.
 
-![the hex title](img/thinkr-hex.png "Title: the hex alt text"){height=100px fig-align=left}
+![ribit ribit](img/logo.png "Title: the hex alt text"){height=100px fig-align=left}
 
-This is the same image, centered and slightly larger.
+This is the same image, slightly larger.
 
-<img src="img/thinkr-hex.png" height="200px" class="centered">
+<img src="img/logo.png" height="200px">
 
 ## Two jpg images printed with knitr
 

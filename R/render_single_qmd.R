@@ -44,7 +44,7 @@
 render_single_qmd <- function(
     qmd,
     img_root_dir = "img",
-    output_format = "thinkridentity-revealjs",
+    output_format = "revealjs",
     metadata = list(
       footer = "",
       logo = "",

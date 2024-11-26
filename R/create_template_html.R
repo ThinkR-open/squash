@@ -1,8 +1,8 @@
 #' Create a themed html from a qmd template
 #' 
-#' Create a template html with ThinkR styling
+#' Create a template html
 #' 
-#' @param path_to_qmd character. Path to the qmd template to be rendered in thinkridentity-revealjs
+#' @param path_to_qmd character. Path to the qmd template to be rendered
 #' @param output_file character. Name of the output html template
 #' @param temp_dir character. Path to the temp_dir where template will be rendered
 #' 
@@ -32,7 +32,7 @@ create_template_html <- function(
   path_to_qmd,
   output_file,
   output_dir,
-  output_format = "thinkridentity-revealjs",
+  output_format = "revealjs",
   title = "Formation R",
   date = '01/01/01-01/01/01',
   footer = "**<i class='las la-book'></i> Formation R**",

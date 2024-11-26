@@ -8,7 +8,7 @@ create_template_html(
   path_to_qmd,
   output_file,
   output_dir,
-  output_format = "thinkridentity-revealjs",
+  output_format = "revealjs",
   title = "Formation R",
   date = "01/01/01-01/01/01",
   footer = "**<i class='las la-book'></i> Formation R**",
@@ -17,7 +17,7 @@ create_template_html(
 )
 }
 \arguments{
-\item{path_to_qmd}{character. Path to the qmd template to be rendered in thinkridentity-revealjs}
+\item{path_to_qmd}{character. Path to the qmd template to be rendered}
 
 \item{output_file}{character. Name of the output html template}
 
@@ -39,7 +39,7 @@ create_template_html(
 character. Path to the html template
 }
 \description{
-Create a template html with ThinkR styling
+Create a template html
 }
 \examples{
 # create temp dir

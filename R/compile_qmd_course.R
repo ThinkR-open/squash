@@ -79,14 +79,14 @@ compile_qmd_course <- function(
     vec_qmd_path,
     output_dir,
     output_html,
-    template = system.file("template.qmd", package = "squash"),
-    output_format = "thinkridentity-revealjs",
-    title = "Formation R",
+    template = system.file("template_minimal.qmd", package = "squash"),
+    output_format = "revealjs",
+    title = "Title",
     date = "01/01/01-01/01/01",
-    footer = "**<i class='las la-book'></i> Formation R**",
-    trainer = "ThinkR",
-    mail = "thinkr.fr",
-    phone = "+33 0 00 00 00 00",
+    footer = "",
+    trainer = NULL,
+    mail = NULL,
+    phone = NULL,
     ext_dir = system.file("_extensions", package = "squash"),
     quiet = TRUE,
     fix_img_path = FALSE
@@ -153,7 +153,10 @@ compile_qmd_course <- function(
     .x = vec_qmd_path,
     .f = \(x){
       p(sprintf("rendering %s", basename(x)), class = "sticky")
-      render_single_qmd(x, img_root_dir = img_root_dir)
+      render_single_qmd(
+        x,
+        img_root_dir = img_root_dir,
+        output_format = output_format)
     },
     # make random number generation reproducible
     .options = furrr_options(seed = TRUE)

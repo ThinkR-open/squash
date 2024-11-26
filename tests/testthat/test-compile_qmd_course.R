@@ -60,7 +60,8 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
     vec_qmd_path = qmds,
     output_dir = temp_dir,
     output_html = "complete_course.html",
-    fix_img_path = TRUE
+    fix_img_path = TRUE,
+    output_format = "dummy-revealjs"
   )
   
   file_present_after_rendering <- list.files(
@@ -92,7 +93,7 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
       "M02S01-presentations_img/img/chevalet_blanc.jpg",
       "M02S01-presentations_img/img/crayon.jpg",
       "M02S01-presentations_img/img/groupe-conversation.jpg",
-      "M02S01-presentations_img/img/thinkr-hex.png"
+      "M02S01-presentations_img/img/logo.png"
     )
   )
 
@@ -104,7 +105,7 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
     "1ccfb852f6cd8df7b3d68d51a6f6aec9",
     "29301418b3f7fd256e1f2eb0dc88a136",
     "8ddd7aad8372954c9513115744a719d7",
-    "e9f32cf87e5de2e683b3c667226ff127"
+    "7051d291d0fc41794c84044b0d8fad47"
   )
   
   #' @description test that output image exist
@@ -148,11 +149,11 @@ test_that("compile_qmd_course HTML preview looks ok", {
     browseURL(file.path(temp_dir, "complete_course.html"))
     
     questions <- c(
-      "\nYou have 26 slides, all with footer and logo ?",
+      "\nYou have 5 chapters ?",
       "\nMain titles are centered, all titles are orange ?",
       "\nImage and code chunk appear properly sized and colored ?",
-      "\nGraphics are visible in slides 23 and 24 ?",
-      "\nTable is visible in slide 25 ?"
+      "\nGraphics are visible ?",
+      "\nTable is visible ?"
       )
     
     answers <- sapply(

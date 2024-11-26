@@ -4,7 +4,7 @@
       slide_content_by_cat
     Output
       [[1]]
-      [1] "Formation R"    "First chapter"  "Second chapter" "Third chapter" 
+      [1] "Title"          "First chapter"  "Second chapter" "Third chapter" 
       [5] "Fourth chapter" "Fifth chapter" 
       
       [[2]]
@@ -27,7 +27,6 @@
       [17] "A ggplot graph"                       
       [18] "A plot"                               
       [19] "Reading and printing data from csv"   
-      [20] "ThinkR"                               
       
       [[3]]
        [1] "8 * 8"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
@@ -54,5 +53,5 @@
     Code
       first_slide_content
     Output
-      [1] "<section id=\"title-slide\" data-background-image=\"_extensions/ThinkR-open/thinkridentity/background.png\" class=\"quarto-title-block center\"><h1 class=\"title\">Trouloulou</h1>\n  <p class=\"subtitle\">66/66/66-66/66/66</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>"
+      [1] "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Trouloulou</h1>\n  <p class=\"subtitle\">66/66/66-66/66/66</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>"
 

@@ -14,9 +14,9 @@ knitr:
     fig-align: center
 ---
 
-### Thinkr hex as markdown image
+### logo as markdown image
 
-![](img/thinkr-hex.png){fig-align="center" fig-alt="alt text"}
+![](img/logo.png){fig-align="center" fig-alt="alt text"}
 
 ---
 

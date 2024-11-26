@@ -26,10 +26,7 @@ copy_if_not_already_exist <- function(
 ){
 
   # list extensions in input dir
-  ext_list <- setdiff(
-    dir_ls(path = from, recurse = 1, type = "directory"),
-    dir_ls(path = from, recurse = 0, type = "directory")
-  ) |> 
+  ext_list <- dir_ls(path = from, recurse = 1, type = "directory") |> 
     gsub(pattern = from, replacement = "")
   
   # list extensions already present in target dir
