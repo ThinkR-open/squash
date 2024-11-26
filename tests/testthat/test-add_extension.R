@@ -1,4 +1,4 @@
-test_that("add_compil_profile_and_extension works", {
+test_that("add_extension works", {
   # add two qmd in a tmp dir, one with yaml project
   tmpdir <- tempfile(pattern = "addcompil")
   dir.create(file.path(tmpdir, "tmpsubfolder1"), recursive = TRUE)
@@ -11,33 +11,30 @@ test_that("add_compil_profile_and_extension works", {
   
   file.create(vec_qmd_path)
 
-  #' @description test function stops if not project is found
-  expect_error(
-    {new_proj_files <- add_compil_profile_and_extension(vec_qmd_path = vec_qmd_path, quiet = FALSE)},
-    regexp = "No quarto project found."
-  ) |> 
-    expect_message(regexp = "No quarto project found")
+  #' @description test function add extension next to qmd if not project detected
+  new_proj_files <- add_extension(vec_qmd_path = vec_qmd_path, quiet = FALSE)
+
+  expect_true(all(dir.exists(new_proj_files)))
   
   # add quarto project
   file.create(
     file.path(tmpdir, "_quarto.yaml")
   )
   
-  #' @description test function add compil and quakr
-  new_proj_files <- add_compil_profile_and_extension(vec_qmd_path = vec_qmd_path, quiet = FALSE)
+  #' @description test function add extension in project root
+  new_proj_files <- add_extension(vec_qmd_path = vec_qmd_path, quiet = FALSE)
   
   #' @description test project files are created if not pre existing
-  expect_true(all(file.exists(new_proj_files)))
+  expect_true(all(dir.exists(new_proj_files)))
   
   #' @description test user message are sent for compil and quakr theme
   expect_message(
-    {new_proj_files <- add_compil_profile_and_extension(vec_qmd_path = vec_qmd_path, quiet = FALSE)},
+    {new_proj_files <- add_extension(vec_qmd_path = vec_qmd_path, quiet = FALSE)},
     regexp = "Using it for compil."
-  ) |> 
-    expect_message(regexp = "Using it for compil.")
+  )
   
   #' @description test project files are not created if pre-existing
-  expect_equal(object = new_proj_files, expected = c("NULL", "NULL"))
+  expect_equal(object = new_proj_files, expected = c("NULL"))
   
   # cleanup
   unlink(tmpdir, recursive = TRUE)

@@ -1,3 +1,7 @@
+# squash 0.4.1
+
+* Set rendering parameters as function parameters instead of yaml file.
+
 # squash 0.4.0
 
 * New feature : set `fix_img_path` to TRUE to enable img embedding with html code.

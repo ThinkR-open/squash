@@ -6,12 +6,14 @@
 #' @param output_dir character. Output path to store html files and companion folders
 #' @param output_html character. File name of the complete html output saved
 #' @param template character. Path to the template qmd to use. Content will be included at the positions inside double-brackets
+#' @param output_format character. Output format of the qmd, default to "revealjs". Can be adapted for specific themes.
 #' @param title character. Title of the presentation
 #' @param date character. Start and end dates of the training
 #' @param footer character. Footer appearing in all slides
 #' @param trainer character. Name of the trainer
 #' @param mail character. Mail of the trainer
 #' @param phone character. Phone number of the trainer
+#' @param ext_dir character. Path to the _extensions directory to use when compiling qmd
 #' @param quiet logical. Output info in user console
 #' @param fix_img_path logical. If image path are present as raw html inside files,
 #' use this option to correctly edit their path.
@@ -78,12 +80,14 @@ compile_qmd_course <- function(
     output_dir,
     output_html,
     template = system.file("template.qmd", package = "squash"),
+    output_format = "thinkridentity-revealjs",
     title = "Formation R",
     date = "01/01/01-01/01/01",
     footer = "**<i class='las la-book'></i> Formation R**",
     trainer = "ThinkR",
     mail = "thinkr.fr",
     phone = "+33 0 00 00 00 00",
+    ext_dir = system.file("_extensions", package = "squash"),
     quiet = TRUE,
     fix_img_path = FALSE
 ) {
@@ -99,10 +103,12 @@ compile_qmd_course <- function(
   template_html <- create_template_html(
     path_to_qmd = template,
     output_dir = output_dir,
+    output_format = output_format,
     output_file = output_html,
     title = title,
     date = date,
-    footer = footer
+    footer = footer,
+    ext_dir = ext_dir
   )
   
   # list courses files present before rendering
@@ -115,8 +121,8 @@ compile_qmd_course <- function(
     recursive = TRUE
   )
   
-  # add compil quarto profile in each directory
-  tmp_compil_files <- add_compil_profile_and_extension(
+  # add extension in each directory
+  tmp_ext_dir <- add_extension(
     vec_qmd_path = vec_qmd_path
   )
   
@@ -158,7 +164,7 @@ compile_qmd_course <- function(
     clean_rendering_files(
       dir = vec_qmd_dir,
       present_before = file_present_before_rendering,
-      extra_files = tmp_compil_files
+      extra_dir = tmp_ext_dir
     )
     return(NULL)
   } else {
@@ -230,7 +236,7 @@ compile_qmd_course <- function(
   clean_rendering_files(
     dir = vec_qmd_dir,
     present_before = file_present_before_rendering,
-    extra_files = tmp_compil_files
+    extra_dir = tmp_ext_dir
   )
   
   return(

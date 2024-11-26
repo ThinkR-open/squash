@@ -9,12 +9,14 @@ compile_qmd_course(
   output_dir,
   output_html,
   template = system.file("template.qmd", package = "squash"),
+  output_format = "thinkridentity-revealjs",
   title = "Formation R",
   date = "01/01/01-01/01/01",
   footer = "**<i class='las la-book'></i> Formation R**",
   trainer = "ThinkR",
   mail = "thinkr.fr",
   phone = "+33 0 00 00 00 00",
+  ext_dir = system.file("_extensions", package = "squash"),
   quiet = TRUE,
   fix_img_path = FALSE
 )
@@ -28,6 +30,8 @@ compile_qmd_course(
 
 \item{template}{character. Path to the template qmd to use. Content will be included at the positions inside double-brackets}
 
+\item{output_format}{character. Output format of the qmd, default to "revealjs". Can be adapted for specific themes.}
+
 \item{title}{character. Title of the presentation}
 
 \item{date}{character. Start and end dates of the training}
@@ -39,6 +43,8 @@ compile_qmd_course(
 \item{mail}{character. Mail of the trainer}
 
 \item{phone}{character. Phone number of the trainer}
+
+\item{ext_dir}{character. Path to the _extensions directory to use when compiling qmd}
 
 \item{quiet}{logical. Output info in user console}
 

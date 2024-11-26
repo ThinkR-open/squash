@@ -75,7 +75,7 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
     object = file_present_after_rendering,
     expected = file_present_before_rendering
   )
-    
+
   #' @description test that output html exists
   expect_true(file.exists(html_output))
   

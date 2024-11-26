@@ -38,7 +38,8 @@ test_that("render_single_qmd returns message and html", {
 
   is_rendered <- render_single_qmd(
     qmd = file.path(temp_dir, "C01-qmd1_for_test.qmd"),
-    img_root_dir = "img_complete"
+    img_root_dir = "img_complete",
+    output_format = "revealjs"
   )
   
   #' @description test output is TRUE for correct rendering

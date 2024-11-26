@@ -32,10 +32,12 @@ create_template_html <- function(
   path_to_qmd,
   output_file,
   output_dir,
+  output_format = "thinkridentity-revealjs",
   title = "Formation R",
   date = '01/01/01-01/01/01',
   footer = "**<i class='las la-book'></i> Formation R**",
-  temp_dir = tempfile(pattern = "template")
+  temp_dir = tempfile(pattern = "template"),
+  ext_dir = system.file("_extensions", package = "squash")
   ){
     
   # set qmd file name base on html output name
@@ -53,36 +55,29 @@ create_template_html <- function(
       output_file_qmd)
     )
   
-  # copy quakr _extensions from {squash} inst
+  # copy _extensions folder if present
   dir.create(file.path(temp_dir, "_extensions/"))
   
   file.copy(
-    from = system.file(
-      "_extensions",
-      package = "squash"
-    ),
+    from = ext_dir,
     to = temp_dir,
     recursive = TRUE
   )
-  
-  # define quarto project parameters
-  write_yaml(
-    x = list(
-      "title" = title,
-      "subtitle" = date,
-      "format" = list(
-        "thinkridentity-revealjs" = list(
-          "footer" = footer
-        )
-      )
-    ),
-    file = file.path(temp_dir, "_quarto.yml")
-  )
-  
+
   # render template with parameters of quarto project
   quarto_render(
     input = file.path(temp_dir, output_file_qmd),
-    quiet = TRUE)
+    quiet = TRUE,
+    metadata = list(
+      subtitle = date,
+      footer = footer
+    ),
+    quarto_args = c(
+      "--metadata",
+      paste0("title=", title)
+      ),
+    output_format = output_format
+  )
   
   # copy output html and companion folders to output_dir
   files_to_copy <- c(

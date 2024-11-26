@@ -4,7 +4,9 @@
 #' 
 #' @param dir character. The directory to look for rendering output recursively.
 #' @param present_before character. Path to the files and directories present before rendering.
-#' @param extra_files character. Path of additional files to remove.
+#' @param extra_dir character. Path of additional directories to remove.
+#' 
+#' @importFrom fs dir_map dir_delete
 #' 
 #' @return None. Side effect: remove files that were not present before rendering
 #' 
@@ -53,7 +55,7 @@
 clean_rendering_files <- function(
     dir,
     present_before,
-    extra_files = NULL
+    extra_dir = NULL
 ){
 
   # list files
@@ -76,8 +78,9 @@ clean_rendering_files <- function(
     recursive = TRUE
   )
   
+  # remove extensions dir
   unlink(
-    x = extra_files,
+    x = extra_dir,
     recursive = TRUE
   )
   

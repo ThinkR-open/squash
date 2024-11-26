@@ -2,9 +2,8 @@ test_that("copy_if_not_already_exist works", {
   tmpdir <- tempfile(pattern = "copy")
   
   output <- copy_if_not_already_exist(
-    from = system.file("_extensions","ThinkR-open","thinkridentity", package = "squash"),
-    to = file.path(tmpdir, "thinkridentity"),
-    copy_type = "dir"
+    from = system.file("_extensions", package = "squash"),
+    to = file.path(tmpdir, "_extensions")
   )
   
   #' @description test that first copy create the dir
@@ -14,9 +13,8 @@ test_that("copy_if_not_already_exist works", {
   expect_message(
     {
       output <- copy_if_not_already_exist(
-        from = system.file("_extensions","ThinkR-open","thinkridentity", package = "squash"),
-        to = file.path(tmpdir, "thinkridentity"),
-        copy_type = "dir"
+        from = system.file("_extensions", package = "squash"),
+        to = file.path(tmpdir, "_extensions")
       )
     },
     regexp = "already present in quarto project"

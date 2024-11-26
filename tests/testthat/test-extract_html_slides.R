@@ -9,9 +9,8 @@ files_to_copy <- c(
   file.path(
     squash_path,
     c("_extensions",
-      file.path("courses", "M01"),
-      "_quarto.yaml",
-      "_quarto-render.yml")
+      file.path("courses", "M01")
+    )
   )
 )
 
@@ -24,8 +23,9 @@ file.copy(
 # render all course qmd in quarto project with default profile
 # remove as_job to not run as background jobs
 quarto::quarto_render(
-  input = temp_dir,
-  quiet = TRUE,
+  input = list.files(temp_dir, recursive = TRUE, pattern = "qmd$", full.names = TRUE),
+  output_format = "revealjs",
+  quiet = FALSE,
   as_job = FALSE
 )
 
