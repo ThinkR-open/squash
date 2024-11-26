@@ -71,12 +71,11 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
   )
   
   #' @description test that no remaining output files are present
-  # ToDo
-  # expect_setequal(
-  #   object = file_present_after_rendering,
-  #   expected = file_present_before_rendering
-  # )
-    
+  expect_setequal(
+    object = file_present_after_rendering,
+    expected = file_present_before_rendering
+  )
+
   #' @description test that output html exists
   expect_true(file.exists(html_output))
   
@@ -208,11 +207,10 @@ test_that("compile_qmd_course works with non-default parameters", {
   )
   
   #' @description test that no remaining output files are present
-  # ToDo
-  # expect_setequal(
-  #   object = file_present_after_rendering,
-  #   expected = file_present_before_rendering
-  # )
+  expect_setequal(
+    object = file_present_after_rendering,
+    expected = file_present_before_rendering
+  )
   
 })
 
@@ -252,11 +250,10 @@ test_that("compile_qmd_course clean after exit for qmd with failed rendering", {
   )
   
   #' @description test that no remaining output files are present
-  # ToDo
-  # expect_setequal(
-  #   object = file_present_after_rendering,
-  #   expected = c(file_present_before_rendering, qmd_with_stop)
-  # )
+  expect_setequal(
+    object = file_present_after_rendering,
+    expected = c(file_present_before_rendering, qmd_with_stop)
+  )
 })
 
 test_that("compile_qmd_course account for qmd with no media output dir", {

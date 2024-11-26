@@ -164,7 +164,7 @@ compile_qmd_course <- function(
     clean_rendering_files(
       dir = vec_qmd_dir,
       present_before = file_present_before_rendering,
-      extra_files = tmp_ext_dir
+      extra_dir = tmp_ext_dir
     )
     return(NULL)
   } else {
@@ -236,7 +236,7 @@ compile_qmd_course <- function(
   clean_rendering_files(
     dir = vec_qmd_dir,
     present_before = file_present_before_rendering,
-    extra_files = tmp_ext_dir
+    extra_dir = tmp_ext_dir
   )
   
   return(

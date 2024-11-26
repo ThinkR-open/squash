@@ -6,6 +6,7 @@
 #' @importFrom quarto quarto_inspect
 #' @importFrom cli cli_alert_info
 #' @importFrom purrr map map_lgl
+#' @importFrom fs dir_create
 #' 
 #' @return Create file path. Side effect : create a yaml compil profile.
 #' 
@@ -35,8 +36,7 @@ add_extension <- function(
   ){
   
   # look for existing quarto projects
-  # _extensions will be added to project root if present
-  # otherwise, 
+  # _extensions will be added to project root
   qmd_dir <- dirname(vec_qmd_path)
   
   quarto_proj <- map(
@@ -62,6 +62,12 @@ add_extension <- function(
       "_extensions"
     )
     
+    extension_dir_not_found <- !dir.exists(quarto_ext_added)
+    
+    if (any(extension_dir_not_found)){
+      dir_create(quarto_ext_added)
+    }
+    
     copied_ext <- map(
       .x = quarto_ext_added,
       .f = \(x){
@@ -71,6 +77,10 @@ add_extension <- function(
         )
       }
     )
+    
+    if (any(extension_dir_not_found)){
+      copied_ext <- c(copied_ext, quarto_ext_added[extension_dir_not_found])
+    }
 
   } else {
     copied_ext <- NULL

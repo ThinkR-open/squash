@@ -4,14 +4,14 @@
 \alias{clean_rendering_files}
 \title{Clean folder after quarto rendering}
 \usage{
-clean_rendering_files(dir, present_before, extra_files = NULL)
+clean_rendering_files(dir, present_before, extra_dir = NULL)
 }
 \arguments{
 \item{dir}{character. The directory to look for rendering output recursively.}
 
 \item{present_before}{character. Path to the files and directories present before rendering.}
 
-\item{extra_files}{character. Path of additional files to remove.}
+\item{extra_dir}{character. Path of additional directories to remove.}
 }
 \value{
 None. Side effect: remove files that were not present before rendering

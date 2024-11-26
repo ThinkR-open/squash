@@ -25,7 +25,7 @@ test_that("add_extension works", {
   new_proj_files <- add_extension(vec_qmd_path = vec_qmd_path, quiet = FALSE)
   
   #' @description test project files are created if not pre existing
-  expect_true(dir.exists(new_proj_files))
+  expect_true(all(dir.exists(new_proj_files)))
   
   #' @description test user message are sent for compil and quakr theme
   expect_message(
