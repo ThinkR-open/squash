@@ -5,7 +5,7 @@ subtitle: "columns and layouts"
 
 ## Slide with side-by-side image layout
 
-two {tidyr} images side by side
+two fish side by side
 
 ::: {layout-ncol=2}
 ![](img/logo_2.png)
@@ -15,7 +15,7 @@ two {tidyr} images side by side
 
 ## Slide with side-by-side image columns
 
-two {tidyr} images side by side
+two fish side by side
 
 :::: {.columns}
 

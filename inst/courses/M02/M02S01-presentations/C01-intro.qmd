@@ -20,46 +20,46 @@ Thï$ îs fûll of spéciàl characters%
 
 ## A graph printed with knitr
 
-This is a centered figure.
+This is a centered fish.
 
 ```{r}
 #| echo: false
 #| out.width: 50%
 #| fig-align: center
-knitr::include_graphics("img/groupe-conversation.jpg")
+knitr::include_graphics("img/fish.png")
 ```
 
 ## An embedded image
 
-This is a tiny left-aligned hex image with a title and an alt text.
+This is a tiny left-aligned kiwi with a title and an alt text.
 
-![ribit ribit](img/logo.png "Title: the hex alt text"){height=100px fig-align=left}
+![kiwi](img/kiwi.png "Title: imakiwi"){height=100px fig-align=left}
 
-This is the same image, slightly larger.
+This is the same kiwi, slightly larger.
 
-<img src="img/logo.png" height="200px">
+<img src="img/kiwi.png" height="200px">
 
 ## Two jpg images printed with knitr
 
-Tow jpg images, they appear centered and one above the other.
+A worn and a cow, they appear centered and one above the other.
 
 ```{r}
 #| echo: false
-#| out.width: 30%
+#| out.width: 20%
 #| fig-align: center
-knitr::include_graphics("img/chevalet_blanc.jpg")
-knitr::include_graphics("img/crayon.jpg")
+knitr::include_graphics("img/worm.jpg")
+knitr::include_graphics("img/cow.png")
 ```
 
 ## One png image printed with knitr
 
-A png image aligned on right
+A shrimp aligned to the right.
 
 ```{r}
 #| echo: false
 #| out.width: 50%
 #| fig-align: right
-knitr::include_graphics("img/bonjour_smiley.png")
+knitr::include_graphics("img/shrimp.png")
 ```
 
 

@@ -29,6 +29,6 @@ This is a speaker note, it is only visible in the speaker view.
 
 ## Slide with image
 
-{dplyr} image
+A kiwi
 
 ![](img/logo_1.png)

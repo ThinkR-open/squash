@@ -16,7 +16,7 @@ knitr:
 
 ### logo as markdown image
 
-![](img/logo.png){fig-align="center" fig-alt="alt text"}
+![](img/kiwi.png){fig-align="center" fig-alt="alt text"}
 
 ---
 
@@ -26,8 +26,8 @@ knitr:
 ```{r}
 #| echo: false
 #| out.width: 45%
-knitr::include_graphics("img/chevalet_blanc.jpg")
-knitr::include_graphics("img/crayon.jpg")
+knitr::include_graphics("img/worm.jpg")
+knitr::include_graphics("img/cow.png")
 ```
 
 ---
@@ -37,7 +37,7 @@ knitr::include_graphics("img/crayon.jpg")
 ```{r}
 #| echo: false
 #| out.width: 50%
-knitr::include_graphics("img/bonjour_smiley.png")
+knitr::include_graphics("img/shrimp.png")
 ```
 
 ---
@@ -90,5 +90,5 @@ my_data
 
 ```{r}
 #| out.width: 50%
-knitr::include_graphics("img/bonjour_smiley.png")
+knitr::include_graphics("img/shrimp.png")
 ```

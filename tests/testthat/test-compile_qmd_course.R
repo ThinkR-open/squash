@@ -138,23 +138,21 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
       "M01S02_img/img/logo_1.png",
       "M02S01-presentations_img/C02-code_files/figure-revealjs/unnamed-chunk-1-1.png",
       "M02S01-presentations_img/C02-code_files/figure-revealjs/unnamed-chunk-2-1.png",
-      "M02S01-presentations_img/img/bonjour_smiley.png",
-      "M02S01-presentations_img/img/chevalet_blanc.jpg",
-      "M02S01-presentations_img/img/crayon.jpg",
-      "M02S01-presentations_img/img/groupe-conversation.jpg",
-      "M02S01-presentations_img/img/logo.png"
+      "M02S01-presentations_img/img/shrimp.png",
+      "M02S01-presentations_img/img/worm.jpg",
+      "M02S01-presentations_img/img/cow.png",
+      "M02S01-presentations_img/img/fish.png"
     )
   )
 
   expected_md5 <- c(
-    "ac99473759dd46bf0564047e5cfc2714",
-    "8d77c0f9921459b6fdc64f2cceb7c575",
-    "3b740309e3746c97e95df575801e3253",
-    "37943ef4b82d1cfb00c3ffd8b7b13948",
-    "1ccfb852f6cd8df7b3d68d51a6f6aec9",
-    "29301418b3f7fd256e1f2eb0dc88a136",
-    "8ddd7aad8372954c9513115744a719d7",
-    "7051d291d0fc41794c84044b0d8fad47"
+    "339a6d7488c1bf96613ac202f81a4e0a",
+    "e1689186ffbb4a2d181e868fbfc716be",
+    "f96ffc2c0beba0a12a0670bce72aef77",
+    "7a754636fcf0f2ab12e0049888f9c646",
+    "5af0089de8304dd00448d75c83ca87e6",
+    "f96ffc2c0beba0a12a0670bce72aef77",
+    "e1689186ffbb4a2d181e868fbfc716be"
   )
   
   #' @description test that output image exist

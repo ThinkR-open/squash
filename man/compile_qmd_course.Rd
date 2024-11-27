@@ -11,11 +11,10 @@ compile_qmd_course(
   template = system.file("template_minimal.qmd", package = "squash"),
   output_format = "revealjs",
   title = "Title",
-  metadata_template = list(subtitle = "01/01/01-01/01/01", footer = ""),
-  metadata_qmd = list(footer = "**<i class='las la-book'></i> A footer**", logo = "",
-    `title-slide-attributes` = list(`data-background-image` = "")),
+  metadata_template = NULL,
+  metadata_qmd = NULL,
   template_text = NULL,
-  ext_dir = system.file("_extensions", package = "squash"),
+  ext_dir = NULL,
   quiet = TRUE,
   fix_img_path = FALSE
 )
