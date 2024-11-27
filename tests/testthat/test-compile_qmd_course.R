@@ -53,7 +53,45 @@ test_that("compile_qmd_course fails gracefully in case of incorrect inputs", {
     expect_error("Some of the input files are not qmd files.")
 })
 
-# write here a basic compil test with no theme (dflt)
+test_that("compile_qmd_course renders all input courses inside a unique html with default params", {
+  
+  # run function
+  html_output <- compile_qmd_course(
+    vec_qmd_path = qmds,
+    output_dir = temp_dir,
+    output_html = "complete_course.html",
+  )
+  
+  file_present_after_rendering <- list.files(
+    path = tmp_course_path,
+    full.names = TRUE,
+    include.dirs = TRUE,
+    recursive = TRUE
+  )
+  
+  #' @description test that no remaining output files are present
+  expect_setequal(
+    object = file_present_after_rendering,
+    expected = file_present_before_rendering
+  )
+  
+  #' @description test that output html exists
+  expect_true(file.exists(html_output))
+ 
+  slide_content <- html_output |>
+    read_html() |>
+    html_elements(css = ".slides")
+  
+  slide_content_by_cat <- purrr::map(.x = c("h1", "h2", "code"), .f = \(x) {
+    slide_content |>
+      html_elements(x) |>
+      rvest::html_text()
+  })
+  
+  #' @description test html content is present
+  expect_snapshot(x = slide_content_by_cat)
+  
+})
 
 test_that("compile_qmd_course renders all input courses inside a unique html output with dummy theme", {
   
@@ -63,7 +101,16 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
     output_dir = temp_dir,
     output_html = "complete_course.html",
     fix_img_path = TRUE,
-    output_format = "dummy-revealjs"
+    output_format = "dummy-revealjs",
+    metadata_template = list(
+      subtitle = "01/01/01-01/01/01",
+      footer = "**<i class='las la-book'></i> A footer**"),
+    # remove logo and footer to avoid duplicate from template
+    metadata_qmd = list(
+      footer = "",
+      logo = ""
+    ),
+    ext_dir = system.file("_extensions", package = "squash")
   )
   
   file_present_after_rendering <- list.files(
