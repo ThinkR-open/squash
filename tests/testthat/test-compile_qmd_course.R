@@ -150,8 +150,8 @@ test_that("compile_qmd_course HTML preview looks ok", {
     
     questions <- c(
       "\nYou have 5 chapters ?",
-      "\nMain titles are centered, all titles are orange ?",
-      "\nImage and code chunk appear properly sized and colored ?",
+      "\nMain titles are centered and orange ? Chapter names are blue ?",
+      "\nImage and code chunk appear properly ?",
       "\nGraphics are visible ?",
       "\nTable is visible ?"
       )
@@ -175,14 +175,16 @@ test_that("compile_qmd_course works with non-default parameters", {
     vec_qmd_path = qmds[1],
     output_dir = temp_dir,
     output_html = "formation_R.html",
-    template = system.file("template_minimal.qmd", package = "squash"),
+    template = system.file("template.qmd", package = "squash"),
     title = "Trouloulou",
     date = "66/66/66-66/66/66",
-    trainer = "Tralala",
-    mail = "Trili@li",
-    phone = "+33 6 66 66 66 66"
+    template_text = list(
+      trainer = "Tralala",
+      mail = "Trili@li",
+      phone = "+33 6 66 66 66 66"
+    )
   )
-
+  
   #' @description test output has expected name
   expect_true(
     file.exists(
@@ -197,8 +199,18 @@ test_that("compile_qmd_course works with non-default parameters", {
     _[[1]] |> 
     as.character()
   
-  #' @description test non-default info are well inserted in minimal template
+  #' @description test non-default info are well inserted in template 1st slide
   expect_snapshot(x = first_slide_content)
+  
+  last_slide_content <- html_output |>
+    read_html() |>
+    html_elements(css = ".slides") |>
+    html_children() |>
+    _[[3]] |> 
+    as.character()
+  
+  #' @description test non-default info are well inserted in template last slide
+  expect_snapshot(x = last_slide_content)
   
   file_present_after_rendering <- list.files(
     path = tmp_course_path,

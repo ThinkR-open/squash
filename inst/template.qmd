@@ -4,8 +4,8 @@
 ---
 
 
-## {{ include_trainer }}
+## {{ trainer }}
 
-**{{ include_phone }}**
+**{{ phone }}**
 
-**{{ include_mail }}**
+**{{ mail }}**

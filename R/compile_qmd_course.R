@@ -10,16 +10,14 @@
 #' @param title character. Title of the presentation
 #' @param date character. Start and end dates of the training
 #' @param footer character. Footer appearing in all slides
-#' @param trainer character. Name of the trainer
-#' @param mail character. Mail of the trainer
-#' @param phone character. Phone number of the trainer
+#' @param template_text list. List of named elements to include in the template.
 #' @param ext_dir character. Path to the _extensions directory to use when compiling qmd
 #' @param quiet logical. Output info in user console
 #' @param fix_img_path logical. If image path are present as raw html inside files,
 #' use this option to correctly edit their path.
 #'
 #' @importFrom tools file_ext
-#' @importFrom htmltools htmlTemplate renderDocument save_html
+#' @importFrom htmltools htmlTemplate renderDocument save_html HTML
 #' @importFrom furrr future_map_lgl furrr_options
 #' @importFrom purrr walk
 #' @importFrom future plan
@@ -84,9 +82,7 @@ compile_qmd_course <- function(
     title = "Title",
     date = "01/01/01-01/01/01",
     footer = "",
-    trainer = NULL,
-    mail = NULL,
-    phone = NULL,
+    template_text = NULL,
     ext_dir = system.file("_extensions", package = "squash"),
     quiet = TRUE,
     fix_img_path = FALSE
@@ -191,14 +187,18 @@ compile_qmd_course <- function(
   )
   
   # include content in template
-  complete_html <- htmlTemplate(
-    filename = template_html,
-    include_html_content = html_content,
-    include_trainer = trainer,
-    include_mail = mail,
-    include_phone = phone
+  # use do.call to add any list of extra content in template
+  complete_html <- do.call(
+    htmlTemplate,
+    append(
+      list(filename = template_html,
+           include_html_content = HTML(html_content)
+      ),
+      template_text
+      )
   ) |>
     renderDocument()
+
   
   # save html file
   path_to_html <- file.path(

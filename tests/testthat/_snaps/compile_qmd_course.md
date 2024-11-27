@@ -55,3 +55,10 @@
     Output
       [1] "<section id=\"title-slide\" class=\"quarto-title-block center\"><h1 class=\"title\">Trouloulou</h1>\n  <p class=\"subtitle\">66/66/66-66/66/66</p>\n\n<div class=\"quarto-title-authors\">\n</div>\n\n</section>"
 
+---
+
+    Code
+      last_slide_content
+    Output
+      [1] "<section id=\"trainer\" class=\"slide level2\"><h2>Tralala</h2>\n<p><strong>+33 6 66 66 66 66</strong></p>\n<p><strong>Trili@li</strong></p>\n<div class=\"quarto-auto-generated-content\">\n<div class=\"footer footer-default\">\n\n</div>\n</div>\n</section>"
+

@@ -41,14 +41,14 @@ test_that("create_template_html generate an html with proper title and theme", {
   #' @description test html content of template has correct title and text
   expect_equal(
     object = slide_id,
-    expected = c("title-slide", NA, "include_trainer")
+    expected = c("title-slide", NA, "trainer")
   )
   expect_contains(
     object = slide_text,
     expected = c(
       "<p>{{ include_html_content }}</p>",
-      "<p><strong>{{ include_phone }}</strong></p>",
-      "<p><strong>{{ include_mail }}</strong></p>"
+      "<p><strong>{{ phone }}</strong></p>",
+      "<p><strong>{{ mail }}</strong></p>"
     )
   )
   

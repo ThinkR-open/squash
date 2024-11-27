@@ -13,9 +13,7 @@ compile_qmd_course(
   title = "Title",
   date = "01/01/01-01/01/01",
   footer = "",
-  trainer = NULL,
-  mail = NULL,
-  phone = NULL,
+  template_text = NULL,
   ext_dir = system.file("_extensions", package = "squash"),
   quiet = TRUE,
   fix_img_path = FALSE
@@ -38,11 +36,7 @@ compile_qmd_course(
 
 \item{footer}{character. Footer appearing in all slides}
 
-\item{trainer}{character. Name of the trainer}
-
-\item{mail}{character. Mail of the trainer}
-
-\item{phone}{character. Phone number of the trainer}
+\item{template_text}{list. List of named elements to include in the template.}
 
 \item{ext_dir}{character. Path to the _extensions directory to use when compiling qmd}
 
