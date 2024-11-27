@@ -9,9 +9,8 @@ create_template_html(
   output_file,
   output_dir,
   output_format = "revealjs",
-  title = "Formation R",
-  date = "01/01/01-01/01/01",
-  footer = "**<i class='las la-book'></i> Formation R**",
+  title = "Title",
+  metadata = NULL,
   temp_dir = tempfile(pattern = "template"),
   ext_dir = system.file("_extensions", package = "squash")
 )
@@ -27,9 +26,7 @@ create_template_html(
 
 \item{title}{character. Title of the presentation}
 
-\item{date}{character. Start and end dates of the training}
-
-\item{footer}{character. Footer appearing in all slides}
+\item{metadata}{list. List of metadata to be used for rendering template}
 
 \item{temp_dir}{character. Path to the temp_dir where template will be rendered}
 

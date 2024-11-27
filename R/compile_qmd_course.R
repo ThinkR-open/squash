@@ -8,10 +8,12 @@
 #' @param template character. Path to the template qmd to use. Content will be included at the positions inside double-brackets
 #' @param output_format character. Output format of the qmd, default to "revealjs". Can be adapted for specific themes.
 #' @param title character. Title of the presentation
-#' @param date character. Start and end dates of the training
-#' @param footer character. Footer appearing in all slides
 #' @param template_text list. List of named elements to include in the template.
 #' @param ext_dir character. Path to the _extensions directory to use when compiling qmd
+#' @param metadata_template list. List of metadata used for rendering template.
+#' If a path to a yml file is provided, metadata will be read from this file.
+#' @param metadata_qmd list. List of metadata used for rendering individual qmd files.
+#' If a path to a yml file is provided, metadata will be read from this file.
 #' @param quiet logical. Output info in user console
 #' @param fix_img_path logical. If image path are present as raw html inside files,
 #' use this option to correctly edit their path.
@@ -80,8 +82,14 @@ compile_qmd_course <- function(
     template = system.file("template_minimal.qmd", package = "squash"),
     output_format = "revealjs",
     title = "Title",
-    date = "01/01/01-01/01/01",
-    footer = "",
+    metadata_template = list(
+      subtitle = "01/01/01-01/01/01",
+      footer = ""),
+    metadata_qmd = list(
+      footer = "**<i class='las la-book'></i> A footer**",
+      logo = "",
+      "title-slide-attributes" = list("data-background-image" = "")
+    ),
     template_text = NULL,
     ext_dir = system.file("_extensions", package = "squash"),
     quiet = TRUE,
@@ -102,8 +110,7 @@ compile_qmd_course <- function(
     output_format = output_format,
     output_file = output_html,
     title = title,
-    date = date,
-    footer = footer,
+    metadata = metadata_template,
     ext_dir = ext_dir
   )
   
@@ -152,7 +159,8 @@ compile_qmd_course <- function(
       render_single_qmd(
         x,
         img_root_dir = img_root_dir,
-        output_format = output_format)
+        output_format = output_format,
+        metadata = metadata_qmd)
     },
     # make random number generation reproducible
     .options = furrr_options(seed = TRUE)

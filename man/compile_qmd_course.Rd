@@ -11,8 +11,9 @@ compile_qmd_course(
   template = system.file("template_minimal.qmd", package = "squash"),
   output_format = "revealjs",
   title = "Title",
-  date = "01/01/01-01/01/01",
-  footer = "",
+  metadata_template = list(subtitle = "01/01/01-01/01/01", footer = ""),
+  metadata_qmd = list(footer = "**<i class='las la-book'></i> A footer**", logo = "",
+    `title-slide-attributes` = list(`data-background-image` = "")),
   template_text = NULL,
   ext_dir = system.file("_extensions", package = "squash"),
   quiet = TRUE,
@@ -32,9 +33,11 @@ compile_qmd_course(
 
 \item{title}{character. Title of the presentation}
 
-\item{date}{character. Start and end dates of the training}
+\item{metadata_template}{list. List of metadata used for rendering template.
+If a path to a yml file is provided, metadata will be read from this file.}
 
-\item{footer}{character. Footer appearing in all slides}
+\item{metadata_qmd}{list. List of metadata used for rendering individual qmd files.
+If a path to a yml file is provided, metadata will be read from this file.}
 
 \item{template_text}{list. List of named elements to include in the template.}
 

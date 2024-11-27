@@ -45,11 +45,7 @@ render_single_qmd <- function(
     qmd,
     img_root_dir = "img",
     output_format = "revealjs",
-    metadata = list(
-      footer = "",
-      logo = "",
-      "title-slide-attributes" = list("data-background-image" = "")
-    )
+    metadata = NULL
 ) {
   # set image sub-folder name
   chapter <- dirname(qmd)

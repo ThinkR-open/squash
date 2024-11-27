@@ -53,7 +53,9 @@ test_that("compile_qmd_course fails gracefully in case of incorrect inputs", {
     expect_error("Some of the input files are not qmd files.")
 })
 
-test_that("compile_qmd_course renders all input courses inside a unique html output", {
+# write here a basic compil test with no theme (dflt)
+
+test_that("compile_qmd_course renders all input courses inside a unique html output with dummy theme", {
   
   # run function
   html_output <- compile_qmd_course(
@@ -177,7 +179,12 @@ test_that("compile_qmd_course works with non-default parameters", {
     output_html = "formation_R.html",
     template = system.file("template.qmd", package = "squash"),
     title = "Trouloulou",
-    date = "66/66/66-66/66/66",
+    metadata_template = list(
+      subtitle = "66/66/66-66/66/66"
+      ),
+    metadata_qmd = list(
+      footer = "imafooter"
+    ),
     template_text = list(
       trainer = "Tralala",
       mail = "Trili@li",
