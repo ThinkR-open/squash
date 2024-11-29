@@ -16,7 +16,7 @@ compile_qmd_course(
   template_text = NULL,
   ext_dir = NULL,
   quiet = TRUE,
-  fix_img_path = FALSE
+  fix_img_path = TRUE
 )
 }
 \arguments{

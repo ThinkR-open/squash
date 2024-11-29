@@ -9,6 +9,7 @@ keywords: "M01S01-1"
 An example code chunk
 
 ```{r}
+#| echo: true
 8 * 8
 ```
 

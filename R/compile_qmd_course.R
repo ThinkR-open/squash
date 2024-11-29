@@ -87,7 +87,7 @@ compile_qmd_course <- function(
     template_text = NULL,
     ext_dir = NULL,
     quiet = TRUE,
-    fix_img_path = FALSE
+    fix_img_path = TRUE
 ) {
   # check paths
   not_all_files_are_qmd <- any(
