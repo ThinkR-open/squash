@@ -1,6 +1,6 @@
 Package: squash
 Title: Several Quarto As Single HTML
-Version: 0.4.0
+Version: 0.4.3
 Authors@R: c(
     person("Antoine", "Languillaume", , "antoine@thinkr.fr", role = c("aut", "cre")),
     person("Colin", "Fay", , "colin@thinkr.fr", role = "aut"),
@@ -12,6 +12,7 @@ License: MIT + file LICENSE
 Imports: 
     cli,
     dplyr,
+    fs,
     furrr,
     future,
     htmltools,

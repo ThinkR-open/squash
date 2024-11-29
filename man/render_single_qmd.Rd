@@ -4,12 +4,21 @@
 \alias{render_single_qmd}
 \title{Render a qmd course to html}
 \usage{
-render_single_qmd(qmd, img_root_dir = "img")
+render_single_qmd(
+  qmd,
+  img_root_dir = "img",
+  output_format = "revealjs",
+  metadata = NULL
+)
 }
 \arguments{
 \item{qmd}{character. Path to the qmd file to render}
 
 \item{img_root_dir}{character. Path to the main image folder to extract media to}
+
+\item{output_format}{character. Output format of the qmd, default to "revealjs". Can be adapted for specific themes.}
+
+\item{metadata}{list. List of metadata to be used for rendering single qmd file}
 }
 \value{
 logical. TRUE if rendering succeeded, FALSE otherwise. Side effect : render qmd as html

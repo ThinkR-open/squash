@@ -4,6 +4,9 @@
 #' 
 #' @param qmd character. Path to the qmd file to render
 #' @param img_root_dir character. Path to the main image folder to extract media to
+#' @param metadata list. List of metadata to be used for rendering single qmd file
+#' 
+#' @inheritParams compile_qmd_course
 #' 
 #' @importFrom quarto quarto_render
 #' @importFrom cli cli_alert_danger
@@ -40,7 +43,9 @@
 #' unlink(temp_dir, recursive = TRUE)
 render_single_qmd <- function(
     qmd,
-    img_root_dir = "img"
+    img_root_dir = "img",
+    output_format = "revealjs",
+    metadata = NULL
 ) {
   # set image sub-folder name
   chapter <- dirname(qmd)
@@ -56,10 +61,10 @@ render_single_qmd <- function(
       quarto_render(
         input = qmd,
         quiet = TRUE,
-        # use revealjs parameter to make a copy of img dir
-        # use compil quarto profile to not add logo/bg and footer from quakr
-        pandoc_args = c(paste0("--extract-media=", img_dir),
-                        "--profile=compil")
+        metadata = metadata,
+        output_format = output_format,
+        # use revealjs extract-media parameter to make a copy of img dir
+        pandoc_args = c(paste0("--extract-media=", img_dir))
       )
       return(TRUE)
     },

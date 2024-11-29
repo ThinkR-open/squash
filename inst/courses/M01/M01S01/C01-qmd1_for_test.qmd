@@ -9,6 +9,7 @@ keywords: "M01S01-1"
 An example code chunk
 
 ```{r}
+#| echo: true
 8 * 8
 ```
 
@@ -29,6 +30,6 @@ This is a speaker note, it is only visible in the speaker view.
 
 ## Slide with image
 
-{dplyr} image
+A kiwi
 
 ![](img/logo_1.png)

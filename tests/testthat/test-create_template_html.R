@@ -10,6 +10,8 @@ test_that("create_template_html generate an html with proper title and theme", {
     output_file = "complete_course.html"
   )
   
+  
+  browseURL(path_to_html_template)
   # list files in extensions
   expect_extension_files <- list.files(
     file.path(temp_dir, "_extensions"),
@@ -27,29 +29,28 @@ test_that("create_template_html generate an html with proper title and theme", {
     html_elements("p") |> 
     as.character()
   
-  #' @description test quakr extension dir is correctly copied
+  #' @description test dummy extension dir is correctly copied
   expect_setequal(
     object = expect_extension_files,
     expected = c(
-      "ThinkR-open/thinkridentity/_extension.yml",
-      "ThinkR-open/thinkridentity/background.png",
-      "ThinkR-open/thinkridentity/logo.png",
-      "ThinkR-open/thinkridentity/logo.svg",
-      "ThinkR-open/thinkridentity/thinkridentity.scss"
+      "dummy/_extension.yml",
+      "dummy/logo.png",
+      "dummy/logo.svg",
+      "dummy/dummy.scss"
     )
   )
   
   #' @description test html content of template has correct title and text
   expect_equal(
     object = slide_id,
-    expected = c("title-slide", NA, "include_trainer")
+    expected = c("title-slide", NA, "trainer")
   )
   expect_contains(
     object = slide_text,
     expected = c(
       "<p>{{ include_html_content }}</p>",
-      "<p><strong>{{ include_phone }}</strong></p>",
-      "<p><strong>{{ include_mail }}</strong></p>"
+      "<p><strong>{{ phone }}</strong></p>",
+      "<p><strong>{{ mail }}</strong></p>"
     )
   )
   

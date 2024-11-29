@@ -1,0 +1,8 @@
+title: dummy
+contributes:
+  formats:
+    revealjs:
+      logo: logo.png
+      theme: dummy.scss
+      execute:
+        echo: true

@@ -5,7 +5,7 @@ subtitle: "columns and layouts"
 
 ## Slide with side-by-side image layout
 
-two {tidyr} images side by side
+two fish side by side
 
 ::: {layout-ncol=2}
 ![](img/logo_2.png)
@@ -15,7 +15,7 @@ two {tidyr} images side by side
 
 ## Slide with side-by-side image columns
 
-two {tidyr} images side by side
+two fish side by side
 
 :::: {.columns}
 
@@ -38,6 +38,7 @@ a central chunk with two outputs side-by-side
 ::: {#left-chunk}
 
 ```{r}
+#| echo: true
 cat("I'm the left chunk output")
 ```
 
@@ -46,6 +47,7 @@ cat("I'm the left chunk output")
 ::: {#right-chunk}
 
 ```{r}
+#| echo: true
 cat("I'm the right chunk output")
 ```
 
@@ -62,6 +64,7 @@ two independent chunks and their separate outputs
 ::: {.column width="50%"}
 
 ```{r}
+#| echo: true
 cat("I'm the left chunk output")
 ```
 
@@ -70,6 +73,7 @@ cat("I'm the left chunk output")
 ::: {.column width="50%"}
 
 ```{r}
+#| echo: true
 cat("I'm the right chunk output")
 ```
 

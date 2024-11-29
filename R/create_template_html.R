@@ -1,10 +1,11 @@
 #' Create a themed html from a qmd template
 #' 
-#' Create a template html with ThinkR styling
+#' Create a template html
 #' 
-#' @param path_to_qmd character. Path to the qmd template to be rendered in thinkridentity-revealjs
+#' @param path_to_qmd character. Path to the qmd template to be rendered
 #' @param output_file character. Name of the output html template
 #' @param temp_dir character. Path to the temp_dir where template will be rendered
+#' @param metadata list. List of metadata to be used for rendering template
 #' 
 #' @inheritParams compile_qmd_course
 #' 
@@ -32,10 +33,11 @@ create_template_html <- function(
   path_to_qmd,
   output_file,
   output_dir,
-  title = "Formation R",
-  date = '01/01/01-01/01/01',
-  footer = "**<i class='las la-book'></i> Formation R**",
-  temp_dir = tempfile(pattern = "template")
+  output_format = "revealjs",
+  title = "Title",
+  metadata = NULL,
+  temp_dir = tempfile(pattern = "template"),
+  ext_dir = system.file("_extensions", package = "squash")
   ){
     
   # set qmd file name base on html output name
@@ -53,36 +55,26 @@ create_template_html <- function(
       output_file_qmd)
     )
   
-  # copy quakr _extensions from {squash} inst
+  # copy _extensions folder if present
   dir.create(file.path(temp_dir, "_extensions/"))
   
   file.copy(
-    from = system.file(
-      "_extensions",
-      package = "squash"
-    ),
+    from = ext_dir,
     to = temp_dir,
     recursive = TRUE
   )
-  
-  # define quarto project parameters
-  write_yaml(
-    x = list(
-      "title" = title,
-      "subtitle" = date,
-      "format" = list(
-        "thinkridentity-revealjs" = list(
-          "footer" = footer
-        )
-      )
-    ),
-    file = file.path(temp_dir, "_quarto.yml")
-  )
-  
+
   # render template with parameters of quarto project
   quarto_render(
     input = file.path(temp_dir, output_file_qmd),
-    quiet = TRUE)
+    quiet = TRUE,
+    metadata = metadata,
+    quarto_args = c(
+      "--metadata",
+      paste0("title=", title)
+      ),
+    output_format = output_format
+  )
   
   # copy output html and companion folders to output_dir
   files_to_copy <- c(
