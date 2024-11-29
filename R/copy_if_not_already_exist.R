@@ -39,7 +39,7 @@ copy_if_not_already_exist <- function(
       cli_alert_info(
         paste(
           "{toString(existing_ext)} extension(s)",
-          "already present in quarto project {dirname(from)}.",
+          "already present in quarto project {dirname(to)}.",
           "Using it for compil."
         )
       )
