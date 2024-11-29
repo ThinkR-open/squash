@@ -1,3 +1,9 @@
+# squash 0.4.2
+
+* Use external extension directory.
+* Enable metadata input as yaml
+* Update doc to cimplify user example in ReadMe.
+
 # squash 0.4.1
 
 * Set rendering parameters as function parameters instead of yaml file.

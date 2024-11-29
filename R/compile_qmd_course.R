@@ -8,23 +8,24 @@
 #' @param template character. Path to the template qmd to use. Content will be included at the positions inside double-brackets
 #' @param output_format character. Output format of the qmd, default to "revealjs". Can be adapted for specific themes.
 #' @param title character. Title of the presentation
-#' @param date character. Start and end dates of the training
-#' @param footer character. Footer appearing in all slides
-#' @param trainer character. Name of the trainer
-#' @param mail character. Mail of the trainer
-#' @param phone character. Phone number of the trainer
+#' @param template_text list. List of named elements to include in the template.
 #' @param ext_dir character. Path to the _extensions directory to use when compiling qmd
+#' @param metadata_template list. List of metadata used for rendering template.
+#' If a path to a yml file is provided, metadata will be read from this file.
+#' @param metadata_qmd list. List of metadata used for rendering individual qmd files.
+#' If a path to a yml file is provided, metadata will be read from this file.
 #' @param quiet logical. Output info in user console
 #' @param fix_img_path logical. If image path are present as raw html inside files,
 #' use this option to correctly edit their path.
 #'
 #' @importFrom tools file_ext
-#' @importFrom htmltools htmlTemplate renderDocument save_html
+#' @importFrom htmltools htmlTemplate renderDocument save_html HTML
 #' @importFrom furrr future_map_lgl furrr_options
 #' @importFrom purrr walk
 #' @importFrom future plan
 #' @importFrom cli cli_alert_info cli_alert_warning cli_alert_success
 #' @importFrom progressr handlers progressor with_progress
+#' @importFrom yaml read_yaml
 #'
 #' @return character. The path to the resulting html file
 #'
@@ -79,17 +80,15 @@ compile_qmd_course <- function(
     vec_qmd_path,
     output_dir,
     output_html,
-    template = system.file("template.qmd", package = "squash"),
-    output_format = "thinkridentity-revealjs",
-    title = "Formation R",
-    date = "01/01/01-01/01/01",
-    footer = "**<i class='las la-book'></i> Formation R**",
-    trainer = "ThinkR",
-    mail = "thinkr.fr",
-    phone = "+33 0 00 00 00 00",
-    ext_dir = system.file("_extensions", package = "squash"),
+    template = system.file("template_minimal.qmd", package = "squash"),
+    output_format = "revealjs",
+    title = "Title",
+    metadata_template = NULL,
+    metadata_qmd = NULL,
+    template_text = NULL,
+    ext_dir = NULL,
     quiet = TRUE,
-    fix_img_path = FALSE
+    fix_img_path = TRUE
 ) {
   # check paths
   not_all_files_are_qmd <- any(
@@ -99,6 +98,14 @@ compile_qmd_course <- function(
     stop("Some of the input files are not qmd files.")
   }
   
+  # read metadata specs
+  if (is.character(metadata_template) && file.exists(metadata_template)){
+    metadata_template <- read_yaml(metadata_template)
+  }
+  if (is.character(metadata_template) && file.exists(metadata_template)){
+    metadata_qmd <- read_yaml(metadata_qmd)
+  }
+  
   # create output dir and html template
   template_html <- create_template_html(
     path_to_qmd = template,
@@ -106,8 +113,7 @@ compile_qmd_course <- function(
     output_format = output_format,
     output_file = output_html,
     title = title,
-    date = date,
-    footer = footer,
+    metadata = metadata_template,
     ext_dir = ext_dir
   )
   
@@ -123,7 +129,8 @@ compile_qmd_course <- function(
   
   # add extension in each directory
   tmp_ext_dir <- add_extension(
-    vec_qmd_path = vec_qmd_path
+    vec_qmd_path = vec_qmd_path,
+    ext_dir = ext_dir
   )
   
   # set main folder for image
@@ -153,7 +160,11 @@ compile_qmd_course <- function(
     .x = vec_qmd_path,
     .f = \(x){
       p(sprintf("rendering %s", basename(x)), class = "sticky")
-      render_single_qmd(x, img_root_dir = img_root_dir)
+      render_single_qmd(
+        x,
+        img_root_dir = img_root_dir,
+        output_format = output_format,
+        metadata = metadata_qmd)
     },
     # make random number generation reproducible
     .options = furrr_options(seed = TRUE)
@@ -188,14 +199,18 @@ compile_qmd_course <- function(
   )
   
   # include content in template
-  complete_html <- htmlTemplate(
-    filename = template_html,
-    include_html_content = html_content,
-    include_trainer = trainer,
-    include_mail = mail,
-    include_phone = phone
+  # use do.call to add any list of extra content in template
+  complete_html <- do.call(
+    htmlTemplate,
+    append(
+      list(filename = template_html,
+           include_html_content = HTML(html_content)
+      ),
+      template_text
+      )
   ) |>
     renderDocument()
+
   
   # save html file
   path_to_html <- file.path(

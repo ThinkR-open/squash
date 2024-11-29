@@ -25,7 +25,7 @@ file.copy(
 quarto::quarto_render(
   input = list.files(temp_dir, recursive = TRUE, pattern = "qmd$", full.names = TRUE),
   output_format = "revealjs",
-  quiet = FALSE,
+  quiet = TRUE,
   as_job = FALSE
 )
 

@@ -1,10 +1,11 @@
 #' Create a themed html from a qmd template
 #' 
-#' Create a template html with ThinkR styling
+#' Create a template html
 #' 
-#' @param path_to_qmd character. Path to the qmd template to be rendered in thinkridentity-revealjs
+#' @param path_to_qmd character. Path to the qmd template to be rendered
 #' @param output_file character. Name of the output html template
 #' @param temp_dir character. Path to the temp_dir where template will be rendered
+#' @param metadata list. List of metadata to be used for rendering template
 #' 
 #' @inheritParams compile_qmd_course
 #' 
@@ -32,10 +33,9 @@ create_template_html <- function(
   path_to_qmd,
   output_file,
   output_dir,
-  output_format = "thinkridentity-revealjs",
-  title = "Formation R",
-  date = '01/01/01-01/01/01',
-  footer = "**<i class='las la-book'></i> Formation R**",
+  output_format = "revealjs",
+  title = "Title",
+  metadata = NULL,
   temp_dir = tempfile(pattern = "template"),
   ext_dir = system.file("_extensions", package = "squash")
   ){
@@ -68,10 +68,7 @@ create_template_html <- function(
   quarto_render(
     input = file.path(temp_dir, output_file_qmd),
     quiet = TRUE,
-    metadata = list(
-      subtitle = date,
-      footer = footer
-    ),
+    metadata = metadata,
     quarto_args = c(
       "--metadata",
       paste0("title=", title)

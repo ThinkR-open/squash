@@ -35,6 +35,11 @@ add_extension <- function(
   quiet = FALSE
   ){
   
+  # sop if not extension dir is provided
+  if (is.null(ext_dir)){
+    return(NULL)
+  }
+  
   # look for existing quarto projects
   # _extensions will be added to project root
   qmd_dir <- dirname(vec_qmd_path)

@@ -31,7 +31,7 @@ quarto::quarto_render(
 )
 
 # add fake extension dir and subdir
-ext <- file.path(temp_dir, "_extensions", "ThinkR-open", "thinkridentity")
+ext <- file.path(temp_dir, "_extensions", "somerepo", "dummy")
 dir.create(path = ext, recursive = TRUE)
 file.create(file.path(ext, "somestyle.css"))
 

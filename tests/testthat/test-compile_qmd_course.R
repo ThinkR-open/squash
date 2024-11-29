@@ -53,14 +53,64 @@ test_that("compile_qmd_course fails gracefully in case of incorrect inputs", {
     expect_error("Some of the input files are not qmd files.")
 })
 
-test_that("compile_qmd_course renders all input courses inside a unique html output", {
+test_that("compile_qmd_course renders all input courses inside a unique html with default params", {
   
   # run function
   html_output <- compile_qmd_course(
     vec_qmd_path = qmds,
     output_dir = temp_dir,
     output_html = "complete_course.html",
-    fix_img_path = TRUE
+  )
+  
+  file_present_after_rendering <- list.files(
+    path = tmp_course_path,
+    full.names = TRUE,
+    include.dirs = TRUE,
+    recursive = TRUE
+  )
+  
+  #' @description test that no remaining output files are present
+  expect_setequal(
+    object = file_present_after_rendering,
+    expected = file_present_before_rendering
+  )
+  
+  #' @description test that output html exists
+  expect_true(file.exists(html_output))
+ 
+  slide_content <- html_output |>
+    read_html() |>
+    html_elements(css = ".slides")
+  
+  slide_content_by_cat <- purrr::map(.x = c("h1", "h2", "code"), .f = \(x) {
+    slide_content |>
+      html_elements(x) |>
+      rvest::html_text()
+  })
+  
+  #' @description test html content is present
+  expect_snapshot(x = slide_content_by_cat)
+  
+})
+
+test_that("compile_qmd_course renders all input courses inside a unique html output with dummy theme", {
+  
+  # run function
+  html_output <- compile_qmd_course(
+    vec_qmd_path = qmds,
+    output_dir = temp_dir,
+    output_html = "complete_course.html",
+    fix_img_path = TRUE,
+    output_format = "dummy-revealjs",
+    metadata_template = list(
+      subtitle = "01/01/01-01/01/01",
+      footer = "**<i class='las la-book'></i> A footer**"),
+    # remove logo and footer to avoid duplicate from template
+    metadata_qmd = list(
+      footer = "",
+      logo = ""
+    ),
+    ext_dir = system.file("_extensions", package = "squash")
   )
   
   file_present_after_rendering <- list.files(
@@ -88,23 +138,21 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
       "M01S02_img/img/logo_1.png",
       "M02S01-presentations_img/C02-code_files/figure-revealjs/unnamed-chunk-1-1.png",
       "M02S01-presentations_img/C02-code_files/figure-revealjs/unnamed-chunk-2-1.png",
-      "M02S01-presentations_img/img/bonjour_smiley.png",
-      "M02S01-presentations_img/img/chevalet_blanc.jpg",
-      "M02S01-presentations_img/img/crayon.jpg",
-      "M02S01-presentations_img/img/groupe-conversation.jpg",
-      "M02S01-presentations_img/img/thinkr-hex.png"
+      "M02S01-presentations_img/img/shrimp.png",
+      "M02S01-presentations_img/img/worm.jpg",
+      "M02S01-presentations_img/img/cow.png",
+      "M02S01-presentations_img/img/fish.png"
     )
   )
 
   expected_md5 <- c(
-    "ac99473759dd46bf0564047e5cfc2714",
-    "8d77c0f9921459b6fdc64f2cceb7c575",
-    "3b740309e3746c97e95df575801e3253",
-    "37943ef4b82d1cfb00c3ffd8b7b13948",
-    "1ccfb852f6cd8df7b3d68d51a6f6aec9",
-    "29301418b3f7fd256e1f2eb0dc88a136",
-    "8ddd7aad8372954c9513115744a719d7",
-    "e9f32cf87e5de2e683b3c667226ff127"
+    "339a6d7488c1bf96613ac202f81a4e0a",
+    "e1689186ffbb4a2d181e868fbfc716be",
+    "f96ffc2c0beba0a12a0670bce72aef77",
+    "7a754636fcf0f2ab12e0049888f9c646",
+    "5af0089de8304dd00448d75c83ca87e6",
+    "f96ffc2c0beba0a12a0670bce72aef77",
+    "e1689186ffbb4a2d181e868fbfc716be"
   )
   
   #' @description test that output image exist
@@ -148,11 +196,11 @@ test_that("compile_qmd_course HTML preview looks ok", {
     browseURL(file.path(temp_dir, "complete_course.html"))
     
     questions <- c(
-      "\nYou have 26 slides, all with footer and logo ?",
-      "\nMain titles are centered, all titles are orange ?",
-      "\nImage and code chunk appear properly sized and colored ?",
-      "\nGraphics are visible in slides 23 and 24 ?",
-      "\nTable is visible in slide 25 ?"
+      "\nYou have 5 chapters ?",
+      "\nMain titles are centered and orange ? Chapter names are blue ?",
+      "\nImage and code chunk appear properly ?",
+      "\nGraphics are visible ?",
+      "\nTable is visible ?"
       )
     
     answers <- sapply(
@@ -174,14 +222,19 @@ test_that("compile_qmd_course works with non-default parameters", {
     vec_qmd_path = qmds[1],
     output_dir = temp_dir,
     output_html = "formation_R.html",
-    template = system.file("template_minimal.qmd", package = "squash"),
+    template = system.file("template.qmd", package = "squash"),
     title = "Trouloulou",
-    date = "66/66/66-66/66/66",
-    trainer = "Tralala",
-    mail = "Trili@li",
-    phone = "+33 6 66 66 66 66"
+    metadata_template = testthat::test_path("_yamls", "metadata.yml"),
+    metadata_qmd = list(
+      footer = "imafooter"
+    ),
+    template_text = list(
+      trainer = "Tralala",
+      mail = "Trili@li",
+      phone = "+33 6 66 66 66 66"
+    )
   )
-
+  
   #' @description test output has expected name
   expect_true(
     file.exists(
@@ -196,8 +249,18 @@ test_that("compile_qmd_course works with non-default parameters", {
     _[[1]] |> 
     as.character()
   
-  #' @description test non-default info are well inserted in minimal template
+  #' @description test non-default info are well inserted in template 1st slide
   expect_snapshot(x = first_slide_content)
+  
+  last_slide_content <- html_output |>
+    read_html() |>
+    html_elements(css = ".slides") |>
+    html_children() |>
+    _[[3]] |> 
+    as.character()
+  
+  #' @description test non-default info are well inserted in template last slide
+  expect_snapshot(x = last_slide_content)
   
   file_present_after_rendering <- list.files(
     path = tmp_course_path,

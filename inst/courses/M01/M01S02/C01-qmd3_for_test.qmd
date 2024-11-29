@@ -16,6 +16,6 @@ Some text again, appear in a new slide
 
 Slide with chapter name and png file name identical to a slide from the first chapter.
 
-This should be a {ggplot2} image.
+This should be a cow image.
 
 <img src="img/logo_1.png">

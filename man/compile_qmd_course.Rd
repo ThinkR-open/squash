@@ -8,17 +8,15 @@ compile_qmd_course(
   vec_qmd_path,
   output_dir,
   output_html,
-  template = system.file("template.qmd", package = "squash"),
-  output_format = "thinkridentity-revealjs",
-  title = "Formation R",
-  date = "01/01/01-01/01/01",
-  footer = "**<i class='las la-book'></i> Formation R**",
-  trainer = "ThinkR",
-  mail = "thinkr.fr",
-  phone = "+33 0 00 00 00 00",
-  ext_dir = system.file("_extensions", package = "squash"),
+  template = system.file("template_minimal.qmd", package = "squash"),
+  output_format = "revealjs",
+  title = "Title",
+  metadata_template = NULL,
+  metadata_qmd = NULL,
+  template_text = NULL,
+  ext_dir = NULL,
   quiet = TRUE,
-  fix_img_path = FALSE
+  fix_img_path = TRUE
 )
 }
 \arguments{
@@ -34,15 +32,13 @@ compile_qmd_course(
 
 \item{title}{character. Title of the presentation}
 
-\item{date}{character. Start and end dates of the training}
+\item{metadata_template}{list. List of metadata used for rendering template.
+If a path to a yml file is provided, metadata will be read from this file.}
 
-\item{footer}{character. Footer appearing in all slides}
+\item{metadata_qmd}{list. List of metadata used for rendering individual qmd files.
+If a path to a yml file is provided, metadata will be read from this file.}
 
-\item{trainer}{character. Name of the trainer}
-
-\item{mail}{character. Mail of the trainer}
-
-\item{phone}{character. Phone number of the trainer}
+\item{template_text}{list. List of named elements to include in the template.}
 
 \item{ext_dir}{character. Path to the _extensions directory to use when compiling qmd}
 

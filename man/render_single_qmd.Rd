@@ -7,9 +7,8 @@
 render_single_qmd(
   qmd,
   img_root_dir = "img",
-  output_format = "thinkridentity-revealjs",
-  metadata = list(footer = "", logo = "", `title-slide-attributes` =
-    list(`data-background-image` = ""))
+  output_format = "revealjs",
+  metadata = NULL
 )
 }
 \arguments{

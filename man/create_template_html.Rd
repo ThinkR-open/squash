@@ -8,16 +8,15 @@ create_template_html(
   path_to_qmd,
   output_file,
   output_dir,
-  output_format = "thinkridentity-revealjs",
-  title = "Formation R",
-  date = "01/01/01-01/01/01",
-  footer = "**<i class='las la-book'></i> Formation R**",
+  output_format = "revealjs",
+  title = "Title",
+  metadata = NULL,
   temp_dir = tempfile(pattern = "template"),
   ext_dir = system.file("_extensions", package = "squash")
 )
 }
 \arguments{
-\item{path_to_qmd}{character. Path to the qmd template to be rendered in thinkridentity-revealjs}
+\item{path_to_qmd}{character. Path to the qmd template to be rendered}
 
 \item{output_file}{character. Name of the output html template}
 
@@ -27,9 +26,7 @@ create_template_html(
 
 \item{title}{character. Title of the presentation}
 
-\item{date}{character. Start and end dates of the training}
-
-\item{footer}{character. Footer appearing in all slides}
+\item{metadata}{list. List of metadata to be used for rendering template}
 
 \item{temp_dir}{character. Path to the temp_dir where template will be rendered}
 
@@ -39,7 +36,7 @@ create_template_html(
 character. Path to the html template
 }
 \description{
-Create a template html with ThinkR styling
+Create a template html
 }
 \examples{
 # create temp dir

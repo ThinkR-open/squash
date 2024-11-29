@@ -17,8 +17,7 @@ html file.
 The main purpose of this is to create custom slide decks from several
 chapter .qmd files.
 
-The resulting html file follows the ThinkR quarto theme:
-[thinkr-open/quakr](https://github.com/ThinkR-open/quakr)
+The resulting html file can be themed via quarto extensions.
 
 ## Installation
 
@@ -61,11 +60,9 @@ courses_path <- system.file(
   package = "squash"
 )
 
-# copy example qmds in a tempdir alongside a quarto project file
+# copy example qmds in a tempdir
 tmp_course_path <- tempfile(pattern = "course")
 dir.create(tmp_course_path)
-file.create(file.path(tmp_course_path, "_quarto.yaml"))
-#> [1] TRUE
 
 file.copy(
   from = courses_path,
@@ -82,9 +79,9 @@ qmds <- list.files(
 )
 
 qmds
-#> [1] "/tmp/RtmpQxxkMo/coursefcc42267730e/M01/M01S01/C01-qmd1_for_test.qmd"
-#> [2] "/tmp/RtmpQxxkMo/coursefcc42267730e/M01/M01S01/C02-qmd2_for_test.qmd"
-#> [3] "/tmp/RtmpQxxkMo/coursefcc42267730e/M01/M01S02/C01-qmd3_for_test.qmd"
+#> [1] "/tmp/Rtmpuq62Kd/courseb1cd08fdabc2/M01/M01S01/C01-qmd1_for_test.qmd"
+#> [2] "/tmp/Rtmpuq62Kd/courseb1cd08fdabc2/M01/M01S01/C02-qmd2_for_test.qmd"
+#> [3] "/tmp/Rtmpuq62Kd/courseb1cd08fdabc2/M01/M01S02/C01-qmd3_for_test.qmd"
 ```
 
 And a directory where you want your course to be generated.
@@ -125,71 +122,7 @@ unlink(tmp_course_path, recursive = TRUE)
 
 ## Devs
 
-### Project Management
-
-The project management of this package (milestones etc…) is done on the
-[squash notion
-page](https://www.notion.so/thnkr/squash-f2d050e0c1484ecab69d044cc7bf201c?pvs=4).
-
 ### Check
 
 Some tests manually verify the appearance of the slides. To trigger
 them, please run `devtools::test()` interactively.
-
-### Keeping ThinkR quarto theme up-to-date
-
-This package is harboring another project
-[quakr](https://github.com/ThinkR-open/quakr) which is the ThinkR theme
-for the quarto revealjs format.
-
-It is not a R package but a quarto extension stored in `inst/`.
-
-It should be kept in sync with the main branch of
-<https://github.com/ThinkR-open/quakr> to insure that {squash} is always
-shipped with the latest release of quakr.
-
-#### Automatic sync check
-
-There is a built-in fail-safe function `.check_if_quakr_up_to_date()` in
-the project `.Rprofile`.
-
-Every time a dev open the project `.check_if_quakr_up_to_date`:
-
-- downloads the the latest version of quakr in a temp directory
-- checks it against the current version within the package
-- informs the dev if quakr needs to be updated
-
-#### Updating quakr
-
-quakr needs to be updated via the quarto cli.
-
-First, you need to be in the package `inst/` directory where the
-extension is stored
-
-``` bash
-cd inst/
-```
-
-Run the `quarto update` command and answer `yes` to all questions
-
-``` bash
-quarto update ThinkR-open/quakr
-```
-
-If you want to update quakr using a specific branch, use `@` to specifiy
-which branch you would like to use. For example:
-
-``` bash
-quarto update ThinkR-open/quakr@dev
-```
-
-In that case you will also need to provide thebranch name to
-`.check_if_quakr_up_to_date()` in the .Rprofile as such
-`.check_if_quakr_up_to_date(branch = "dev")` not to be bothered by
-useless warnings.
-
-Lastly, don’t forget to get back to the package directory
-
-``` bash
-cd ..
-```
