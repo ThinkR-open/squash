@@ -25,6 +25,7 @@
 #' @importFrom future plan
 #' @importFrom cli cli_alert_info cli_alert_warning cli_alert_success
 #' @importFrom progressr handlers progressor with_progress
+#' @importFrom yaml read_yaml
 #'
 #' @return character. The path to the resulting html file
 #'
@@ -95,6 +96,14 @@ compile_qmd_course <- function(
   )
   if (isTRUE(not_all_files_are_qmd)) {
     stop("Some of the input files are not qmd files.")
+  }
+  
+  # read metadata specs
+  if (is.character(metadata_template) && file.exists(metadata_template)){
+    metadata_template <- read_yaml(metadata_template)
+  }
+  if (is.character(metadata_template) && file.exists(metadata_template)){
+    metadata_qmd <- read_yaml(metadata_qmd)
   }
   
   # create output dir and html template

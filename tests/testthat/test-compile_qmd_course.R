@@ -224,9 +224,7 @@ test_that("compile_qmd_course works with non-default parameters", {
     output_html = "formation_R.html",
     template = system.file("template.qmd", package = "squash"),
     title = "Trouloulou",
-    metadata_template = list(
-      subtitle = "66/66/66-66/66/66"
-      ),
+    metadata_template = testthat::test_path("_yamls", "metadata.yml"),
     metadata_qmd = list(
       footer = "imafooter"
     ),
