@@ -79,9 +79,9 @@ qmds <- list.files(
 )
 
 qmds
-#> [1] "/tmp/RtmpUzxzqG/coursea7df316a432f6/M01/M01S01/C01-qmd1_for_test.qmd"
-#> [2] "/tmp/RtmpUzxzqG/coursea7df316a432f6/M01/M01S01/C02-qmd2_for_test.qmd"
-#> [3] "/tmp/RtmpUzxzqG/coursea7df316a432f6/M01/M01S02/C01-qmd3_for_test.qmd"
+#> [1] "/tmp/Rtmpuq62Kd/courseb1cd08fdabc2/M01/M01S01/C01-qmd1_for_test.qmd"
+#> [2] "/tmp/Rtmpuq62Kd/courseb1cd08fdabc2/M01/M01S01/C02-qmd2_for_test.qmd"
+#> [3] "/tmp/Rtmpuq62Kd/courseb1cd08fdabc2/M01/M01S02/C01-qmd3_for_test.qmd"
 ```
 
 And a directory where you want your course to be generated.

@@ -129,7 +129,8 @@ compile_qmd_course <- function(
   
   # add extension in each directory
   tmp_ext_dir <- add_extension(
-    vec_qmd_path = vec_qmd_path
+    vec_qmd_path = vec_qmd_path,
+    ext_dir = ext_dir
   )
   
   # set main folder for image
