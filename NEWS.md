@@ -1,3 +1,7 @@
+# squash 0.4.3
+
+* use {fs} to compute extensions relative path
+
 # squash 0.4.2
 
 * Use external extension directory.

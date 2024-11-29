@@ -4,7 +4,7 @@
 #' @param to character. The target path to copy to extensions to
 #' @param quiet logical. Should the use be warned about pre-existing dir
 #' 
-#' @importFrom fs dir_ls dir_copy dir_exists
+#' @importFrom fs dir_ls dir_copy dir_exists path_rel
 #' @importFrom purrr walk
 #' 
 #' @return character. Path of added directory.
@@ -27,7 +27,7 @@ copy_if_not_already_exist <- function(
 
   # list extensions in input dir
   ext_list <- dir_ls(path = from, recurse = 1, type = "directory") |> 
-    gsub(pattern = from, replacement = "")
+    path_rel(start = from)
   
   # list extensions already present in target dir
   already_present <- dir_exists(file.path(to, ext_list))
