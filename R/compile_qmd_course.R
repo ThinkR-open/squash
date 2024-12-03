@@ -87,7 +87,7 @@ compile_qmd_course <- function(
     metadata_qmd = NULL,
     template_text = NULL,
     ext_dir = NULL,
-    quiet = TRUE,
+    quiet = FALSE,
     fix_img_path = TRUE
 ) {
   # check paths
@@ -106,6 +106,23 @@ compile_qmd_course <- function(
     metadata_qmd <- read_yaml(metadata_qmd)
   }
   
+  # list courses files present before rendering
+  vec_qmd_dir <- unique(dirname(vec_qmd_path))
+  
+  file_present_before_rendering <- list.files(
+    path = vec_qmd_dir,
+    full.names = TRUE,
+    include.dirs = TRUE,
+    recursive = TRUE
+  )
+  
+  # prepare qmd rendering
+  tmp_ext_dir <- add_extension(
+    vec_qmd_path = vec_qmd_path,
+    ext_dir = ext_dir,
+    quiet = quiet
+  )
+  
   # create output dir and html template
   template_html <- create_template_html(
     path_to_qmd = template,
@@ -117,39 +134,8 @@ compile_qmd_course <- function(
     ext_dir = ext_dir
   )
   
-  # list courses files present before rendering
-  vec_qmd_dir <- unique(dirname(vec_qmd_path))
-  
-  file_present_before_rendering <- list.files(
-    path = vec_qmd_dir,
-    full.names = TRUE,
-    include.dirs = TRUE,
-    recursive = TRUE
-  )
-  
-  # add extension in each directory
-  tmp_ext_dir <- add_extension(
-    vec_qmd_path = vec_qmd_path,
-    ext_dir = ext_dir
-  )
-  
   # set main folder for image
   img_root_dir <- gsub("\\.html", "_img", output_html)
-  
-  # warn user about {furrr} strategy (e.g. parallel, sequential, default)
-  if (isFALSE(quiet)){
-    future_setting <- attr(plan(), "call")
-    future_setting <- ifelse(
-      test = is.null(future_setting),
-      yes = 'plan("default")',
-      no = deparse(future_setting)
-    )
-    
-    cli_alert_info(paste(
-      "{{future}} is using {future_setting},",
-      "to modify this use {.code future::plan()}"
-    ))
-  }
 
   # setup progress report with {progressr}
   handlers("progress")
@@ -164,7 +150,9 @@ compile_qmd_course <- function(
         x,
         img_root_dir = img_root_dir,
         output_format = output_format,
-        metadata = metadata_qmd)
+        metadata = metadata_qmd,
+        quiet = quiet
+        )
     },
     # make random number generation reproducible
     .options = furrr_options(seed = TRUE)

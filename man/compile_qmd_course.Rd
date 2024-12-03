@@ -15,7 +15,7 @@ compile_qmd_course(
   metadata_qmd = NULL,
   template_text = NULL,
   ext_dir = NULL,
-  quiet = TRUE,
+  quiet = FALSE,
   fix_img_path = TRUE
 )
 }

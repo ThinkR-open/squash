@@ -32,33 +32,21 @@ add_extension <- function(
   vec_qmd_path,
   ext_dir = system.file("_extensions",
                         package = "squash"),
-  quiet = FALSE
+  quiet = TRUE
   ){
   
-  # sop if not extension dir is provided
+  # stop if not extension dir is provided
   if (is.null(ext_dir)){
     return(NULL)
   }
   
-  # look for existing quarto projects
-  # _extensions will be added to project root
-  qmd_dir <- dirname(vec_qmd_path)
+  # fetch target extension path
+  qmd_dir <- fetch_project_and_future_settings(
+    vec_qmd_path = vec_qmd_path,
+    quiet = quiet
+  )
   
-  quarto_proj <- map(
-    .x = qmd_dir,
-    .f = \(x){
-      # return NULL if dir is not a quarto project
-      tryCatch(
-        expr = {quarto_inspect(x)$dir},
-        error = \(e){NULL}
-        )
-      }
-    ) |> as.vector()
-  
-  no_quarto_proj <- map_lgl(quarto_proj, is.null)
-  qmd_dir <- unique(c(qmd_dir[no_quarto_proj], quarto_proj[!no_quarto_proj]))
-
-  # add extension in detected projects
+  # add extension in detected paths
   if (length(qmd_dir) > 0){
 
     # add quakr extension
@@ -78,7 +66,8 @@ add_extension <- function(
       .f = \(x){
         copy_if_not_already_exist(
           from = ext_dir,
-          to = x
+          to = x,
+          quiet = quiet
         )
       }
     )

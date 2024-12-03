@@ -107,5 +107,5 @@
     Code
       last_slide_content
     Output
-      [1] "<section id=\"trainer\" class=\"slide level2\"><h2>Tralala</h2>\n<p><strong>+33 6 66 66 66 66</strong></p>\n<p><strong>Trili@li</strong></p>\n<div class=\"quarto-auto-generated-content\">\n<div class=\"footer footer-default\">\n\n</div>\n</div>\n</section>"
+      [1] "<section id=\"trainer\" class=\"slide level2\"><h2>Tralala</h2>\n<p><strong>+33 6 66 66 66 66</strong></p>\n<p><strong>Trili@li</strong></p>\n\n</section>"
 
