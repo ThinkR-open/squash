@@ -1,3 +1,7 @@
+# squash 0.4.4
+
+* Refacto to reduce single function size
+
 # squash 0.4.3
 
 * use {fs} to compute extensions relative path
