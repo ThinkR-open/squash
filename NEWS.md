@@ -1,3 +1,8 @@
+# squash 0.4.5
+
+* Add `debug` parameter to split simple verbose and large one includong all rendering details
+* Add vignette for simple usage
+
 # squash 0.4.4
 
 * Refacto to reduce single function size
