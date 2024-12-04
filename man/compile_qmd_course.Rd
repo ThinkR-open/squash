@@ -15,7 +15,8 @@ compile_qmd_course(
   metadata_qmd = NULL,
   template_text = NULL,
   ext_dir = NULL,
-  quiet = TRUE,
+  quiet = FALSE,
+  debug = FALSE,
   fix_img_path = TRUE
 )
 }
@@ -43,6 +44,8 @@ If a path to a yml file is provided, metadata will be read from this file.}
 \item{ext_dir}{character. Path to the _extensions directory to use when compiling qmd}
 
 \item{quiet}{logical. Output info in user console}
+
+\item{debug}{logical. Output rendering output in user console.}
 
 \item{fix_img_path}{logical. If image path are present as raw html inside files,
 use this option to correctly edit their path.}

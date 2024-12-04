@@ -45,7 +45,8 @@ render_single_qmd <- function(
     qmd,
     img_root_dir = "img",
     output_format = "revealjs",
-    metadata = NULL
+    metadata = NULL,
+    quiet = TRUE
 ) {
   # set image sub-folder name
   chapter <- dirname(qmd)
@@ -60,11 +61,9 @@ render_single_qmd <- function(
     expr = {
       quarto_render(
         input = qmd,
-        quiet = TRUE,
-        metadata = metadata,
+        metadata = c(metadata, list(`extract-media` = img_dir)),
         output_format = output_format,
-        # use revealjs extract-media parameter to make a copy of img dir
-        pandoc_args = c(paste0("--extract-media=", img_dir))
+        quiet = quiet
       )
       return(TRUE)
     },

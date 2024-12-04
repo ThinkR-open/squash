@@ -79,9 +79,9 @@ qmds <- list.files(
 )
 
 qmds
-#> [1] "/tmp/Rtmpuq62Kd/courseb1cd08fdabc2/M01/M01S01/C01-qmd1_for_test.qmd"
-#> [2] "/tmp/Rtmpuq62Kd/courseb1cd08fdabc2/M01/M01S01/C02-qmd2_for_test.qmd"
-#> [3] "/tmp/Rtmpuq62Kd/courseb1cd08fdabc2/M01/M01S02/C01-qmd3_for_test.qmd"
+#> [1] "/tmp/Rtmp4CGWT1/course38cdd106ae27d/M01/M01S01/C01-qmd1_for_test.qmd"
+#> [2] "/tmp/Rtmp4CGWT1/course38cdd106ae27d/M01/M01S01/C02-qmd2_for_test.qmd"
+#> [3] "/tmp/Rtmp4CGWT1/course38cdd106ae27d/M01/M01S02/C01-qmd3_for_test.qmd"
 ```
 
 And a directory where you want your course to be generated.
@@ -105,6 +105,7 @@ html_output <- progressr::with_progress(
     output_html = "complete_course.html"
   )
 )
+#> ✔ All qmd rendered.
 ```
 
 Check out the result

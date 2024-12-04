@@ -22,7 +22,7 @@
 copy_if_not_already_exist <- function(
     from,
     to,
-    quiet = FALSE
+    quiet = TRUE
 ){
 
   # list extensions in input dir
@@ -35,7 +35,7 @@ copy_if_not_already_exist <- function(
   new_ext <- ext_list[!already_present]
   
   if (length(existing_ext) > 0) {
-    if (!quiet){
+    if (isFALSE(quiet)){
       cli_alert_info(
         paste(
           "{toString(existing_ext)} extension(s)",
