@@ -15,6 +15,7 @@
 #' @param metadata_qmd list. List of metadata used for rendering individual qmd files.
 #' If a path to a yml file is provided, metadata will be read from this file.
 #' @param quiet logical. Output info in user console
+#' @param debug logical. Output rendering output in user console.
 #' @param fix_img_path logical. If image path are present as raw html inside files,
 #' use this option to correctly edit their path.
 #'
@@ -88,6 +89,7 @@ compile_qmd_course <- function(
     template_text = NULL,
     ext_dir = NULL,
     quiet = FALSE,
+    debug = FALSE,
     fix_img_path = TRUE
 ) {
   # check paths
@@ -151,7 +153,7 @@ compile_qmd_course <- function(
         img_root_dir = img_root_dir,
         output_format = output_format,
         metadata = metadata_qmd,
-        quiet = quiet
+        quiet = !debug
         )
     },
     # make random number generation reproducible
