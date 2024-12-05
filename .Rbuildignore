@@ -9,3 +9,5 @@
 ^inst/\.quarto$
 ^\.Rprofile$
 ^\.github$
+^docs$
+^pkgdown$
