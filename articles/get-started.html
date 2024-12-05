@@ -104,7 +104,7 @@ presentation.</p>
 logo images.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span><span class="va">tmp_course_path</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">/tmp/RtmpCoMJq8/course1b5a604bf458</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">/tmp/RtmpdMrCD3/course1cbb4bba6c5f</span></span></span>
 <span><span class="co">#&gt; └── <span style="color: #0000BB; font-weight: bold;">M01</span></span></span>
 <span><span class="co">#&gt;     ├── <span style="color: #0000BB; font-weight: bold;">M01S01</span></span></span>
 <span><span class="co">#&gt;     │   ├── C01-qmd1_for_test.qmd</span></span>
@@ -125,9 +125,9 @@ logo images.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">qmds</span></span>
-<span><span class="co">#&gt; [1] "/tmp/RtmpCoMJq8/course1b5a604bf458/M01/M01S01/C01-qmd1_for_test.qmd"</span></span>
-<span><span class="co">#&gt; [2] "/tmp/RtmpCoMJq8/course1b5a604bf458/M01/M01S01/C02-qmd2_for_test.qmd"</span></span>
-<span><span class="co">#&gt; [3] "/tmp/RtmpCoMJq8/course1b5a604bf458/M01/M01S02/C01-qmd3_for_test.qmd"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "/tmp/RtmpdMrCD3/course1cbb4bba6c5f/M01/M01S01/C01-qmd1_for_test.qmd"</span></span>
+<span><span class="co">#&gt; [2] "/tmp/RtmpdMrCD3/course1cbb4bba6c5f/M01/M01S01/C02-qmd2_for_test.qmd"</span></span>
+<span><span class="co">#&gt; [3] "/tmp/RtmpdMrCD3/course1cbb4bba6c5f/M01/M01S02/C01-qmd3_for_test.qmd"</span></span></code></pre></div>
 <p>I can render a single html presentation from these qmd by executing
 the following command :</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -144,7 +144,7 @@ the necessary external image files, stored in individual sub-folder to
 prevent overriding.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span><span class="va">tmp_course_path</span>, recurse <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">/tmp/RtmpCoMJq8/course1b5a604bf458</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">/tmp/RtmpdMrCD3/course1cbb4bba6c5f</span></span></span>
 <span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">M01</span></span></span>
 <span><span class="co">#&gt; │   ├── <span style="color: #0000BB; font-weight: bold;">M01S01</span></span></span>
 <span><span class="co">#&gt; │   │   ├── C01-qmd1_for_test.qmd</span></span>
