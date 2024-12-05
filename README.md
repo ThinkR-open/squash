@@ -5,10 +5,9 @@
 
 <!-- badges: start -->
 
-[![R build
-status](https://forge.thinkr.fr/thinkr/thinkrverse/squash/badges/main/pipeline.svg)](https://forge.thinkr.fr/thinkr/thinkrverse/squash/-/pipelines)
+[![R-CMD-check](https://github.com/ThinkR-open/squash/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ThinkR-open/squash/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://forge.thinkr.fr/thinkr/thinkrverse/squash/badges/main/coverage.svg)](https://forge.thinkr.fr/thinkr/thinkrverse/squash/commits/main)
+coverage](https://codecov.io/gh/ThinkR-open/squash/graph/badge.svg)](https://app.codecov.io/gh/ThinkR-open/squash)
 <!-- badges: end -->
 
 The goal of {squash} is to compile n .qmd presentations to one single
@@ -52,7 +51,6 @@ file.copy(
   to = tmp_course_path,
   recursive = TRUE
 )
-#> [1] TRUE
 
 qmds <- list.files(
   path = tmp_course_path,
@@ -62,9 +60,6 @@ qmds <- list.files(
 )
 
 qmds
-#> [1] "/tmp/RtmpqnCEPl/course3ae567a45a7de/M01/M01S01/C01-qmd1_for_test.qmd"
-#> [2] "/tmp/RtmpqnCEPl/course3ae567a45a7de/M01/M01S01/C02-qmd2_for_test.qmd"
-#> [3] "/tmp/RtmpqnCEPl/course3ae567a45a7de/M01/M01S02/C01-qmd3_for_test.qmd"
 ```
 
 And a directory where you want your course to be generated.
@@ -88,7 +83,6 @@ html_output <- progressr::with_progress(
     output_html = "complete_course.html"
   )
 )
-#> ✔ All qmd rendered.
 ```
 
 Check out the result

@@ -14,8 +14,8 @@ knitr::opts_chunk$set(
 # {squash}: several quarto to single html
 
 <!-- badges: start -->
-[![R build status](https://forge.thinkr.fr/thinkr/thinkrverse/squash/badges/main/pipeline.svg)](https://forge.thinkr.fr/thinkr/thinkrverse/squash/-/pipelines)
-[![Codecov test coverage](https://forge.thinkr.fr/thinkr/thinkrverse/squash/badges/main/coverage.svg)](https://forge.thinkr.fr/thinkr/thinkrverse/squash/commits/main)
+[![R-CMD-check](https://github.com/ThinkR-open/squash/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ThinkR-open/squash/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/ThinkR-open/squash/graph/badge.svg)](https://app.codecov.io/gh/ThinkR-open/squash)
 <!-- badges: end -->
 
 The goal of {squash} is to compile n .qmd presentations to one single html file.
@@ -46,7 +46,7 @@ library(squash)
 
 Given a vector containing path to several .qmd chapters.
 
-```{r}
+```{r, eval=FALSE}
 # list example qmds from /inst
 courses_path <- system.file(
   "courses",
@@ -76,7 +76,7 @@ qmds
 
 And a directory where you want your course to be generated.
 
-```{r}
+```{r, eval=FALSE}
 # generate html in temp folder
 temp_dir <- tempfile(pattern = "compile")
 ```
@@ -85,7 +85,7 @@ You can use the function `compile_qmd_course()` to compile a course.
 
 > We wrap the function call inside a `progressr::with_progress()` to see the progress bar. You can also set it in the console with `progressr::handlers(global = TRUE)`
 
-```{r}
+```{r, eval=FALSE}
 html_output <- progressr::with_progress(
   compile_qmd_course(
     vec_qmd_path = qmds,
@@ -102,7 +102,7 @@ browseURL(html_output)
 
 Clean temporary example directory.
 
-```{r}
+```{r, eval=FALSE}
 unlink(temp_dir, recursive = TRUE)
 unlink(tmp_course_path, recursive = TRUE)
 ```
