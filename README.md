@@ -21,23 +21,6 @@ The resulting html file can be themed via quarto extensions.
 
 ## Installation
 
-``` r
-if (!requireNamespace("remotes")) {install.packages("remotes")}
-if (!requireNamespace("git2r")) {install.packages("git2r")}
-
-options(
-  remotes.git_credentials = git2r::cred_user_pass(
-    "gitlab-ci-token", 
-    Sys.getenv("FORGE_PAT")
-  )
-)
-
-remotes::install_git(
-  "https://forge.thinkr.fr/thinkr/thinkrverse/squash", 
-  upgrade = "never"
-)
-```
-
 ## External dependencies
 
 This package relies on quarto \> 1.3.
@@ -79,9 +62,9 @@ qmds <- list.files(
 )
 
 qmds
-#> [1] "/tmp/Rtmp4CGWT1/course38cdd106ae27d/M01/M01S01/C01-qmd1_for_test.qmd"
-#> [2] "/tmp/Rtmp4CGWT1/course38cdd106ae27d/M01/M01S01/C02-qmd2_for_test.qmd"
-#> [3] "/tmp/Rtmp4CGWT1/course38cdd106ae27d/M01/M01S02/C01-qmd3_for_test.qmd"
+#> [1] "/tmp/RtmpqnCEPl/course3ae567a45a7de/M01/M01S01/C01-qmd1_for_test.qmd"
+#> [2] "/tmp/RtmpqnCEPl/course3ae567a45a7de/M01/M01S01/C02-qmd2_for_test.qmd"
+#> [3] "/tmp/RtmpqnCEPl/course3ae567a45a7de/M01/M01S02/C01-qmd3_for_test.qmd"
 ```
 
 And a directory where you want your course to be generated.

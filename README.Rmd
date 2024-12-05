@@ -28,20 +28,7 @@ The resulting html file can be themed via quarto extensions.
 ## Installation
 
 ```{r eval=FALSE}
-if (!requireNamespace("remotes")) {install.packages("remotes")}
-if (!requireNamespace("git2r")) {install.packages("git2r")}
 
-options(
-  remotes.git_credentials = git2r::cred_user_pass(
-    "gitlab-ci-token", 
-    Sys.getenv("FORGE_PAT")
-  )
-)
-
-remotes::install_git(
-  "https://forge.thinkr.fr/thinkr/thinkrverse/squash", 
-  upgrade = "never"
-)
 
 ```
 
