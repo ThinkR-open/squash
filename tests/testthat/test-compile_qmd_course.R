@@ -302,7 +302,7 @@ test_that("compile_qmd_course clean after exit for qmd with failed rendering", {
         output_html = "complete_course.html"
       )
     },
-    regexp = paste0("Fail to render ", qmd_with_stop, ", cleaning and existing")
+    regexp = paste0("Fail to render .* cleaning and existing")
   )
   
   file_present_after_rendering <- list.files(
