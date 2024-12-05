@@ -9,6 +9,7 @@ Authors@R: c(
 Description: Compile n .qmd (under format revealjs) to one single html
     file.
 License: MIT + file LICENSE
+URL: https://thinkr-open.github.io/squash/, https://github.com/ThinkR-open/squash
 Imports: 
     cli,
     dplyr,
