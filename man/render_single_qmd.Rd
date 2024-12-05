@@ -8,7 +8,8 @@ render_single_qmd(
   qmd,
   img_root_dir = "img",
   output_format = "revealjs",
-  metadata = NULL
+  metadata = NULL,
+  quiet = TRUE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ render_single_qmd(
 \item{output_format}{character. Output format of the qmd, default to "revealjs". Can be adapted for specific themes.}
 
 \item{metadata}{list. List of metadata to be used for rendering single qmd file}
+
+\item{quiet}{logical. Output info in user console}
 }
 \value{
 logical. TRUE if rendering succeeded, FALSE otherwise. Side effect : render qmd as html

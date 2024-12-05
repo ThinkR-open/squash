@@ -1,0 +1,100 @@
+---
+title: "Get started"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+_What is `{squash}` made for?_
+
+This package has been developed to enable the generation of a single html presentation file from multiple independent quarto files.
+
+Given a list of qmd files, `{squash}` will individually render them with the specified metadata and combine their content into a single template file.
+
+Relative references to image and external data in each single qmd file will be functional and embedded in the final html presentation.
+
+## How do I use {squash} ?
+
+This is a basic example of combining qmd files into a single html presentation.
+
+Let's say we have two folders with qmd files inside, refering to some logo images.
+
+```{r}
+#| include: false
+
+# list example qmds
+courses_path <- system.file(
+  "courses",
+  "M01",
+  package = "squash"
+)
+
+# copy course tree in tmpdir
+tmp_course_path <- tempfile(pattern = "course")
+dir.create(tmp_course_path)
+
+file.copy(
+  from = courses_path,
+  to = tmp_course_path,
+  recursive = TRUE
+)
+```
+
+```{r}
+fs::dir_tree(tmp_course_path)
+
+qmds <- list.files(
+  tmp_course_path,
+  full.names = TRUE,
+  recursive = TRUE,
+  pattern = "qmd$"
+)
+
+qmds
+```
+I can render a single html presentation from these qmd by executing the following command :
+
+```{r}
+library(squash)
+
+html_output <- compile_qmd_course(
+  vec_qmd_path = qmds,
+  output_dir = file.path(tmp_course_path, "complete"),
+  output_html = "complete_course.html",
+  quiet = TRUE
+)
+```
+
+I now have a new folder, with my complete html presentation alongside the necessary external image files, stored in individual sub-folder to prevent overriding.
+
+```{r}
+fs::dir_tree(tmp_course_path, recurse = 2)
+```
+
+```{r}
+#| include: false
+
+unlink(tmp_course_path, recursive = TRUE)
+```
+
+
+## Remarks
+
+* Files will be included in the same order provided to `compile_qmd_course`.
+
+* Metadata and parameters set in the `compile_qmd_course` will supersed the parameters detected inside the qmd header and/or the quarto project metadata files.
+
+* {squash} can work both inside and outside of a quarto project, qmd files to combine togather can also come from different quarto projects.
+
+* In case of failure to render some files, `{squash}` will erase all temporarily created files before exiting.

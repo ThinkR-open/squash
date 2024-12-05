@@ -14,7 +14,8 @@ test_that("copy_if_not_already_exist works", {
     {
       output <- copy_if_not_already_exist(
         from = system.file("_extensions", package = "squash"),
-        to = file.path(tmpdir, "_extensions")
+        to = file.path(tmpdir, "_extensions"),
+        quiet = FALSE
       )
     },
     regexp = "already present in quarto project"
