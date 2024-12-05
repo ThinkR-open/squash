@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# {squash}: several quarto to single html
+# {squash}: several quarto to single html <img src="man/figures/logo.png" align="right" height="138" alt="" />
 
 <!-- badges: start -->
 
