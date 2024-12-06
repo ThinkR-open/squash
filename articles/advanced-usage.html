@@ -6,6 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Advanced usage • squash</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Rubik-0.4.9/font.css" rel="stylesheet">
@@ -30,13 +36,15 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorial" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorial</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorial">
-<li><a class="dropdown-item" href="../articles/get-started.html">Getting started</a></li>
-    <li><a class="dropdown-item" href="../articles/advanced-usage.html">Advanced</a></li>
+<li><a class="dropdown-item" href="../articles/get-started.html">Get started</a></li>
+    <li><a class="dropdown-item" href="../articles/advanced-usage.html">Advanced usage</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/ThinkR-open/squash/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -64,22 +72,127 @@
 <div class="section level2">
 <h2 id="using-personnalised-template">Using personnalised template<a class="anchor" aria-label="anchor" href="#using-personnalised-template"></a>
 </h2>
+<p>By default, <a href="https://thinkr-open.github.io/squash/">squash</a> will include your qmd chapters into
+a minimal template with no extra slide then the title one.</p>
+<p>You can provide a personalized template, and include some custom
+placeholder as necessary.</p>
+<p>The only requirement for your template is to keep the
+<code>{{ include_html_content }}</code> placeholder, as it will be the
+landing spot for including the chapter slides.</p>
+<p>Let’s use the following template :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode md"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>{{ include_html_content }}</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>---</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">## {{ trainer }}</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>**{{ phone }}**</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>**{{ mail }}**</span></code></pre></div>
+<blockquote>
+<p>This template is available via
+<code>system.file("template.qmd", package = "squash")</code></p>
+</blockquote>
+<p>In this template, I add three new placeholders in a last slide to
+mention a trainer’s contact details.</p>
+<p>I can now render my template with customized info in these new slots
+with the following command :</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thinkr-open.github.io/squash/">squash</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">html_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compile_qmd_course.html">compile_qmd_course</a></span><span class="op">(</span></span>
+<span>  vec_qmd_path <span class="op">=</span> <span class="va">qmds</span>,</span>
+<span>  output_dir <span class="op">=</span> <span class="va">temp_dir</span>,</span>
+<span>  output_html <span class="op">=</span> <span class="st">"complete_course.html"</span>,</span>
+<span>  template <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"template.qmd"</span>, package <span class="op">=</span> <span class="st">"squash"</span><span class="op">)</span>,</span>
+<span>  template_text <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"trainer"</span> <span class="op">=</span> <span class="st">"Rudolph"</span>,</span>
+<span>    <span class="st">"phone"</span> <span class="op">=</span> <span class="st">"36 15 36 15"</span>,</span>
+<span>    <span class="st">"mail"</span> <span class="op">=</span> <span class="st">"alloperenoel.com"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>You can add as many new placeholder as you wish, as long as you
+provide it with a value in the <code>template_text</code> input
+list.</p>
+<p>You can also add some fixed content directly into the template that
+will be rendered without the need of extra parameters.</p>
 </div>
 <div class="section level2">
-<h2 id="using-quarto-extensions">Using quarto extensions<a class="anchor" aria-label="anchor" href="#using-quarto-extensions"></a>
+<h2 id="using-quarto-extensions-theme-and-plugin">Using quarto extensions (theme and plugin)<a class="anchor" aria-label="anchor" href="#using-quarto-extensions-theme-and-plugin"></a>
 </h2>
-<blockquote>
-<p>A note on extensions and projects</p>
-</blockquote>
+<p>Let’s now say the default quarto theme is somewhat not your style,
+how could you include your preferred quarto theme ?</p>
+<p>To do so, you first need to install this extension on your machine
+like you would do for a single qmd file rendering.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">quarto</span> add ArthurData/quarto-revealjs-lilleuniv</span></code></pre></div>
+<p>Great, now you can use this theme with <a href="https://thinkr-open.github.io/squash/">squash</a> by
+providing the target theme as <code>output_format</code> and the
+<code>_extensions</code> folder path as <code>ext_dir</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">html_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compile_qmd_course.html">compile_qmd_course</a></span><span class="op">(</span></span>
+<span>  vec_qmd_path <span class="op">=</span> <span class="va">qmds</span>,</span>
+<span>  output_dir <span class="op">=</span> <span class="va">temp_dir</span>,</span>
+<span>  output_html <span class="op">=</span> <span class="st">"complete_course.html"</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"revealjs-lille-univ-dark-revealjs"</span>,</span>
+<span>  ext_dir <span class="op">=</span> <span class="st">"path/to/_extensions"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Cool right ? But let’s go further and add a plugin in the
+<code>_extensions</code> folders !</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">quarto</span> add ArthurData/quarto-confetti</span></code></pre></div>
+<p>I can now add this plugin in the rendering metadata to integrate it
+in my presentation.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">html_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compile_qmd_course.html">compile_qmd_course</a></span><span class="op">(</span></span>
+<span>  vec_qmd_path <span class="op">=</span> <span class="va">qmds</span>,</span>
+<span>  output_dir <span class="op">=</span> <span class="va">temp_dir</span>,</span>
+<span>  output_html <span class="op">=</span> <span class="st">"complete_course.html"</span>,</span>
+<span>  metadata_template <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    `revealjs-plugins` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"confetti"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  ext_dir <span class="op">=</span> <span class="st">"path/to/_extensions"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="a-note-on-extensions">A note on extensions<a class="anchor" aria-label="anchor" href="#a-note-on-extensions"></a>
+</h3>
+<p>In order to use themes and plugins, you can only provide a single
+<code>_extensions</code> folder via the <code>ext_dir</code> parameter,
+so make sure all the necessary folders are installed in there.</p>
+<p>You can edit the metadata a the template level
+(<code>metadata_template</code> input) and/or the qmd level
+(<code>metadata_qmd</code> input). It is usually best for plugins and
+themes to be applied at the template level (which will be source of the
+main html output file).</p>
+<p>When rendering a qmd file, <a href="https://thinkr-open.github.io/squash/">squash</a> will make sure the
+qmd can access the provided <code>_extensions</code> folder. Two
+scenarios can be triggered :</p>
+<ul>
+<li>the qmd is part of a quarto project : the <code>_extensions</code>
+folder is copied in the quarto project root and cleaned after
+rendering</li>
+<li>the qmd is <strong>not</strong> part of a quarto project : the
+<code>_extensions</code> folder is copied in the qmd folder and cleaned
+after rendering</li>
+</ul>
+<p>In both cases, if the extensions are already present in the target
+location, a note will be raised in the console and <a href="https://thinkr-open.github.io/squash/">squash</a>
+will use the existing extensions without overriting.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="using-parallel-workers">Using parallel workers<a class="anchor" aria-label="anchor" href="#using-parallel-workers"></a>
 </h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thinkr-open.github.io/squash/">squash</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
+<p>The individual rendering of qmd files is managed with the
+<a href="https://future.futureverse.org" class="external-link">future</a> and <a href="https://github.com/DavisVaughan/furrr" class="external-link">furrr</a> packages, meaning you can
+parallelize the generation of several chapters at once.</p>
+<p>To do so, you need to setup the future <code><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan()</a></code> with your
+selected behavior (e.g. <code>sequential</code> or
+<code>multisession</code>) before running the compilation.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># set parallel rendering</span></span>
+<span><span class="co"># set parallel rendering with future</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">html_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compile_qmd_course.html">compile_qmd_course</a></span><span class="op">(</span></span>
@@ -87,10 +200,23 @@
 <span>  output_dir <span class="op">=</span> <span class="va">temp_dir</span>,</span>
 <span>  output_html <span class="op">=</span> <span class="st">"complete_course.html"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> All qmd rendered.</span></span></code></pre></div>
-<blockquote>
-<p>A note of caution</p>
-</blockquote>
+<span></span>
+<span><span class="co"># reset default future plan</span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="st">"default"</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="a-note-on-future">A note on future<a class="anchor" aria-label="anchor" href="#a-note-on-future"></a>
+</h3>
+<p>Parallel rendering in currently not natively supported by quarto. As
+a result, please use parallel rendering at your own risk, as it is
+likely to become unstable with an increasing number of qmd chapter
+files.</p>
+<p>This is caused by temporary execution directories that may be erased
+by a sub-process while still being looked for in another subprocess.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># clean up</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">temp_dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">tmp_course_path</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
