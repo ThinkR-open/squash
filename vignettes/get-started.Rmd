@@ -63,6 +63,7 @@ qmds <- list.files(
 
 qmds
 ```
+
 I can render a single html presentation from these qmd by executing the following command :
 
 ```{r}
@@ -76,7 +77,7 @@ html_output <- compile_qmd_course(
 )
 ```
 
-I now have a new folder, with my complete html presentation alongside the necessary external image files, stored in individual sub-folder to prevent overriding.
+Tada, I now have a new folder, with my complete html presentation alongside the necessary external image files, stored in individual sub-folder to prevent overriding.
 
 ```{r}
 fs::dir_tree(tmp_course_path, recurse = 2)
@@ -93,8 +94,8 @@ unlink(tmp_course_path, recursive = TRUE)
 
 * Files will be included in the same order provided to `compile_qmd_course`.
 
-* Metadata and parameters set in the `compile_qmd_course` will supersed the parameters detected inside the qmd header and/or the quarto project metadata files.
+* Metadata and parameters set in the `compile_qmd_course` will supersede the parameters detected inside the qmd header and/or the quarto project metadata files.
 
-* {squash} can work both inside and outside of a quarto project, qmd files to combine togather can also come from different quarto projects.
+* {squash} can work both inside and outside of a quarto project, qmd files to combine together can also come from different quarto projects.
 
 * In case of failure to render some files, `{squash}` will erase all temporarily created files before exiting.

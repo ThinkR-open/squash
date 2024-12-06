@@ -26,15 +26,15 @@ navbar:
   bg: info
   type: light
   structure:
-    left: [tutos]
+    left: [reference, tutos, news]
     right: [github]
   components:
     tutos:
       text: Tutorial
       menu:
-      - text: Getting started
+      - text: Get started
         href: articles/get-started.html
-      - text: Advanced
+      - text: Advanced usage
         href: articles/advanced-usage.html
 
 footer:
