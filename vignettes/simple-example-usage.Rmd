@@ -1,8 +1,8 @@
 ---
-title: "Get started"
+title: "Simple example usage"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Get started}
+  %\VignetteIndexEntry{Simple example usage}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,23 +14,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Introduction
-
-_What is `{squash}` made for?_
-
-This package has been developed to enable the generation of a single html presentation file from multiple independent quarto files.
-
-Given a list of qmd files, `{squash}` will individually render them with the specified metadata and combine their content into a single template file.
-
-Relative references to image and external data in each single qmd file will be functional and embedded in the final html presentation.
-
 ## How do I use {squash} ?
 
 This is a basic example of combining qmd files into a single html presentation.
 
-Let's say we have two folders with qmd files inside, refering to some logo images.
+Let's say we have two folders with qmd files inside, alongside their images.
 
-```{r}
+```{r, eval=FALSE}
 #| include: false
 
 # list example qmds
@@ -49,10 +39,6 @@ file.copy(
   to = tmp_course_path,
   recursive = TRUE
 )
-```
-
-```{r}
-fs::dir_tree(tmp_course_path)
 
 qmds <- list.files(
   tmp_course_path,
@@ -60,13 +46,13 @@ qmds <- list.files(
   recursive = TRUE,
   pattern = "qmd$"
 )
-
-qmds
 ```
+
+> These files are available for copy via `system.file("courses", "M01", package = "squash")`
 
 I can render a single html presentation from these qmd by executing the following command :
 
-```{r}
+```{r, eval=FALSE}
 library(squash)
 
 html_output <- compile_qmd_course(
@@ -79,13 +65,7 @@ html_output <- compile_qmd_course(
 
 Tada, I now have a new folder, with my complete html presentation alongside the necessary external image files, stored in individual sub-folder to prevent overriding.
 
-```{r}
-fs::dir_tree(tmp_course_path, recurse = 2)
-```
-
-```{r}
-#| include: false
-
+```{r, eval=FALSE}
 unlink(tmp_course_path, recursive = TRUE)
 ```
 
@@ -99,3 +79,5 @@ unlink(tmp_course_path, recursive = TRUE)
 * {squash} can work both inside and outside of a quarto project, qmd files to combine together can also come from different quarto projects.
 
 * In case of failure to render some files, `{squash}` will erase all temporarily created files before exiting.
+
+* To see a progress bar as compilation is running, you can wrap the function call inside a `progressr::with_progress()`. You can also set it in the console with `progressr::handlers(global = TRUE)`.

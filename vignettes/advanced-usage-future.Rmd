@@ -1,0 +1,81 @@
+---
+title: "Using parallel workers"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using parallel workers}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, eval=FALSE}
+#| include: false
+
+# list example qmds
+courses_path <- system.file(
+  "courses",
+  "M01",
+  package = "squash"
+)
+
+# copy course tree in tmpdir, add quarto porject file
+tmp_course_path <- tempfile(pattern = "course")
+dir.create(tmp_course_path)
+file.create(file.path(tmp_course_path, "_quarto.yaml"))
+
+file.copy(
+  from = courses_path,
+  to = tmp_course_path,
+  recursive = TRUE
+)
+
+qmds <- list.files(
+  path = tmp_course_path,
+  full.names = TRUE,
+  recursive = TRUE,
+  pattern = "qmd$"
+)
+
+# generate html in temp folder
+temp_dir <- tempfile(pattern = "compile")
+
+```
+
+The individual rendering of qmd files is managed with the `{future}` and `{furrr}` packages, meaning you can parallelize the generation of several chapters at once.
+
+To do so, you need to setup the future `plan()` with your selected behavior (e.g. `sequential` or `multisession`) before running the compilation.
+
+```{r, eval=FALSE}
+library(future)
+
+# set parallel rendering with future
+plan(multisession, workers = 2)
+
+html_output <- compile_qmd_course(
+  vec_qmd_path = qmds,
+  output_dir = temp_dir,
+  output_html = "complete_course.html"
+)
+
+# reset default future plan
+plan("default")
+```
+
+## A note on future
+
+Parallel rendering in currently not natively supported by quarto. As a result, please use parallel rendering at your own risk, as it is likely to become unstable with an increasing number of qmd chapter files.
+
+This is caused by temporary execution directories that may be erased by a sub-process while still being looked for in another subprocess.
+
+```{r, eval=FALSE}
+# clean up
+unlink(temp_dir, recursive = TRUE)
+unlink(tmp_course_path, recursive = TRUE)
+```
+

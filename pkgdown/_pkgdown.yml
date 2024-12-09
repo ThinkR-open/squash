@@ -32,10 +32,18 @@ navbar:
     tutos:
       text: Tutorial
       menu:
+      - text: -------
       - text: Get started
-        href: articles/get-started.html
+      - text: Simple example usage
+        href: articles/simple-example-usage.html
+      - text: -------
       - text: Advanced usage
-        href: articles/advanced-usage.html
+      - text: Using personnalised template
+        href: articles/advanced-usage-template.html
+      - text: Using quarto extensions
+        href: articles/advanced-usage-theme.html
+      - text: Using parallel workers
+        href: articles/advanced-usage-future.html
 
 footer:
   structure:
