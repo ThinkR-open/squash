@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Using parallel workers • squash</title>
+<title>Contributing • squash</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Rubik-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Using parallel workers">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Contributing">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -37,7 +37,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item dropdown">
+<li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorial" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorial</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorial">
 <li><hr class="dropdown-divider"></li>
@@ -50,7 +50,7 @@
     <li><a class="dropdown-item" href="../articles/advanced-usage-future.html">Using parallel workers</a></li>
   </ul>
 </li>
-<li class="nav-item dropdown">
+<li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-code" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Code</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-code">
 <li><a class="dropdown-item" href="../articles/dev-contribute.html">Contributing</a></li>
@@ -73,49 +73,16 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Using parallel workers</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Contributing</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ThinkR-open/squash/blob/main/vignettes/advanced-usage-future.Rmd" class="external-link"><code>vignettes/advanced-usage-future.Rmd</code></a></small>
-      <div class="d-none name"><code>advanced-usage-future.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/ThinkR-open/squash/blob/main/vignettes/dev-architecture.Rmd" class="external-link"><code>vignettes/dev-architecture.Rmd</code></a></small>
+      <div class="d-none name"><code>dev-architecture.Rmd</code></div>
     </div>
 
     
     
-<p>The individual rendering of qmd files is managed with the
-<a href="https://future.futureverse.org" class="external-link">future</a> and <a href="https://github.com/DavisVaughan/furrr" class="external-link">furrr</a> packages, meaning you can
-parallelize the generation of several chapters at once.</p>
-<p>To do so, you need to setup the future <code><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan()</a></code> with your
-selected behavior (e.g. <code>sequential</code> or
-<code>multisession</code>) before running the compilation.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># set parallel rendering with future</span></span>
-<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">html_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compile_qmd_course.html">compile_qmd_course</a></span><span class="op">(</span></span>
-<span>  vec_qmd_path <span class="op">=</span> <span class="va">qmds</span>,</span>
-<span>  output_dir <span class="op">=</span> <span class="va">temp_dir</span>,</span>
-<span>  output_html <span class="op">=</span> <span class="st">"complete_course.html"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># reset default future plan</span></span>
-<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="st">"default"</span><span class="op">)</span></span></code></pre></div>
-<div class="section level2">
-<h2 id="a-note-on-future">A note on future<a class="anchor" aria-label="anchor" href="#a-note-on-future"></a>
-</h2>
-<p>Parallel rendering in currently not natively supported by quarto. As
-a result, please use parallel rendering at your own risk, as it is
-likely to become unstable with an increasing number of qmd chapter
-files.</p>
-<p>This is caused by temporary execution directories that may be erased
-by a sub-process while still being looked for in another subprocess.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># clean up</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">temp_dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">tmp_course_path</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-</div>
+
   </main>
 </div>
 
