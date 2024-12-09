@@ -18,6 +18,8 @@ chapter quarto files.
 
 The resulting html file can be themed via quarto extensions.
 
+![](man/figures/simple_scheme.png)
+
 ## Installation
 
 You can install the **stable** version from
@@ -37,7 +39,7 @@ remotes::install_github("Thinkr-open/squash", ref = "main")
 This package relies on quarto \> 1.3 (see its [download
 page](https://quarto.org/docs/download/)).
 
-## Play with `{squash}`
+## Play with {squash}
 
 ### TL;DR
 
@@ -64,27 +66,19 @@ browseURL(html_output)
 ### Tutorials
 
 You can find find a full tutorial on how to create your first
-`{squash}`-made html
+{squash}-made html
 [here](https://thinkr-open.github.io/squash/articles/simple-example-usage.html).
 
 Eager to spice it up ? Take a look at some advanced usage doc :
 
-- using quarto themes and extensions :
-  [here](https://thinkr-open.github.io/squash/articles/advanced-usage-theme.html)
-- using a personalized template :
-  [here](https://thinkr-open.github.io/squash/articles/advanced-usage-template.html)
-- using parallel workers with `{future}` :
-  [here](https://thinkr-open.github.io/squash/articles/advanced-usage-future.html)
+- using quarto themes and
+  extensions:[here](https://thinkr-open.github.io/squash/articles/advanced-usage-theme.html)
+- using a personalized
+  template:[here](https://thinkr-open.github.io/squash/articles/advanced-usage-template.html)
+- using parallel workers with
+  `{future}`:[here](https://thinkr-open.github.io/squash/articles/advanced-usage-future.html)
 
 ## Code of Conduct
 
-Please note that this project is released with a [Contributor Code of
-Conduct](https://www.contributor-covenant.org/version/1/0/0/code-of-conduct.html).
-By participating in this project you agree to abide by its terms.
-
-## Devs
-
-### Check
-
-Some tests manually verify the appearance of the slides. To trigger
-them, please run `devtools::test()` interactively.
+Ready to help ? Take a look at the [contribution
+guidelines](https://thinkr-open.github.io/squash/articles/dev-contribute.html).

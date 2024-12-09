@@ -26,7 +26,7 @@ navbar:
   bg: info
   type: light
   structure:
-    left: [reference, tutos, news]
+    left: [reference, tutos, code, news]
     right: [github]
   components:
     tutos:
@@ -44,6 +44,13 @@ navbar:
         href: articles/advanced-usage-theme.html
       - text: Using parallel workers
         href: articles/advanced-usage-future.html
+    code:
+      text: Code
+      menu:
+      - text: Contributing
+        href: articles/dev-contribute.html
+      - text: Architecture
+        href: articles/dev-architecture.html
 
 footer:
   structure:
