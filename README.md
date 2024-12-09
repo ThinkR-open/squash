@@ -10,23 +10,36 @@
 coverage](https://codecov.io/gh/ThinkR-open/squash/graph/badge.svg)](https://app.codecov.io/gh/ThinkR-open/squash)
 <!-- badges: end -->
 
-The goal of {squash} is to compile n .qmd presentations to one single
-html file.
+The goal of {squash} is to compile a single html presentation file from
+multiple independent quarto files.
 
 The main purpose of this is to create custom slide decks from several
-chapter .qmd files.
+chapter quarto files.
 
 The resulting html file can be themed via quarto extensions.
 
 ## Installation
 
-## External dependencies
+You can install the **stable** version from
+[GitHub](https://github.com/Thinkr-open/squash) with:
 
-This package relies on quarto \> 1.3.
+``` r
+remotes::install_github("Thinkr-open/squash", ref = "production")
+```
 
-Link to quarto: [download page](https://quarto.org/docs/download/)
+You can install the **development** version from
+[GitHub](https://github.com/Thinkr-open/squash) with:
 
-## How to use it
+``` r
+remotes::install_github("Thinkr-open/squash", ref = "main")
+```
+
+This package relies on quarto \> 1.3 (see its [download
+page](https://quarto.org/docs/download/)).
+
+## Play with `{squash}`
+
+### Simple case
 
 ``` r
 library(squash)
@@ -97,6 +110,12 @@ Clean temporary example directory.
 unlink(temp_dir, recursive = TRUE)
 unlink(tmp_course_path, recursive = TRUE)
 ```
+
+## Code of Conduct
+
+Please note that this project is released with a [Contributor Code of
+Conduct](https://www.contributor-covenant.org/version/1/0/0/code-of-conduct.html).
+By participating in this project you agree to abide by its terms.
 
 ## Devs
 
