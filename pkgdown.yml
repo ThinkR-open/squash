@@ -2,9 +2,11 @@ pandoc: 3.1.11
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
-  advanced-usage: advanced-usage.html
-  get-started: get-started.html
-last_built: 2024-12-06T14:34Z
+  advanced-usage-future: advanced-usage-future.html
+  advanced-usage-template: advanced-usage-template.html
+  advanced-usage-theme: advanced-usage-theme.html
+  simple-example-usage: simple-example-usage.html
+last_built: 2024-12-09T12:37Z
 urls:
   reference: https://thinkr-open.github.io/squash/reference
   article: https://thinkr-open.github.io/squash/articles

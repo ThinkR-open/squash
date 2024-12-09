@@ -1,10 +1,13 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://thinkr-open.github.io/squash/404.html</loc></url>
+<url><loc>https://thinkr-open.github.io/squash/CODE_OF_CONDUCT.html</loc></url>
 <url><loc>https://thinkr-open.github.io/squash/LICENSE-text.html</loc></url>
 <url><loc>https://thinkr-open.github.io/squash/LICENSE.html</loc></url>
-<url><loc>https://thinkr-open.github.io/squash/articles/advanced-usage.html</loc></url>
-<url><loc>https://thinkr-open.github.io/squash/articles/get-started.html</loc></url>
+<url><loc>https://thinkr-open.github.io/squash/articles/advanced-usage-future.html</loc></url>
+<url><loc>https://thinkr-open.github.io/squash/articles/advanced-usage-template.html</loc></url>
+<url><loc>https://thinkr-open.github.io/squash/articles/advanced-usage-theme.html</loc></url>
 <url><loc>https://thinkr-open.github.io/squash/articles/index.html</loc></url>
+<url><loc>https://thinkr-open.github.io/squash/articles/simple-example-usage.html</loc></url>
 <url><loc>https://thinkr-open.github.io/squash/authors.html</loc></url>
 <url><loc>https://thinkr-open.github.io/squash/index.html</loc></url>
 <url><loc>https://thinkr-open.github.io/squash/news/index.html</loc></url>
@@ -15,5 +18,6 @@
 <url><loc>https://thinkr-open.github.io/squash/reference/extract_html_slides.html</loc></url>
 <url><loc>https://thinkr-open.github.io/squash/reference/index.html</loc></url>
 <url><loc>https://thinkr-open.github.io/squash/reference/render_single_qmd.html</loc></url>
+<url><loc>https://thinkr-open.github.io/squash/reference/squash-package.html</loc></url>
 </urlset>
 
