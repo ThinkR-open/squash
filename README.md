@@ -39,62 +39,19 @@ page](https://quarto.org/docs/download/)).
 
 ## Play with `{squash}`
 
-### Simple case
+### TL;DR
+
+Given a vector `qmds` containing paths to one or several qmd file
+chapters, you can use the function `compile_qmd_course()` to compile a
+course.
 
 ``` r
 library(squash)
-```
 
-Given a vector containing path to several .qmd chapters.
-
-``` r
-# list example qmds from /inst
-courses_path <- system.file(
-  "courses",
-  "M01",
-  package = "squash"
-)
-
-# copy example qmds in a tempdir
-tmp_course_path <- tempfile(pattern = "course")
-dir.create(tmp_course_path)
-
-file.copy(
-  from = courses_path,
-  to = tmp_course_path,
-  recursive = TRUE
-)
-
-qmds <- list.files(
-  path = tmp_course_path,
-  full.names = TRUE,
-  recursive = TRUE,
-  pattern = "qmd$"
-)
-
-qmds
-```
-
-And a directory where you want your course to be generated.
-
-``` r
-# generate html in temp folder
-temp_dir <- tempfile(pattern = "compile")
-```
-
-You can use the function `compile_qmd_course()` to compile a course.
-
-> We wrap the function call inside a `progressr::with_progress()` to see
-> the progress bar. You can also set it in the console with
-> `progressr::handlers(global = TRUE)`
-
-``` r
-html_output <- progressr::with_progress(
-  compile_qmd_course(
-    vec_qmd_path = qmds,
-    output_dir = temp_dir,
-    output_html = "complete_course.html"
-  )
+compile_qmd_course(
+  vec_qmd_path = qmds,
+  output_dir = tempdir(),
+  output_html = "complete_course.html"
 )
 ```
 
@@ -104,12 +61,20 @@ Check out the result
 browseURL(html_output)
 ```
 
-Clean temporary example directory.
+### Tutorials
 
-``` r
-unlink(temp_dir, recursive = TRUE)
-unlink(tmp_course_path, recursive = TRUE)
-```
+You can find find a full tutorial on how to create your first
+`{squash}`-made html
+[here](https://thinkr-open.github.io/squash/articles/simple-example-usage.html).
+
+Eager to spice it up ? Take a look at some advanced usage doc :
+
+- using quarto themes and extensions :
+  [here](https://thinkr-open.github.io/squash/articles/advanced-usage-theme.html)
+- using a personalized template :
+  [here](https://thinkr-open.github.io/squash/articles/advanced-usage-template.html)
+- using parallel workers with `{future}` :
+  [here](https://thinkr-open.github.io/squash/articles/advanced-usage-future.html)
 
 ## Code of Conduct
 
