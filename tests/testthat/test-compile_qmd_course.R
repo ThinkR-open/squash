@@ -56,11 +56,13 @@ test_that("compile_qmd_course fails gracefully in case of incorrect inputs", {
 test_that("compile_qmd_course renders all input courses inside a unique html with default params", {
   
   # run function
-  html_output <- compile_qmd_course(
-    vec_qmd_path = qmds,
-    output_dir = temp_dir,
-    output_html = "complete_course.html",
-  )
+  expect_message({
+    html_output <- compile_qmd_course(
+      vec_qmd_path = qmds,
+      output_dir = temp_dir,
+      output_html = "complete_course.html",
+    )
+  }, regexp = "All qmd rendered")
   
   file_present_after_rendering <- list.files(
     path = tmp_course_path,
@@ -96,6 +98,7 @@ test_that("compile_qmd_course renders all input courses inside a unique html wit
 test_that("compile_qmd_course renders all input courses inside a unique html output with dummy theme", {
   
   # run function
+  expect_message({
   html_output <- compile_qmd_course(
     vec_qmd_path = qmds,
     output_dir = temp_dir,
@@ -110,8 +113,9 @@ test_that("compile_qmd_course renders all input courses inside a unique html out
       footer = "",
       logo = ""
     ),
-    ext_dir = system.file("_extensions", package = "squash")
+    ext_dir = system.file("_extensions", package = "squash"),
   )
+  }, regexp = "All qmd rendered")
   
   file_present_after_rendering <- list.files(
     path = tmp_course_path,
@@ -218,22 +222,22 @@ test_that("compile_qmd_course HTML preview looks ok", {
 test_that("compile_qmd_course works with non-default parameters", {
 
   # run function with other template and parameters
-  html_output <- compile_qmd_course(
-    vec_qmd_path = qmds[1],
-    output_dir = temp_dir,
-    output_html = "formation_R.html",
-    template = system.file("template.qmd", package = "squash"),
-    title = "Trouloulou",
-    metadata_template = testthat::test_path("_yamls", "metadata.yml"),
-    metadata_qmd = list(
-      footer = "imafooter"
-    ),
-    template_text = list(
-      trainer = "Tralala",
-      mail = "Trili@li",
-      phone = "+33 6 66 66 66 66"
+  expect_message({
+    html_output <- compile_qmd_course(
+      vec_qmd_path = qmds[1],
+      output_dir = temp_dir,
+      output_html = "formation_R.html",
+      template = system.file("template.qmd", package = "squash"),
+      title = "Trouloulou",
+      metadata_template = testthat::test_path("_yamls", "metadata.yml"),
+      metadata_qmd = list(footer = "imafooter"),
+      template_text = list(
+        trainer = "Tralala",
+        mail = "Trili@li",
+        phone = "+33 6 66 66 66 66"
+      )
     )
-  )
+  }, regexp = "All qmd rendered")
   
   #' @description test output has expected name
   expect_true(
@@ -294,7 +298,7 @@ test_that("compile_qmd_course clean after exit for qmd with failed rendering", {
   )
   
   # run function
-  expect_message(
+  expect_error(
     object = {
       html_output <- compile_qmd_course(
         vec_qmd_path = c(qmds[1:2], qmd_with_stop),
@@ -302,8 +306,9 @@ test_that("compile_qmd_course clean after exit for qmd with failed rendering", {
         output_html = "complete_course.html"
       )
     },
-    regexp = paste0("Fail to render .* cleaning and existing")
-  )
+    regexp = paste0("Failed to render all qmd files")
+  ) |> 
+    expect_message("Failed to render .*C03-qmd-with-stop.qmd")
   
   file_present_after_rendering <- list.files(
     path = tmp_course_path,
@@ -337,7 +342,7 @@ test_that("compile_qmd_course account for qmd with no media output dir", {
   )
   
   # run function
-  expect_warning(
+  expect_message(
     object = {
       html_output <- compile_qmd_course(
         vec_qmd_path = c(qmds[1:2], qmd_with_no_media),
@@ -345,7 +350,7 @@ test_that("compile_qmd_course account for qmd with no media output dir", {
         output_html = "complete_course.html"
       )
     },
-    regexp = NA
+    regexp = "All qmd rendered"
   )
   
   #' @description test that no img dir is present for qmd with no media

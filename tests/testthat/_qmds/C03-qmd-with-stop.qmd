@@ -1,17 +1,7 @@
 ---
-title: "Pour aider ceux qui ne retiennent pas les prénoms"
-code: M01S01C03
-subtitle: ''
-slug: banana
-prerequis:
-  chapitre:
-  - M01S01C01
-  - M01S01C02
-obj_ped: "écrire leurs nom lisiblement sur une feuille et faire tenir la feuille de
-  façon a ce que le formateur puisse lire"
-knitr:
-  opts_chunk: 
-    fig-align: center
+title: "Third chapter"
+subtitle: "basic slides"
+keywords: "M01S02-1"
 ---
 
 ### logo as markdown image

@@ -14,8 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r, eval=FALSE}
-#| include: false
+```{r, echo=FALSE, eval=FALSE}
 
 # list example qmds
 courses_path <- system.file(
@@ -47,13 +46,23 @@ temp_dir <- tempfile(pattern = "compile")
 
 ```
 
-By default, `{squash}` will include your qmd chapters into a minimal template with no extra slide then the title one.
+## Adding fixed elements in template
 
-You can provide a personalized template, and include some custom placeholder as necessary.
+By default, `{squash}` will include your quarto chapters into a minimal template with no extra slide other than the title one and an empty last slide.
+
+You can provide a personalized template, with additional content.
 
 The only requirement for your template is to keep the `{{ include_html_content }}` placeholder, as it will be the landing spot for including the chapter slides.
 
-Let's use the following template :
+Let's change from using the default template (*left*) to this personalized template (*right*).
+
+:::: {style="display: grid; grid-template-columns: 1fr 1fr; grid-column-gap: 10px;"}
+
+::: {}
+
+::: {style="text-align: center"}
+**default template**
+:::
 
 ```{.md}
 
@@ -61,19 +70,33 @@ Let's use the following template :
 
 ---
 
-
-## {{ trainer }}
-
-**{{ phone }}**
-
-**{{ mail }}**
 ```
+:::
 
-> This template is available via `system.file("template.qmd", package = "squash")`
+::: {}
 
-In this template, I add three new placeholders in a last slide to mention a trainer's contact details.
+::: {style="text-align: center"}
+**personalized template**
+:::
 
-I can now render my template with customized info in these new slots with the following command :
+```{.md}
+
+{{ include_html_content }}
+
+---
+
+## University of RandomName
+
++33 36 15 36 15
+
+contact@randomu.com
+```
+:::
+
+::::
+
+To do so, I provide the path to my template to the `template` parameter.
+
 
 ```{r, eval=FALSE}
 library(squash)
@@ -82,7 +105,87 @@ html_output <- compile_qmd_course(
   vec_qmd_path = qmds,
   output_dir = temp_dir,
   output_html = "complete_course.html",
-  template = system.file("template.qmd", package = "squash"),
+  template = "path/to/template.qmd"
+)
+```
+
+Now, all compilations with this new template will end with my custom last slide!
+
+:::: {style="display: grid; grid-template-columns: 1fr 1fr; grid-column-gap: 10px;"}
+
+::: {}
+
+::: {style="text-align: center"}
+**default last slide**
+:::
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("figures/last_slide_default.png")
+```
+
+:::
+
+::: {}
+
+::: {style="text-align: center"}
+**personalized last slide**
+:::
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("figures/last_slide_fixed.png")
+```
+
+:::
+
+::::
+
+## Adding variable elements in template
+
+Let's spice it up, what if I want to change contact details for each of my presentations. In that case, no need for a pile of custom templates, you can add **custom placeholders** with the `{{ element }}` syntax.
+
+You can fill their value through the `template_text` parameter. Fell free to add as many new placeholders as you wish, as long as you provide them all with a value in the `template_text` input.
+
+Again, you also need to keep the `{{ include_html_content }}` placeholder somewhere inside your template. 
+
+Let's use the following template and compile command line.
+
+:::: {style="display: grid; grid-template-columns: 1fr 1fr; grid-column-gap: 10px;"}
+
+::: {}
+
+::: {style="text-align: center"}
+**personalized template**
+:::
+
+```{.md}
+
+{{ include_html_content }}
+
+---
+
+## {{ trainer }}
+
+**{{ phone }}**
+
+**{{ mail }}**
+```
+:::
+
+::: {}
+
+::: {style="text-align: center"}
+**command line**
+:::
+
+
+```{r, eval=FALSE}
+library(squash)
+
+html_output <- compile_qmd_course(
+  vec_qmd_path = qmds,
+  output_dir = temp_dir,
+  output_html = "complete_course.html",
+  template = "path/to/template.qmd",
   template_text = list(
     "trainer" = "Rudolph",
     "phone" = "36 15 36 15",
@@ -90,12 +193,28 @@ html_output <- compile_qmd_course(
   )
 )
 ```
+:::
 
-You can add as many new placeholder as you wish, as long as you provide it with a value in the `template_text` input list.
+::::
 
-You can also add some fixed content directly into the template that will be rendered without the need of extra parameters.
+I have three placeholders in my last slide:
 
-```{r, eval=FALSE}
+- the slide chapter name will refer to `trainer`
+- two lines styled in bold will refer to `phone` and `mail`
+
+I fill them up with the `template_text` list values, and obtain the following last slide:
+
+::: {style="text-align: center"}
+**personalized last slide**
+:::
+
+```{r, echo=FALSE, fig.align='center', out.width="50%"}
+knitr::include_graphics("figures/last_slide_variable.png")
+```
+
+Cool thing is that, I can now re-use the same template and adapt last slide content by simply adjusting the command line parameters.
+
+```{r, eval=FALSE, echo=FALSE}
 # clean up
 unlink(temp_dir, recursive = TRUE)
 unlink(tmp_course_path, recursive = TRUE)

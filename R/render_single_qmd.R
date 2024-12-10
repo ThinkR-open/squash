@@ -68,7 +68,7 @@ render_single_qmd <- function(
       return(TRUE)
     },
     error = \(error_message) {
-      cli_alert_danger("Fail to render {qmd}, cleaning and existing")
+      cli_alert_danger("Failed to render {qmd}, cleaning and existing")
       
       # throw an error with original error message
       return(FALSE)

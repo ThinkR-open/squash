@@ -11,7 +11,8 @@ files_to_copy <- c(
     c("_extensions",
       file.path("courses", "M01")
     )
-  )
+  ),
+  testthat::test_path("_qmds", "C03-qmd-with-dup-keyword.qmd")
 )
 
 file.copy(
@@ -36,7 +37,7 @@ htmls <- list.files(
   recursive = TRUE,
   full.names = TRUE
 )
-  
+
 test_that("extract_html_slides returns all html slide classes in correct order", {
   
   # run function with slide order 1-2-3
@@ -98,6 +99,29 @@ test_that("extract_html_slides returns all html slide classes in correct order",
       "3-slide-with-image"
     )
   )
+})
+
+test_that("extract_html_slides returns an error if duplicated keywords are detected", {
+  
+  # list created html with extra duplicated keyword html
+  htmls <- list.files(
+    path = temp_dir,
+    pattern = "(qmd[0-9]_for_test\\.html$)|(C03-qmd-with-dup-keyword.html)",
+    recursive = TRUE,
+    full.names = TRUE
+  )
+  
+  # run function
+  expect_error(
+    object = {
+      extract_html_slides(
+        vec_html_path = htmls,
+        use_metadata = TRUE
+      )
+    },
+    regexp = "Some keywords are not unique : M01S02-1"
+  )
+  
 })
 
 # clean up
