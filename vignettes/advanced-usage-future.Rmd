@@ -14,9 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r, eval=FALSE}
-#| include: false
-
+```{r, eval=FALSE, echo=FALSE}
 # list example qmds
 courses_path <- system.file(
   "courses",
@@ -47,15 +45,15 @@ temp_dir <- tempfile(pattern = "compile")
 
 ```
 
-The individual rendering of qmd files is managed with the `{future}` and `{furrr}` packages, meaning you can parallelize the generation of several chapters at once.
+Inside `{squash}`, the individual rendering of quarto presentation files is managed via `{future}` and `{furrr}` packages, meaning you can parallelize the generation of several chapters at once.
 
-To do so, you need to setup the future `plan()` with your selected behavior (e.g. `sequential` or `multisession`) before running the compilation.
+To do so, you need to setup the `future::plan()` with your selected behavior (e.g. `sequential` or `multisession`) before running the compilation.
 
 ```{r, eval=FALSE}
-library(future)
+library(squash)
 
 # set parallel rendering with future
-plan(multisession, workers = 2)
+future::plan(future::multisession, workers = 2)
 
 html_output <- compile_qmd_course(
   vec_qmd_path = qmds,
@@ -64,18 +62,27 @@ html_output <- compile_qmd_course(
 )
 
 # reset default future plan
-plan("default")
+future::plan("default")
 ```
+
+By running the above command, `{squash}` will first warn you that a non-default plan is detected for running the compilation. It will then proceed to render the html.
+
+```{r, echo=FALSE}
+cli::cli_alert_info("{{future}} is using plan(multisession, workers = 2), to modify this use `future::plan()`")
+cli::cli_alert_success("All qmd rendered.")
+```
+
 
 ## A note on future
 
-Parallel rendering in currently not natively supported by quarto. As a result, please use parallel rendering at your own risk, as it is likely to become unstable with an increasing number of qmd chapter files.
+* Future plan will not be modified by `{squash}`, you may want to restor default plan after rendering with the `future::plan("default")` command.
 
-This is caused by temporary execution directories that may be erased by a sub-process while still being looked for in another subprocess.
+* Parallel rendering in currently not natively supported by quarto. As a result, please use parallel rendering at your own risk, as it is likely to become unstable with an increasing number of quarto chapter files.
 
-```{r, eval=FALSE}
+* Unstability is likely caused by temporary execution directories that may be erased by a sub-process while still being looked for in another subprocess.
+
+```{r, eval=FALSE, echo=FALSE}
 # clean up
 unlink(temp_dir, recursive = TRUE)
 unlink(tmp_course_path, recursive = TRUE)
 ```
-
