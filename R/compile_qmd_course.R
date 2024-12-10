@@ -23,7 +23,6 @@
 #' @importFrom htmltools htmlTemplate renderDocument save_html HTML
 #' @importFrom furrr future_map_lgl furrr_options
 #' @importFrom purrr walk
-#' @importFrom future plan
 #' @importFrom cli cli_alert_info cli_alert_warning cli_alert_success
 #' @importFrom progressr handlers progressor with_progress
 #' @importFrom yaml read_yaml
@@ -92,7 +91,7 @@ compile_qmd_course <- function(
     debug = FALSE,
     fix_img_path = TRUE
 ) {
-  # check paths
+  # check inputs and future settings
   not_all_files_are_qmd <- any(
     file_ext(vec_qmd_path) != "qmd"
   )
@@ -100,13 +99,14 @@ compile_qmd_course <- function(
     stop("Some of the input files are not qmd files.")
   }
   
-  # read metadata specs
   if (is.character(metadata_template) && file.exists(metadata_template)){
     metadata_template <- read_yaml(metadata_template)
   }
   if (is.character(metadata_template) && file.exists(metadata_template)){
     metadata_qmd <- read_yaml(metadata_qmd)
   }
+  
+  fetch_future_settings(quiet = quiet)
   
   # list courses files present before rendering
   vec_qmd_dir <- unique(dirname(vec_qmd_path))
@@ -167,7 +167,7 @@ compile_qmd_course <- function(
       present_before = file_present_before_rendering,
       extra_dir = tmp_ext_dir
     )
-    return(NULL)
+    stop("Failed to render all qmd files.")
   } else {
     if(isFALSE(quiet)){
       cli_alert_success("All qmd rendered.")

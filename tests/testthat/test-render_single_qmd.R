@@ -26,7 +26,7 @@ test_that("render_single_qmd return an alert for failed rendering", {
         qmd = "a_qmd_that_does_not_exist.qmd"
         )
   },
-  regexp = "Fail to render a_qmd_that_does_not_exist.qmd"
+  regexp = "Failed to render a_qmd_that_does_not_exist.qmd"
   )
   
   #' @description test output is FALSE for incorrect rendering

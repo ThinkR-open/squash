@@ -41,7 +41,7 @@ add_extension <- function(
   }
   
   # fetch target extension path
-  qmd_dir <- fetch_project_and_future_settings(
+  qmd_dir <- fetch_project(
     vec_qmd_path = vec_qmd_path,
     quiet = quiet
   )
