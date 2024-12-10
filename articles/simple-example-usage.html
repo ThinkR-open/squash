@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">squash</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,51 +83,66 @@
     
     
 <div class="section level2">
-<h2 id="how-do-i-use-squash">How do I use {squash} ?<a class="anchor" aria-label="anchor" href="#how-do-i-use-squash"></a>
+<h2 id="how-do-i-use-squash">How do I use {squash}?<a class="anchor" aria-label="anchor" href="#how-do-i-use-squash"></a>
 </h2>
 <p>This is a basic example of combining qmd files into a single html
 presentation.</p>
-<p>Let’s say we have two folders with qmd files inside, alongside their
-images.</p>
+<p>Let’s say we have two folders with three quarto revealjs presentation
+files, alongside their images.</p>
+<p><img src="figures%2Ffile_tree.png" width="60%" style="display: block; margin: auto;"></p>
 <blockquote>
-<p>These files are available for copy via
+<p>Example files are stored in
 <code>system.file("courses", "M01", package = "squash")</code></p>
 </blockquote>
-<p>I can render a single html presentation from these qmd by executing
-the following command :</p>
+<p>I can render a combined html presentation from these quarto files by
+executing the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thinkr-open.github.io/squash/">squash</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">qmds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"path/to/A.qmd"</span>, <span class="st">"path/to/B.qmd"</span>, <span class="st">"path/to/C.qmd"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">html_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compile_qmd_course.html">compile_qmd_course</a></span><span class="op">(</span></span>
 <span>  vec_qmd_path <span class="op">=</span> <span class="va">qmds</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">tmp_course_path</span>, <span class="st">"complete"</span><span class="op">)</span>,</span>
-<span>  output_html <span class="op">=</span> <span class="st">"complete_course.html"</span>,</span>
-<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  output_html <span class="op">=</span> <span class="st">"complete_course.html"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Tada, I now have a new folder, with my complete html presentation
-alongside the necessary external image files, stored in individual
-sub-folder to prevent overriding.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">tmp_course_path</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Tada, I now have a new folder, with my complete html
+presentation!</p>
+<p><img src="figures%2Fhtml_tree.png" width="60%" style="display: block; margin: auto;"></p>
+<p>Inside this output directory you can find the following files:</p>
+<ul>
+<li>
+<strong>an html file</strong>: the complete revealjs presentation,
+with content from all input quarto files</li>
+<li>
+<strong>an image folder</strong>: it will store all images (graph
+output, png, jpg, etc) organised in sub-folders mimicking the original
+file tree</li>
+<li>
+<strong>a companion folder</strong>: like a classic quarto
+rendering, it will store the necessary libraries to read the revealjs
+html output</li>
+</ul>
 </div>
 <div class="section level2">
-<h2 id="remarks">Remarks<a class="anchor" aria-label="anchor" href="#remarks"></a>
+<h2 id="a-note-on-compilation">A note on compilation<a class="anchor" aria-label="anchor" href="#a-note-on-compilation"></a>
 </h2>
 <ul>
-<li><p>Files will be included in the same order provided to
+<li><p>File content will be included in the same order as provided to
 <code>compile_qmd_course</code>.</p></li>
-<li><p>Metadata and parameters set in the
-<code>compile_qmd_course</code> will supersede the parameters detected
-inside the qmd header and/or the quarto project metadata files.</p></li>
-<li><p>{squash} can work both inside and outside of a quarto project,
-qmd files to combine together can also come from different quarto
-projects.</p></li>
+<li><p><a href="https://thinkr-open.github.io/squash/">squash</a> can work with quarto files both inside and
+outside of quarto project, you can even mix them in the same
+compilation.</p></li>
 <li><p>In case of failure to render some files, <a href="https://thinkr-open.github.io/squash/">squash</a>
 will erase all temporarily created files before exiting.</p></li>
 <li><p>To see a progress bar as compilation is running, you can wrap the
 function call inside a <code><a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">progressr::with_progress()</a></code>. You can
 also set it in the console with
 <code>progressr::handlers(global = TRUE)</code>.</p></li>
+<li><p>Image files are stored in sub-folders to prevent overriding files
+with identical names across different original folders. For instance, if
+two presentations use a <code>logo.png</code> that link to two different
+images, it will be correctly handled in the compiled html.</p></li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

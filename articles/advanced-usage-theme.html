@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">squash</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,102 +82,103 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># list example qmds</span></span>
-<span><span class="va">courses_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
-<span>  <span class="st">"courses"</span>,</span>
-<span>  <span class="st">"M01"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"squash"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># copy course tree in tmpdir, add quarto porject file</span></span>
-<span><span class="va">tmp_course_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"course"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">tmp_course_path</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.create</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">tmp_course_path</span>, <span class="st">"_quarto.yaml"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span></span>
-<span>  from <span class="op">=</span> <span class="va">courses_path</span>,</span>
-<span>  to <span class="op">=</span> <span class="va">tmp_course_path</span>,</span>
-<span>  recursive <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">qmds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span></span>
-<span>  path <span class="op">=</span> <span class="va">tmp_course_path</span>,</span>
-<span>  full.names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  recursive <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  pattern <span class="op">=</span> <span class="st">"qmd$"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># generate html in temp folder</span></span>
-<span><span class="va">temp_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"compile"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="using-quarto-themes">Using quarto themes<a class="anchor" aria-label="anchor" href="#using-quarto-themes"></a>
 </h2>
 <p>Let’s say the default quarto theme is somewhat not your style, how
 could you include your preferred quarto theme ?</p>
-<p>To do so, you first need to install this extension on your machine
-like you would do for a single qmd file rendering.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">quarto</span> add ArthurData/quarto-revealjs-lilleuniv</span></code></pre></div>
+<p>To do so, you first need to install your target extension on your
+machine from your terminal, like you would do for a single quarto
+revealjs file rendering.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">quarto</span> add ArthurData/quarto-revealjs-lilleuniv</span></code></pre></div>
 <p>Great, now you can use this theme with <a href="https://thinkr-open.github.io/squash/">squash</a> by
-providing the target theme as <code>output_format</code> and the
-<code>_extensions</code> folder path as <code>ext_dir</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+providing the target theme as <code>output_format</code> and the path to
+the <code>_extensions</code> folder as <code>ext_dir</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">html_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compile_qmd_course.html">compile_qmd_course</a></span><span class="op">(</span></span>
 <span>  vec_qmd_path <span class="op">=</span> <span class="va">qmds</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="va">temp_dir</span>,</span>
 <span>  output_html <span class="op">=</span> <span class="st">"complete_course.html"</span>,</span>
-<span>  output_format <span class="op">=</span> <span class="st">"revealjs-lille-univ-dark-revealjs"</span>,</span>
-<span>  ext_dir <span class="op">=</span> <span class="st">"path/to/_extensions"</span></span>
+<span>  output_format <span class="op">=</span> <span class="st">"lille-univ-dark-revealjs"</span>,</span>
+<span>  ext_dir <span class="op">=</span> <span class="st">"path/to/_extensions/"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>My slide deck will now bear my custom theme !</p>
+<div style="display: grid; grid-template-columns: 1fr 1fr; grid-column-gap: 10px;">
+<div>
+<div style="text-align: center">
+<p><strong>default theme slides</strong></p>
+</div>
+<p><img src="figures%2Fdefault_title_slide.png" width="100%"></p>
+</div>
+<div>
+<div style="text-align: center">
+<p><strong>custom theme slides</strong></p>
+</div>
+<p><img src="figures%2Fcustom_title_slide.png" width="100%"></p>
+</div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="using-quarto-plugins">Using quarto plugins<a class="anchor" aria-label="anchor" href="#using-quarto-plugins"></a>
 </h2>
-<p>Cool right ? But let’s go further and add a plugin in the
-<code>_extensions</code> folders !</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">quarto</span> add ArthurData/quarto-confetti</span></code></pre></div>
-<p>I can now add this plugin in the rendering metadata to integrate it
-in my presentation.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>Cool right? But let’s go further and add a couple plugins in the
+<code>_extensions</code> folder!</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">quarto</span> add ArthurData/quarto-confetti</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="ex">quarto</span> add quarto-ext/pointer</span></code></pre></div>
+<p>You can now list these plugins in the <code>metadata_template</code>
+parameters and integrate them in your presentation.</p>
+<p>The <code>metadata_template</code> input list will be converted as
+yaml-like parameters and provided to the rendering machinery, as if you
+had directly written them in the header of your quarto file.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">html_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compile_qmd_course.html">compile_qmd_course</a></span><span class="op">(</span></span>
 <span>  vec_qmd_path <span class="op">=</span> <span class="va">qmds</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="va">temp_dir</span>,</span>
 <span>  output_html <span class="op">=</span> <span class="st">"complete_course.html"</span>,</span>
 <span>  metadata_template <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    `revealjs-plugins` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"confetti"</span><span class="op">)</span></span>
+<span>    `revealjs-plugins` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"confetti"</span>, <span class="st">"pointer"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
-<span>  ext_dir <span class="op">=</span> <span class="st">"path/to/_extensions"</span></span>
+<span>  ext_dir <span class="op">=</span> <span class="st">"path/to/_extensions/"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>Now, I can throw confetti by pressing <code>c</code> and get my
+pointer with <code>q</code> 🎉.</p>
+<p><img src="figures%2Fplugin.gif" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="a-note-on-extensions">A note on extensions<a class="anchor" aria-label="anchor" href="#a-note-on-extensions"></a>
 </h2>
-<p>In order to use themes and plugins, you can only provide a single
-<code>_extensions</code> folder via the <code>ext_dir</code> parameter,
-so make sure all the necessary folders are installed in there.</p>
-<p>You can edit the metadata a the template level
-(<code>metadata_template</code> input) and/or the qmd level
-(<code>metadata_qmd</code> input). It is usually best for plugins and
-themes to be applied at the template level (which will be source of the
-main html output file).</p>
-<p>When rendering a qmd file, <a href="https://thinkr-open.github.io/squash/">squash</a> will make sure the
-qmd can access the provided <code>_extensions</code> folder. Two
-scenarios can be triggered :</p>
 <ul>
-<li>the qmd is part of a quarto project : the <code>_extensions</code>
-folder is copied in the quarto project root and cleaned after
-rendering</li>
-<li>the qmd is <strong>not</strong> part of a quarto project : the
-<code>_extensions</code> folder is copied in the qmd folder and cleaned
-after rendering</li>
+<li><p>Metadata and parameters set in the
+<code>compile_qmd_course</code> will supersede the parameters detected
+inside the quarto header and/or the quarto project metadata
+files.</p></li>
+<li><p>In order to use themes and plugins, you can only provide a single
+<code>_extensions</code> folder via the <code>ext_dir</code> parameter,
+so make sure all the necessary plugins and themes are installed in
+there.</p></li>
+<li><p>You can edit the metadata a the template level
+(<code>metadata_template</code> input) and/or the individual chapter
+level (<code>metadata_qmd</code> input). It is usually best for plugins
+and themes to be applied at the template level (which will be the
+wrapper of the main html output file).</p></li>
+<li>
+<p>When rendering a quarto file with extensions,
+<a href="https://thinkr-open.github.io/squash/">squash</a> will provide access tho the target
+<code>_extensions</code> folder. Several cases can be triggered :</p>
+<ul>
+<li>the file is part of a <strong>quarto project</strong>: the
+<code>_extensions</code> folder is copied in the quarto project root and
+cleaned after rendering</li>
+<li>the file is <strong>not</strong> part of a <strong>quarto
+project</strong>: the <code>_extensions</code> folder is copied in the
+file folder and cleaned after rendering</li>
+<li>in both cases, if some of the extensions are already present in the
+target location, a note will be raised in the console and
+<a href="https://thinkr-open.github.io/squash/">squash</a> will use the existing extensions without
+overwriting them.</li>
 </ul>
-<p>In both cases, if the extensions are already present in the target
-location, a note will be raised in the console and <a href="https://thinkr-open.github.io/squash/">squash</a>
-will use the existing extensions without overriting.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># clean up</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">temp_dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">tmp_course_path</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</li>
+</ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

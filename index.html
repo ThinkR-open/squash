@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="index.html">squash</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,8 +79,8 @@
 <!-- badges: start -->
 
 <p>The goal of {squash} is to compile a single html presentation file from multiple independent quarto files.</p>
-<p>The main purpose of this is to create custom slide decks from several chapter quarto files.</p>
-<p>The resulting html file can be themed via quarto extensions.</p>
+<p>The main purpose of this is to create custom slide decks from several quarto chapter files.</p>
+<p>The resulting revealjs presentation can be themed via quarto extensions.</p>
 <p><img src="reference/figures/simple_scheme.png"></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -99,11 +99,11 @@
 <div class="section level3">
 <h3 id="tldr">TL;DR<a class="anchor" aria-label="anchor" href="#tldr"></a>
 </h3>
-<p>Given a vector <code>qmds</code> containing paths to one or several qmd file chapters, you can use the function <code><a href="reference/compile_qmd_course.html">compile_qmd_course()</a></code> to compile a course.</p>
+<p>Given the vector <code>qmds</code> containing paths to one or several qmd revealjs presentation, you can use the function <code><a href="reference/compile_qmd_course.html">compile_qmd_course()</a></code> to compile a full presentation.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thinkr-open.github.io/squash/">squash</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/compile_qmd_course.html">compile_qmd_course</a></span><span class="op">(</span></span>
+<span><span class="va">html_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/compile_qmd_course.html">compile_qmd_course</a></span><span class="op">(</span></span>
 <span>  vec_qmd_path <span class="op">=</span> <span class="va">qmds</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  output_html <span class="op">=</span> <span class="st">"complete_course.html"</span></span>
@@ -118,17 +118,17 @@
 <p>You can find find a full tutorial on how to create your first {squash}-made html <a href="https://thinkr-open.github.io/squash/articles/simple-example-usage.html">here</a>.</p>
 <p>Eager to spice it up ? Take a look at some advanced usage doc :</p>
 <ul>
-<li>using quarto themes and extensions:<a href="https://thinkr-open.github.io/squash/articles/advanced-usage-theme.html">here</a>
+<li>using quarto themes and extensions: <a href="https://thinkr-open.github.io/squash/articles/advanced-usage-theme.html">here</a>
 </li>
-<li>using a personalized template:<a href="https://thinkr-open.github.io/squash/articles/advanced-usage-template.html">here</a>
+<li>using a personalized template: <a href="https://thinkr-open.github.io/squash/articles/advanced-usage-template.html">here</a>
 </li>
-<li>using parallel workers with <a href="https://future.futureverse.org" class="external-link">future</a>:<a href="https://thinkr-open.github.io/squash/articles/advanced-usage-future.html">here</a>
+<li>using parallel workers with <a href="https://future.futureverse.org" class="external-link">future</a>: <a href="https://thinkr-open.github.io/squash/articles/advanced-usage-future.html">here</a>
 </li>
 </ul>
 </div>
 </div>
 <div class="section level2">
-<h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
+<h2 id="contribute">Contribute<a class="anchor" aria-label="anchor" href="#contribute"></a>
 </h2>
 <p>Ready to help ? Take a look at the <a href="https://thinkr-open.github.io/squash/articles/dev-contribute.html">contribution guidelines</a>.</p>
 </div>
