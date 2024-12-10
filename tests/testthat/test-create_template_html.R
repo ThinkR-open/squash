@@ -10,8 +10,6 @@ test_that("create_template_html generate an html with proper title and theme", {
     output_file = "complete_course.html"
   )
   
-  
-  browseURL(path_to_html_template)
   # list files in extensions
   expect_extension_files <- list.files(
     file.path(temp_dir, "_extensions"),

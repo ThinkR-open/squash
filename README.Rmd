@@ -19,11 +19,13 @@ knitr::opts_chunk$set(
 
 The goal of {squash} is to compile a single html presentation file from multiple independent quarto files.
 
-The main purpose of this is to create custom slide decks from several chapter quarto files.
+The main purpose of this is to create custom slide decks from several quarto chapter files.
 
-The resulting html file can be themed via quarto extensions.
+The resulting revealjs presentation can be themed via quarto extensions.
 
-![](man/figures/simple_scheme.png)
+```{r, fig.align = 'center'}
+knitr::include_graphics("man/figures/simple_scheme.png")
+```
 
 ## Installation
 
@@ -46,12 +48,12 @@ This package relies on quarto > 1.3 (see its [download page](https://quarto.org/
 
 ### TL;DR
 
-Given a vector `qmds` containing paths to one or several qmd file chapters, you can use the function `compile_qmd_course()` to compile a course.
+Given the vector `qmds` containing paths to one or several qmd revealjs presentation, you can use the function `compile_qmd_course()` to compile a full presentation.
 
 ```{r, eval=FALSE}
 library(squash)
 
-compile_qmd_course(
+html_output <- compile_qmd_course(
   vec_qmd_path = qmds,
   output_dir = tempdir(),
   output_html = "complete_course.html"
@@ -73,6 +75,6 @@ Eager to spice it up ? Take a look at some advanced usage doc :
 - using a personalized template: [here](https://thinkr-open.github.io/squash/articles/advanced-usage-template.html)
 - using parallel workers with `{future}`: [here](https://thinkr-open.github.io/squash/articles/advanced-usage-future.html)
 
-## Code of Conduct
+## Contribute
 
 Ready to help ? Take a look at the [contribution guidelines](https://thinkr-open.github.io/squash/articles/dev-contribute.html).

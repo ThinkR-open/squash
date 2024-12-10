@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo=FALSE}
 # list example qmds
 courses_path <- system.file(
   "courses",
@@ -49,33 +49,64 @@ temp_dir <- tempfile(pattern = "compile")
 
 Let's say the default quarto theme is somewhat not your style, how could you include your preferred quarto theme ?
 
-To do so, you first need to install this extension on your machine like you would do for a single qmd file rendering.
+To do so, you first need to install your target extension on your machine from your terminal, like you would do for a single quarto revealjs file rendering.
 
 ```{.bash}
 quarto add ArthurData/quarto-revealjs-lilleuniv
 ```
 
-Great, now you can use this theme with `{squash}` by providing the target theme as `output_format` and the `_extensions` folder path as `ext_dir`.
+Great, now you can use this theme with `{squash}` by providing the target theme as `output_format` and the path to the `_extensions` folder as `ext_dir`.
 
 ```{r, eval=FALSE}
 html_output <- compile_qmd_course(
   vec_qmd_path = qmds,
   output_dir = temp_dir,
   output_html = "complete_course.html",
-  output_format = "revealjs-lille-univ-dark-revealjs",
-  ext_dir = "path/to/_extensions"
+  output_format = "lille-univ-dark-revealjs",
+  ext_dir = "path/to/_extensions/"
 )
 ```
 
+My slide deck will now bear my custom theme !
+
+:::: {style="display: grid; grid-template-columns: 1fr 1fr; grid-column-gap: 10px;"}
+
+::: {}
+
+::: {style="text-align: center"}
+**default theme slides**
+:::
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("figures/default_title_slide.png")
+```
+:::
+
+::: {}
+
+::: {style="text-align: center"}
+**custom theme slides**
+:::
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("figures/custom_title_slide.png")
+```
+:::
+
+::::
+
 ## Using quarto plugins
 
-Cool right ? But let's go further and add a plugin in the `_extensions` folders !
+Cool right? But let's go further and add a couple plugins in the `_extensions` folder!
 
 ```{.bash}
 quarto add ArthurData/quarto-confetti
+quarto add quarto-ext/pointer
 ```
 
-I can now add this plugin in the rendering metadata to integrate it in my presentation.
+You can now list these plugins in the `metadata_template` parameters and integrate them in your presentation.
+
+The `metadata_template` input list will be converted as yaml-like parameters and provided to the rendering machinery, as if you had directly written them in the header of your quarto file.
 
 ```{r, eval=FALSE}
 html_output <- compile_qmd_course(
@@ -83,26 +114,33 @@ html_output <- compile_qmd_course(
   output_dir = temp_dir,
   output_html = "complete_course.html",
   metadata_template = list(
-    `revealjs-plugins` = c("confetti")
+    `revealjs-plugins` = list("confetti", "pointer")
   ),
-  ext_dir = "path/to/_extensions"
+  ext_dir = "path/to/_extensions/"
 )
+```
+
+Now, I can throw confetti by pressing `c` and get my pointer with `q` 🎉.
+
+```{r, echo=FALSE, fig.align='center', out.width="60%"}
+knitr::include_graphics("figures/plugin.gif")
 ```
 
 ## A note on extensions
 
-In order to use themes and plugins, you can only provide a single `_extensions` folder via the `ext_dir` parameter, so make sure all the necessary folders are installed in there.
+* Metadata and parameters set in the `compile_qmd_course` will supersede the parameters detected inside the quarto header and/or the quarto project metadata files.
 
-You can edit the metadata a the template level (`metadata_template` input) and/or the qmd level (`metadata_qmd` input). It is usually best for plugins and themes to be applied at the template level (which will be source of the main html output file).
+* In order to use themes and plugins, you can only provide a single `_extensions` folder via the `ext_dir` parameter, so make sure all the necessary plugins and themes are installed in there.
 
-When rendering a qmd file, `{squash}` will make sure the qmd can access the provided `_extensions` folder. Two scenarios can be triggered :
+* You can edit the metadata a the template level (`metadata_template` input) and/or the individual chapter level (`metadata_qmd` input). It is usually best for plugins and themes to be applied at the template level (which will be the wrapper of the main html output file).
 
-- the qmd is part of a quarto project : the `_extensions` folder is copied in the quarto project root and cleaned after rendering
-- the qmd is **not** part of a quarto project : the `_extensions` folder is copied in the qmd folder and cleaned after rendering
+* When rendering a quarto file with extensions, `{squash}` will provide access tho the target `_extensions` folder. Several cases can be triggered :
 
-In both cases, if the extensions are already present in the target location, a note will be raised in the console and `{squash}` will use the existing extensions without overriting.
+  - the file is part of a **quarto project**: the `_extensions` folder is copied in the quarto project root and cleaned after rendering
+  - the file is **not** part of a **quarto project**: the `_extensions` folder is copied in the file folder and cleaned after rendering
+  - in both cases, if some of the extensions are already present in the target location, a note will be raised in the console and `{squash}` will use the existing extensions without overwriting them.
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo=FALSE}
 # clean up
 unlink(temp_dir, recursive = TRUE)
 unlink(tmp_course_path, recursive = TRUE)
