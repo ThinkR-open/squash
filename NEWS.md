@@ -1,3 +1,7 @@
+# squash 1.0.0
+
+* Official stable release
+
 # squash 0.4.7
 
 * Add architecture scheme
