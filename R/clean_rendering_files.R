@@ -1,15 +1,15 @@
 #' Clean folder after quarto rendering
-#' 
+#'
 #' Remove all the files and folders created when rendering a qmd to html
-#' 
+#'
 #' @param dir character. The directory to look for rendering output recursively.
 #' @param present_before character. Path to the files and directories present before rendering.
 #' @param extra_dir character. Path of additional directories to remove.
-#' 
+#'
 #' @importFrom fs dir_map dir_delete
-#' 
+#'
 #' @return None. Side effect: remove files that were not present before rendering
-#' 
+#'
 #' @export
 #' @examples
 #' # create a temp dir with qmd
@@ -53,11 +53,10 @@
 #' # clean temp dir
 #' unlink(temp_dir, recursive = TRUE)
 clean_rendering_files <- function(
-    dir,
-    present_before,
-    extra_dir = NULL
-){
-
+  dir,
+  present_before,
+  extra_dir = NULL
+) {
   # list files
   present_after <- unique(
     list.files(
@@ -67,21 +66,20 @@ clean_rendering_files <- function(
       include.dirs = TRUE
     )
   )
-  
+
   file_created_by_rendering <- setdiff(
     x = present_after,
     y = path.expand(present_before)
   )
-  
+
   unlink(
     x = file_created_by_rendering,
     recursive = TRUE
   )
-  
+
   # remove extensions dir
   unlink(
     x = extra_dir,
     recursive = TRUE
   )
-  
 }

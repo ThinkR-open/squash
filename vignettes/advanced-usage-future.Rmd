@@ -42,7 +42,6 @@ qmds <- list.files(
 
 # generate html in temp folder
 temp_dir <- tempfile(pattern = "compile")
-
 ```
 
 Inside `{squash}`, the individual rendering of quarto presentation files is managed via `{future}` and `{furrr}` packages, meaning you can parallelize the generation of several chapters at once.

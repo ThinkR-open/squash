@@ -1,18 +1,18 @@
-#' Render a qmd course to html 
-#' 
+#' Render a qmd course to html
+#'
 #' Render a single qmd file to html with image folder.
-#' 
+#'
 #' @param qmd character. Path to the qmd file to render
 #' @param img_root_dir character. Path to the main image folder to extract media to
 #' @param metadata list. List of metadata to be used for rendering single qmd file
-#' 
+#'
 #' @inheritParams compile_qmd_course
-#' 
+#'
 #' @importFrom quarto quarto_render
 #' @importFrom cli cli_alert_danger
-#' 
+#'
 #' @return logical. TRUE if rendering succeeded, FALSE otherwise. Side effect : render qmd as html
-#' 
+#'
 #' @export
 #' @examples
 #' # create a temp dir with qmd
@@ -42,20 +42,20 @@
 #' # clean temp dir
 #' unlink(temp_dir, recursive = TRUE)
 render_single_qmd <- function(
-    qmd,
-    img_root_dir = "img",
-    output_format = "revealjs",
-    metadata = NULL,
-    quiet = TRUE
+  qmd,
+  img_root_dir = "img",
+  output_format = "revealjs",
+  metadata = NULL,
+  quiet = TRUE
 ) {
   # set image sub-folder name
   chapter <- dirname(qmd)
-  
+
   img_dir <- file.path(
     img_root_dir,
     paste0(basename(chapter), "_img")
   )
-  
+
   # try rendering qmd and warn user if successful / fail
   tryCatch(
     expr = {
@@ -69,7 +69,7 @@ render_single_qmd <- function(
     },
     error = \(error_message) {
       cli_alert_danger("Failed to render {qmd}, cleaning and existing")
-      
+
       # throw an error with original error message
       return(FALSE)
     }

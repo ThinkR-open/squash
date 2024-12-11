@@ -42,7 +42,6 @@ qmds <- list.files(
 
 # generate html in temp folder
 temp_dir <- tempfile(pattern = "compile")
-
 ```
 
 ## Using quarto themes

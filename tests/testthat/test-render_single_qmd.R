@@ -17,56 +17,57 @@ file.copy(
 )
 
 
-test_that("render_single_qmd return an alert for failed rendering", {
-
-  #' @description test cli_message in case of error in rendering
-  expect_message(
-    object = {
-      is_rendered <- render_single_qmd(
-        qmd = "a_qmd_that_does_not_exist.qmd"
+test_that(
+  "render_single_qmd return an alert for failed rendering",
+  {
+    #' @description test cli_message in case of error in rendering
+    expect_message(
+      object = {
+        is_rendered <- render_single_qmd(
+          qmd = "a_qmd_that_does_not_exist.qmd"
         )
-  },
-  regexp = "Failed to render a_qmd_that_does_not_exist.qmd"
-  )
-  
-  #' @description test output is FALSE for incorrect rendering
-  expect_true(isFALSE(is_rendered))
+      },
+      regexp = "Failed to render a_qmd_that_does_not_exist.qmd"
+    )
+
+    #' @description test output is FALSE for incorrect rendering
+    expect_true(isFALSE(is_rendered))
   }
 )
 
-test_that("render_single_qmd returns message and html", {
+test_that(
+  "render_single_qmd returns message and html",
+  {
+    is_rendered <- render_single_qmd(
+      qmd = file.path(temp_dir, "C01-qmd1_for_test.qmd"),
+      img_root_dir = "img_complete",
+      output_format = "revealjs"
+    )
 
-  is_rendered <- render_single_qmd(
-    qmd = file.path(temp_dir, "C01-qmd1_for_test.qmd"),
-    img_root_dir = "img_complete",
-    output_format = "revealjs"
-  )
-  
-  #' @description test output is TRUE for correct rendering
-  expect_true(is_rendered)
-  
-  #' @description test html output exist
-  expect_true(
-    file.exists(
-      file.path(temp_dir, "C01-qmd1_for_test.html")
+    #' @description test output is TRUE for correct rendering
+    expect_true(is_rendered)
+
+    #' @description test html output exist
+    expect_true(
+      file.exists(
+        file.path(temp_dir, "C01-qmd1_for_test.html")
       )
     )
 
-  #' @description test image path is correct
-  img_path <- list.files(
-    path = file.path(temp_dir, "img_complete"),
-    recursive = TRUE,
-    full.names = TRUE
+    #' @description test image path is correct
+    img_path <- list.files(
+      path = file.path(temp_dir, "img_complete"),
+      recursive = TRUE,
+      full.names = TRUE
     )
-  expect_true(
-    object = grepl(
-      pattern = "img_complete\\/render.+_img\\/img\\/logo_1.png",
-      x = img_path
+    expect_true(
+      object = grepl(
+        pattern = "img_complete\\/render.+_img\\/img\\/logo_1.png",
+        x = img_path
       )
     )
-  
-}
+  }
 )
-  
+
 # clean temp dir
 unlink(temp_dir, recursive = TRUE)
