@@ -18,7 +18,7 @@ quarto chapter files.
 
 The resulting revealjs presentation can be themed via quarto extensions.
 
-![](man/figures/simple_scheme.png)
+<img src="man/figures/simple_scheme.png" alt="A simple schematic view of squash input and output" width="2733" style="display: block; margin: auto;" />
 
 ## Installation
 
@@ -69,7 +69,7 @@ You can find find a full tutorial on how to create your first
 {squash}-made html
 [here](https://thinkr-open.github.io/squash/articles/simple-example-usage.html).
 
-Eager to spice it up ? Take a look at some advanced usage doc :
+Eager to spice it up? Take a look at some advanced usage doc :
 
 - using quarto themes and extensions:
   [here](https://thinkr-open.github.io/squash/articles/advanced-usage-theme.html)
@@ -78,7 +78,17 @@ Eager to spice it up ? Take a look at some advanced usage doc :
 - using parallel workers with `{future}`:
   [here](https://thinkr-open.github.io/squash/articles/advanced-usage-future.html)
 
+### Related tools
+
+Not quite what you were looking for? Here are two closely related quarto
+tools :
+
+- exporting as a book instead of a slide deck: [quarto
+  book](https://quarto.org/docs/books/)
+- including snippets instead of full quarto chapters: [Include
+  shortcodes](https://quarto.org/docs/authoring/includes.html)
+
 ## Contribute
 
-Ready to help ? Take a look at the [contribution
+Ready to help? Take a look at the [contribution
 guidelines](https://thinkr-open.github.io/squash/articles/dev-contribute.html).
