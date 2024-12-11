@@ -1,3 +1,8 @@
+# squash 0.4.7
+
+* Add architecture scheme
+* Improve Readme
+
 # squash 0.4.6
 
 * Add vignette for advanced usage
