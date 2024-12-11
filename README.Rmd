@@ -11,100 +11,56 @@ knitr::opts_chunk$set(
 )
 ```
 
-# {squash}: several quarto to single html
-
+# {squash}: several quarto to single html <img src="man/figures/logo.png" align="right" height="138" alt="" />
 <!-- badges: start -->
-[![R build status](https://forge.thinkr.fr/thinkr/thinkrverse/squash/badges/main/pipeline.svg)](https://forge.thinkr.fr/thinkr/thinkrverse/squash/-/pipelines)
-[![Codecov test coverage](https://forge.thinkr.fr/thinkr/thinkrverse/squash/badges/main/coverage.svg)](https://forge.thinkr.fr/thinkr/thinkrverse/squash/commits/main)
+[![R-CMD-check](https://github.com/ThinkR-open/squash/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ThinkR-open/squash/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/ThinkR-open/squash/graph/badge.svg)](https://app.codecov.io/gh/ThinkR-open/squash)
 <!-- badges: end -->
 
-The goal of {squash} is to compile n .qmd presentations to one single html file.
+The goal of {squash} is to compile a single html presentation file from multiple independent quarto files.
 
-The main purpose of this is to create custom slide decks from several 
-chapter .qmd files.
+The main purpose of this is to create custom slide decks from several quarto chapter files.
 
-The resulting html file can be themed via quarto extensions.
+The resulting revealjs presentation can be themed via quarto extensions.
+
+```{r, fig.align = 'center', echo=FALSE}
+#| fig.alt: >
+#|   A simple schematic view of squash input and output
+knitr::include_graphics("man/figures/simple_scheme.png")
+```
+
+
 
 ## Installation
 
+You can install the **stable** version from [GitHub](https://github.com/Thinkr-open/squash) with:
+
 ```{r eval=FALSE}
-if (!requireNamespace("remotes")) {install.packages("remotes")}
-if (!requireNamespace("git2r")) {install.packages("git2r")}
-
-options(
-  remotes.git_credentials = git2r::cred_user_pass(
-    "gitlab-ci-token", 
-    Sys.getenv("FORGE_PAT")
-  )
-)
-
-remotes::install_git(
-  "https://forge.thinkr.fr/thinkr/thinkrverse/squash", 
-  upgrade = "never"
-)
-
+remotes::install_github("Thinkr-open/squash", ref = "production")
 ```
 
-## External dependencies
 
-This package relies on quarto > 1.3.
+You can install the **development** version from [GitHub](https://github.com/Thinkr-open/squash) with:
 
-Link to quarto: [download page](https://quarto.org/docs/download/)
+```{r eval=FALSE}
+remotes::install_github("Thinkr-open/squash", ref = "main")
+```
 
-## How to use it
+This package relies on quarto > 1.3 (see its [download page](https://quarto.org/docs/download/)).
 
-```{r}
+## Play with {squash}
+
+### TL;DR
+
+Given the vector `qmds` containing paths to one or several qmd revealjs presentation, you can use the function `compile_qmd_course()` to compile a full presentation.
+
+```{r, eval=FALSE}
 library(squash)
-```
 
-Given a vector containing path to several .qmd chapters.
-
-```{r}
-# list example qmds from /inst
-courses_path <- system.file(
-  "courses",
-  "M01",
-  package = "squash"
-)
-
-# copy example qmds in a tempdir
-tmp_course_path <- tempfile(pattern = "course")
-dir.create(tmp_course_path)
-
-file.copy(
-  from = courses_path,
-  to = tmp_course_path,
-  recursive = TRUE
-)
-
-qmds <- list.files(
-  path = tmp_course_path,
-  full.names = TRUE,
-  recursive = TRUE,
-  pattern = "qmd$"
-)
-
-qmds
-```
-
-And a directory where you want your course to be generated.
-
-```{r}
-# generate html in temp folder
-temp_dir <- tempfile(pattern = "compile")
-```
-
-You can use the function `compile_qmd_course()` to compile a course.
-
-> We wrap the function call inside a `progressr::with_progress()` to see the progress bar. You can also set it in the console with `progressr::handlers(global = TRUE)`
-
-```{r}
-html_output <- progressr::with_progress(
-  compile_qmd_course(
-    vec_qmd_path = qmds,
-    output_dir = temp_dir,
-    output_html = "complete_course.html"
-  )
+html_output <- compile_qmd_course(
+  vec_qmd_path = qmds,
+  output_dir = tempdir(),
+  output_html = "complete_course.html"
 )
 ```
 
@@ -113,15 +69,23 @@ Check out the result
 browseURL(html_output)
 ```
 
-Clean temporary example directory.
+### Tutorials
 
-```{r}
-unlink(temp_dir, recursive = TRUE)
-unlink(tmp_course_path, recursive = TRUE)
-```
+You can find find a full tutorial on how to create your first {squash}-made html [here](https://thinkr-open.github.io/squash/articles/simple-example-usage.html).
 
-## Devs
+Eager to spice it up? Take a look at some advanced usage doc :
 
-### Check
+- using quarto themes and extensions: [here](https://thinkr-open.github.io/squash/articles/advanced-usage-theme.html)
+- using a personalized template: [here](https://thinkr-open.github.io/squash/articles/advanced-usage-template.html)
+- using parallel workers with `{future}`: [here](https://thinkr-open.github.io/squash/articles/advanced-usage-future.html)
 
-Some tests manually verify the appearance of the slides. To trigger them, please run `devtools::test()` interactively.
+### Related tools
+
+Not quite what you were looking for? Here are two closely related quarto tools :
+
+- exporting as a book instead of a slide deck: [quarto book](https://quarto.org/docs/books/)
+- including snippets instead of full quarto chapters: [Include shortcodes](https://quarto.org/docs/authoring/includes.html)
+
+## Contribute
+
+Ready to help? Take a look at the [contribution guidelines](https://thinkr-open.github.io/squash/articles/dev-contribute.html).

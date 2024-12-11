@@ -1,6 +1,6 @@
 Package: squash
 Title: Several Quarto As Single HTML
-Version: 0.4.5
+Version: 1.0.0
 Authors@R: c(
     person("Antoine", "Languillaume", , "antoine@thinkr.fr", role = c("aut", "cre")),
     person("Colin", "Fay", , "colin@thinkr.fr", role = "aut"),
@@ -9,6 +9,8 @@ Authors@R: c(
 Description: Compile n .qmd (under format revealjs) to one single html
     file.
 License: MIT + file LICENSE
+URL: https://thinkr-open.github.io/squash/,
+    https://github.com/ThinkR-open/squash
 Imports: 
     cli,
     dplyr,

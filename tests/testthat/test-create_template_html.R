@@ -2,22 +2,19 @@
 temp_dir <- tempfile(pattern = "template")
 
 test_that("create_template_html generate an html with proper title and theme", {
-
   # create html template
   path_to_html_template <- create_template_html(
     path_to_qmd = system.file("template.qmd", package = "squash"),
     output_dir = temp_dir,
     output_file = "complete_course.html"
   )
-  
-  
-  browseURL(path_to_html_template)
+
   # list files in extensions
   expect_extension_files <- list.files(
     file.path(temp_dir, "_extensions"),
     recursive = TRUE
   )
-  
+
   # extract html content
   slide_content <- path_to_html_template |>
     read_html() |>
@@ -25,10 +22,10 @@ test_that("create_template_html generate an html with proper title and theme", {
     html_children()
   slide_id <- slide_content |>
     html_attr(name = "id")
-  slide_text <- slide_content |> 
-    html_elements("p") |> 
+  slide_text <- slide_content |>
+    html_elements("p") |>
     as.character()
-  
+
   #' @description test dummy extension dir is correctly copied
   expect_setequal(
     object = expect_extension_files,
@@ -39,7 +36,7 @@ test_that("create_template_html generate an html with proper title and theme", {
       "dummy/dummy.scss"
     )
   )
-  
+
   #' @description test html content of template has correct title and text
   expect_equal(
     object = slide_id,
@@ -53,7 +50,6 @@ test_that("create_template_html generate an html with proper title and theme", {
       "<p><strong>{{ mail }}</strong></p>"
     )
   )
-  
 })
 
 # clean up

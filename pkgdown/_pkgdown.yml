@@ -1,0 +1,59 @@
+url: https://thinkr-open.github.io/squash/
+
+template:
+  bootstrap: 5
+  theme: github-dark
+  bslib:
+    pkgdown-nav-height: 100px
+    primary: "#7176b8"
+    info: "#f15521"
+    bg: "#fafafa"
+    fg: "#38424f"
+    navbar-brand-font-size: 2rem
+    navbar-light-brand-color: "#fafafa"
+    navbar-light-brand-hover-color: "#fafafa"
+    navbar-light-color: "#fafafa"
+    navbar-light-hover-color: "#fafafa"
+    navbar-light-toggler-border-color: "#fafafa"
+    link-color: "#f15521"
+    link-decoration: underline dotted
+    dropdown-link-active-bg: "#f15521"
+    code-bg: "#f155212b"
+    base_font: { google: "Rubik" }
+    heading_font: { google: "Rubik" }
+
+navbar:
+  bg: info
+  type: light
+  structure:
+    left: [reference, tutos, code, news]
+    right: [github]
+  components:
+    tutos:
+      text: Tutorial
+      menu:
+      - text: -------
+      - text: Get started
+      - text: Simple example usage
+        href: articles/simple-example-usage.html
+      - text: -------
+      - text: Advanced usage
+      - text: Using personnalised template
+        href: articles/advanced-usage-template.html
+      - text: Using quarto extensions
+        href: articles/advanced-usage-theme.html
+      - text: Using parallel workers
+        href: articles/advanced-usage-future.html
+    code:
+      text: Code
+      menu:
+      - text: Contributing
+        href: articles/dev-contribute.html
+      - text: Architecture
+        href: articles/dev-architecture.html
+
+footer:
+  structure:
+    left: thinkr
+  components:
+    thinkr: <a href="https://thinkr.fr/" target="_blank">© ThinkR - A French company of R experts</a>
