@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">squash</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,17 +82,18 @@
 
     
     
-<p>The individual rendering of qmd files is managed with the
-<a href="https://future.futureverse.org" class="external-link">future</a> and <a href="https://github.com/DavisVaughan/furrr" class="external-link">furrr</a> packages, meaning you can
-parallelize the generation of several chapters at once.</p>
-<p>To do so, you need to setup the future <code><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan()</a></code> with your
+<p>Inside <a href="https://thinkr-open.github.io/squash/">squash</a>, the individual rendering of quarto
+presentation files is managed via <a href="https://future.futureverse.org" class="external-link">future</a> and
+<a href="https://github.com/DavisVaughan/furrr" class="external-link">furrr</a> packages, meaning you can parallelize the
+generation of several chapters at once.</p>
+<p>To do so, you need to setup the <code><a href="https://future.futureverse.org/reference/plan.html" class="external-link">future::plan()</a></code> with your
 selected behavior (e.g. <code>sequential</code> or
 <code>multisession</code>) before running the compilation.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thinkr-open.github.io/squash/">squash</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># set parallel rendering with future</span></span>
-<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://future.futureverse.org/reference/multisession.html" class="external-link">multisession</a></span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">html_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compile_qmd_course.html">compile_qmd_course</a></span><span class="op">(</span></span>
 <span>  vec_qmd_path <span class="op">=</span> <span class="va">qmds</span>,</span>
@@ -101,20 +102,27 @@ selected behavior (e.g. <code>sequential</code> or
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># reset default future plan</span></span>
-<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="st">"default"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="st">"default"</span><span class="op">)</span></span></code></pre></div>
+<p>By running the above command, <a href="https://thinkr-open.github.io/squash/">squash</a> will first warn
+you that a non-default plan is detected for running the compilation. It
+will then proceed to render the html.</p>
+<pre><code><span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> {future} is using plan(multisession, workers = 2), to modify this use `future::plan()`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> All qmd rendered.</span></span></code></pre>
 <div class="section level2">
 <h2 id="a-note-on-future">A note on future<a class="anchor" aria-label="anchor" href="#a-note-on-future"></a>
 </h2>
-<p>Parallel rendering in currently not natively supported by quarto. As
-a result, please use parallel rendering at your own risk, as it is
-likely to become unstable with an increasing number of qmd chapter
-files.</p>
-<p>This is caused by temporary execution directories that may be erased
-by a sub-process while still being looked for in another subprocess.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># clean up</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">temp_dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">tmp_course_path</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<ul>
+<li><p>Future plan will not be modified by <a href="https://thinkr-open.github.io/squash/">squash</a>, you
+may want to restor default plan after rendering with the
+<code>future::plan("default")</code> command.</p></li>
+<li><p>Parallel rendering in currently not natively supported by quarto.
+As a result, please use parallel rendering at your own risk, as it is
+likely to become unstable with an increasing number of quarto chapter
+files.</p></li>
+<li><p>Unstability is likely caused by temporary execution directories
+that may be erased by a sub-process while still being looked for in
+another subprocess.</p></li>
+</ul>
 </div>
   </main>
 </div>

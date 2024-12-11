@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">squash</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,13 +108,13 @@ the <code>_extensions</code> folder as <code>ext_dir</code>.</p>
 <div style="text-align: center">
 <p><strong>default theme slides</strong></p>
 </div>
-<p><img src="figures%2Fdefault_title_slide.png" width="100%"></p>
+<p><img src="figures%2Fdefault_title_slide.png" alt="A defaut first slide with blank background" width="100%"></p>
 </div>
 <div>
 <div style="text-align: center">
 <p><strong>custom theme slides</strong></p>
 </div>
-<p><img src="figures%2Fcustom_title_slide.png" width="100%"></p>
+<p><img src="figures%2Fcustom_title_slide.png" alt="A custom first slide with lille university theme" width="100%"></p>
 </div>
 </div>
 </div>
@@ -142,7 +142,7 @@ had directly written them in the header of your quarto file.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Now, I can throw confetti by pressing <code>c</code> and get my
 pointer with <code>q</code> 🎉.</p>
-<p><img src="figures%2Fplugin.gif" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="figures%2Fplugin.gif" alt="A default first slide with confetti throwing and pointer activation" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="a-note-on-extensions">A note on extensions<a class="anchor" aria-label="anchor" href="#a-note-on-extensions"></a>
@@ -160,7 +160,8 @@ there.</p></li>
 (<code>metadata_template</code> input) and/or the individual chapter
 level (<code>metadata_qmd</code> input). It is usually best for plugins
 and themes to be applied at the template level (which will be the
-wrapper of the main html output file).</p></li>
+wrapper of the main html output file). Chapter-level metadata may be
+usefull to remove some overlapping content (e.g. logo, footer).</p></li>
 <li>
 <p>When rendering a quarto file with extensions,
 <a href="https://thinkr-open.github.io/squash/">squash</a> will provide access tho the target
