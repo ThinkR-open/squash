@@ -8,7 +8,8 @@ squash_path <- system.file(package = "squash")
 files_to_copy <- c(
   file.path(
     squash_path,
-    c("_extensions",
+    c(
+      "_extensions",
       file.path("courses", "M01")
     )
   ),
@@ -39,13 +40,12 @@ htmls <- list.files(
 )
 
 test_that("extract_html_slides returns all html slide classes in correct order", {
-  
   # run function with slide order 1-2-3
   html_slide_content <- extract_html_slides(
     vec_html_path = htmls,
     use_metadata = TRUE
   )
-  
+
   #' @description test with three html files in order 1-2-3
   section_title <- html_slide_content |>
     read_html() |>
@@ -69,13 +69,13 @@ test_that("extract_html_slides returns all html slide classes in correct order",
       "3-slide-with-image"
     )
   )
-  
+
   # run function with slide order 2-1-3
   html_slide_content_reordered <- extract_html_slides(
     vec_html_path = htmls[c(2, 1, 3)],
     use_metadata = TRUE
   )
-  
+
   #' @description test with three htmls in order 2-1-3
   section_title_reordered <- html_slide_content_reordered |>
     read_html() |>
@@ -102,7 +102,6 @@ test_that("extract_html_slides returns all html slide classes in correct order",
 })
 
 test_that("extract_html_slides returns an error if duplicated keywords are detected", {
-  
   # list created html with extra duplicated keyword html
   htmls <- list.files(
     path = temp_dir,
@@ -110,7 +109,7 @@ test_that("extract_html_slides returns an error if duplicated keywords are detec
     recursive = TRUE,
     full.names = TRUE
   )
-  
+
   # run function
   expect_error(
     object = {
@@ -121,7 +120,6 @@ test_that("extract_html_slides returns an error if duplicated keywords are detec
     },
     regexp = "Some keywords are not unique : M01S02-1"
   )
-  
 })
 
 # clean up

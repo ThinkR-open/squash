@@ -77,19 +77,19 @@
 #' unlink(temp_dir, recursive = TRUE)
 #' unlink(tmp_course_path, recursive = TRUE)
 compile_qmd_course <- function(
-    vec_qmd_path,
-    output_dir,
-    output_html,
-    template = system.file("template_minimal.qmd", package = "squash"),
-    output_format = "revealjs",
-    title = "Title",
-    metadata_template = NULL,
-    metadata_qmd = NULL,
-    template_text = NULL,
-    ext_dir = NULL,
-    quiet = FALSE,
-    debug = FALSE,
-    fix_img_path = TRUE
+  vec_qmd_path,
+  output_dir,
+  output_html,
+  template = system.file("template_minimal.qmd", package = "squash"),
+  output_format = "revealjs",
+  title = "Title",
+  metadata_template = NULL,
+  metadata_qmd = NULL,
+  template_text = NULL,
+  ext_dir = NULL,
+  quiet = FALSE,
+  debug = FALSE,
+  fix_img_path = TRUE
 ) {
   # check inputs and future settings
   not_all_files_are_qmd <- any(
@@ -98,33 +98,33 @@ compile_qmd_course <- function(
   if (isTRUE(not_all_files_are_qmd)) {
     stop("Some of the input files are not qmd files.")
   }
-  
-  if (is.character(metadata_template) && file.exists(metadata_template)){
+
+  if (is.character(metadata_template) && file.exists(metadata_template)) {
     metadata_template <- read_yaml(metadata_template)
   }
-  if (is.character(metadata_template) && file.exists(metadata_template)){
+  if (is.character(metadata_template) && file.exists(metadata_template)) {
     metadata_qmd <- read_yaml(metadata_qmd)
   }
-  
+
   fetch_future_settings(quiet = quiet)
-  
+
   # list courses files present before rendering
   vec_qmd_dir <- unique(dirname(vec_qmd_path))
-  
+
   file_present_before_rendering <- list.files(
     path = vec_qmd_dir,
     full.names = TRUE,
     include.dirs = TRUE,
     recursive = TRUE
   )
-  
+
   # prepare qmd rendering
   tmp_ext_dir <- add_extension(
     vec_qmd_path = vec_qmd_path,
     ext_dir = ext_dir,
     quiet = quiet
   )
-  
+
   # create output dir and html template
   template_html <- create_template_html(
     path_to_qmd = template,
@@ -135,14 +135,14 @@ compile_qmd_course <- function(
     metadata = metadata_template,
     ext_dir = ext_dir
   )
-  
+
   # set main folder for image
   img_root_dir <- gsub("\\.html", "_img", output_html)
 
   # setup progress report with {progressr}
   handlers("progress")
   p <- progressor(along = vec_qmd_path)
-  
+
   # render each course in parallel
   render_success <- future_map_lgl(
     .x = vec_qmd_path,
@@ -154,14 +154,14 @@ compile_qmd_course <- function(
         output_format = output_format,
         metadata = metadata_qmd,
         quiet = !debug
-        )
+      )
     },
     # make random number generation reproducible
     .options = furrr_options(seed = TRUE)
   )
 
   # exit and clean if some rendering failed
-  if (!all(render_success)){
+  if (!all(render_success)) {
     clean_rendering_files(
       dir = vec_qmd_dir,
       present_before = file_present_before_rendering,
@@ -169,81 +169,82 @@ compile_qmd_course <- function(
     )
     stop("Failed to render all qmd files.")
   } else {
-    if(isFALSE(quiet)){
+    if (isFALSE(quiet)) {
       cli_alert_success("All qmd rendered.")
     }
   }
-  
+
   # correct remaining img path
   vec_html_path <- gsub("\\.qmd", "\\.html", vec_qmd_path)
-  
+
   if (fix_img_path) {
     walk(.x = vec_html_path, .f = \(x) {
       copy_img_and_edit_path(html_path = x, img_root_dir = img_root_dir)
     })
   }
-  
+
   # read html and extract slides elements
   html_content <- extract_html_slides(
     vec_html_path = vec_html_path
   )
-  
+
   # include content in template
   # use do.call to add any list of extra content in template
   complete_html <- do.call(
     htmlTemplate,
     append(
-      list(filename = template_html,
-           include_html_content = HTML(html_content)
+      list(
+        filename = template_html,
+        include_html_content = HTML(html_content)
       ),
       template_text
-      )
+    )
   ) |>
     renderDocument()
 
-  
+
   # save html file
   path_to_html <- file.path(
     output_dir,
     output_html
   )
-  
+
   save_html(
     html = complete_html,
     file = path_to_html
   )
-  
+
   # copy all img sub-folders to output_dir
   output_img_dir <- file.path(
     output_dir,
     gsub("\\.html", "_img", output_html)
   )
-  
+
   if (!file.exists(output_img_dir)) {
     dir.create(path = output_img_dir)
   }
-  
+
   vec_img_dir <- file.path(
     vec_qmd_dir,
     gsub("\\.html", "_img", output_html),
     paste0(basename(vec_qmd_dir), "_img")
   )
-  
+
   # copy img dir if they are present
   vec_img_dir <- vec_img_dir[dir.exists(vec_img_dir)]
-  
+
   file.copy(
     from = unique(vec_img_dir),
     to = output_img_dir,
     recursive = TRUE
   )
-  
+
   clean_rendering_files(
     dir = vec_qmd_dir,
     present_before = file_present_before_rendering,
     extra_dir = tmp_ext_dir
   )
-  
+
   return(
     file.path(
       output_dir,
