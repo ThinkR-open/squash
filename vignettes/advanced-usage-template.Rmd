@@ -120,6 +120,8 @@ Now, all compilations with this new template will end with my custom last slide!
 :::
 
 ```{r, echo=FALSE, out.width="100%"}
+#| fig.alt: >
+#|   A default empty last slide with
 knitr::include_graphics("figures/last_slide_default.png")
 ```
 
@@ -132,6 +134,8 @@ knitr::include_graphics("figures/last_slide_default.png")
 :::
 
 ```{r, echo=FALSE, out.width="100%"}
+#| fig.alt: >
+#|   A custom last slide with contact detail
 knitr::include_graphics("figures/last_slide_fixed.png")
 ```
 
@@ -193,6 +197,7 @@ html_output <- compile_qmd_course(
   )
 )
 ```
+
 :::
 
 ::::
@@ -209,6 +214,8 @@ I fill them up with the `template_text` list values, and obtain the following la
 :::
 
 ```{r, echo=FALSE, fig.align='center', out.width="50%"}
+#| fig.alt: >
+#|   A custom last slide with contact detail
 knitr::include_graphics("figures/last_slide_variable.png")
 ```
 

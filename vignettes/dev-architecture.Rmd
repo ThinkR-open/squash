@@ -17,6 +17,8 @@ knitr::opts_chunk$set(
 ## Architecture scheme
 
 ```{r, echo=FALSE, fig.align='center', out.width="100%"}
+#| fig.alt: >
+#|   The architecture scheme of the package
 knitr::include_graphics(path = "figures/achitecture.png")
 ```
 

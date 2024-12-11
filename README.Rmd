@@ -24,6 +24,8 @@ The main purpose of this is to create custom slide decks from several quarto cha
 The resulting revealjs presentation can be themed via quarto extensions.
 
 ```{r, fig.align = 'center'}
+#| fig.alt: >
+#|   A simple schematic view of squash input and output
 knitr::include_graphics("man/figures/simple_scheme.png")
 ```
 

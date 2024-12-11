@@ -78,6 +78,8 @@ My slide deck will now bear my custom theme !
 :::
 
 ```{r, echo=FALSE, out.width="100%"}
+#| fig.alt: >
+#|   A defaut first slide with blank background
 knitr::include_graphics("figures/default_title_slide.png")
 ```
 :::
@@ -89,6 +91,8 @@ knitr::include_graphics("figures/default_title_slide.png")
 :::
 
 ```{r, echo=FALSE, out.width="100%"}
+#| fig.alt: >
+#|   A custom first slide with lille university theme
 knitr::include_graphics("figures/custom_title_slide.png")
 ```
 :::
@@ -123,6 +127,8 @@ html_output <- compile_qmd_course(
 Now, I can throw confetti by pressing `c` and get my pointer with `q` 🎉.
 
 ```{r, echo=FALSE, fig.align='center', out.width="60%"}
+#| fig.alt: >
+#|   A default first slide with confetti throwing and pointer activation
 knitr::include_graphics("figures/plugin.gif")
 ```
 
@@ -132,7 +138,7 @@ knitr::include_graphics("figures/plugin.gif")
 
 * In order to use themes and plugins, you can only provide a single `_extensions` folder via the `ext_dir` parameter, so make sure all the necessary plugins and themes are installed in there.
 
-* You can edit the metadata a the template level (`metadata_template` input) and/or the individual chapter level (`metadata_qmd` input). It is usually best for plugins and themes to be applied at the template level (which will be the wrapper of the main html output file).
+* You can edit the metadata a the template level (`metadata_template` input) and/or the individual chapter level (`metadata_qmd` input). It is usually best for plugins and themes to be applied at the template level (which will be the wrapper of the main html output file). Chapter-level metadata may be usefull to remove some overlapping content (e.g. logo, footer).
 
 * When rendering a quarto file with extensions, `{squash}` will provide access tho the target `_extensions` folder. Several cases can be triggered :
 
