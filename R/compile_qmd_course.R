@@ -89,7 +89,8 @@ compile_qmd_course <- function(
   ext_dir = NULL,
   quiet = FALSE,
   debug = FALSE,
-  fix_img_path = TRUE
+  fix_img_path = TRUE,
+  quarto_profile = NULL
 ) {
   # check inputs and future settings
   not_all_files_are_qmd <- any(
@@ -148,12 +149,17 @@ compile_qmd_course <- function(
     .x = vec_qmd_path,
     .f = \(x){
       p(sprintf("rendering %s", basename(x)), class = "sticky")
-      render_single_qmd(
-        x,
-        img_root_dir = img_root_dir,
-        output_format = output_format,
-        metadata = metadata_qmd,
-        quiet = !debug
+      withr::with_envvar(
+        c("QUARTO_PROFILE" = quarto_profile), {
+          p(sprintf("rendering %s", basename(x)), class = "sticky")
+          render_single_qmd(
+            x,
+            img_root_dir = img_root_dir,
+            output_format = output_format,
+            metadata = metadata_qmd,
+            quiet = !debug
+          )
+        }
       )
     },
     # make random number generation reproducible
