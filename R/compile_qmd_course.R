@@ -18,6 +18,8 @@
 #' @param debug logical. Output rendering output in user console.
 #' @param fix_img_path logical. If image path are present as raw html inside files,
 #' use this option to correctly edit their path.
+#' @param render_pdf logical. If TRUE, render a pdf version of the html file
+#' @param render_pdf_fun function. Function to use to render the pdf. Default to pagedown::chrome_print. The function need to take a path to a html file as input.
 #'
 #' @importFrom tools file_ext
 #' @importFrom htmltools htmlTemplate renderDocument save_html HTML
@@ -89,7 +91,9 @@ compile_qmd_course <- function(
   ext_dir = NULL,
   quiet = FALSE,
   debug = FALSE,
-  fix_img_path = TRUE
+  fix_img_path = TRUE,
+  render_pdf = FALSE,
+  render_pdf_fun = pagedown::chrome_print
 ) {
   # check inputs and future settings
   not_all_files_are_qmd <- any(
@@ -244,6 +248,15 @@ compile_qmd_course <- function(
     present_before = file_present_before_rendering,
     extra_dir = tmp_ext_dir
   )
+
+  if (render_pdf) {
+    render_pdf_fun(
+      file.path(
+        output_dir,
+        output_html
+      )
+    )
+  }
 
   return(
     file.path(

@@ -17,7 +17,9 @@ compile_qmd_course(
   ext_dir = NULL,
   quiet = FALSE,
   debug = FALSE,
-  fix_img_path = TRUE
+  fix_img_path = TRUE,
+  render_pdf = FALSE,
+  render_pdf_fun = pagedown::chrome_print
 )
 }
 \arguments{
@@ -49,6 +51,10 @@ If a path to a yml file is provided, metadata will be read from this file.}
 
 \item{fix_img_path}{logical. If image path are present as raw html inside files,
 use this option to correctly edit their path.}
+
+\item{render_pdf}{logical. If TRUE, render a pdf version of the html file}
+
+\item{render_pdf_fun}{function. Function to use to render the pdf. Default to pagedown::chrome_print. The function need to take a path to a html file as input.}
 }
 \value{
 character. The path to the resulting html file
