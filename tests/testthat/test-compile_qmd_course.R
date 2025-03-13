@@ -362,6 +362,88 @@ test_that("compile_qmd_course account for qmd with no media output dir", {
   )
 })
 
+skip_if_no_chrome <- function() {
+  if (!requireNamespace("pagedown", quietly = TRUE)) {
+    skip("pagedown not installed")
+  }
+  has_chrome <- try(
+    {
+      pagedown::find_chrome()
+    },
+    silent = TRUE
+  )
+  if (inherits(has_chrome, "try-error")) {
+    skip("chrome not installed")
+  }
+}
+
+run_with_multiple_quarto <- function(expr) {
+  # Create a temp dir
+  temp_dir <- tempfile(pattern = "compile")
+  dir.create(temp_dir)
+  old_dir <- setwd(temp_dir)
+  for (i in 1:10) {
+    write(
+      file = sprintf("test%s.qmd", i),
+      sprintf("---
+title: 'test%s'
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+", i)
+    )
+  }
+  on.exit({
+    unlink(temp_dir, recursive = TRUE)
+    setwd(old_dir)
+  })
+  force(expr)
+}
+
+test_that(
+  "print pdf works",
+  {
+    skip_if_no_chrome()
+
+    run_with_multiple_quarto({
+      # This is a temporary solution while
+      # https://github.com/ThinkR-open/squash/issues/11 is not solved
+      output_dir <- tempfile(pattern = "output_dir")
+      dir.create(output_dir)
+      on.exit(
+        {
+          unlink(output_dir, recursive = TRUE)
+        },
+        add = TRUE
+      )
+      list.files(pattern = "\\.qmd$", full.names = TRUE) |>
+        compile_qmd_course(
+          output_dir = output_dir,
+          output_html = "complete_course.html",
+          render_pdf = TRUE
+        )
+      expect_true(
+        file.exists(
+          file.path(
+            output_dir,
+            "complete_course.html"
+          )
+        )
+      )
+      expect_true(
+        file.exists(
+          file.path(
+            output_dir,
+            "complete_course.pdf"
+          )
+        )
+      )
+    })
+  }
+)
+
 # clean up
 unlink(temp_dir, recursive = TRUE)
 unlink(tmp_course_path, recursive = TRUE)
