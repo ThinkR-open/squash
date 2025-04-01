@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">squash</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create a single html from multiple qmd</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ThinkR-open/squash/blob/v1.0.0/R/compile_qmd_course.R" class="external-link"><code>R/compile_qmd_course.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ThinkR-open/squash/blob/main/R/compile_qmd_course.R" class="external-link"><code>R/compile_qmd_course.R</code></a></small>
       <div class="d-none name"><code>compile_qmd_course.Rd</code></div>
     </div>
 
@@ -65,7 +65,9 @@
 <span>  ext_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  debug <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  fix_img_path <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  fix_img_path <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  render_pdf <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  render_pdf_fun <span class="op">=</span> <span class="fu">pagedown</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/pagedown/man/chrome_print.html" class="external-link">chrome_print</a></span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -126,6 +128,14 @@ If a path to a yml file is provided, metadata will be read from this file.</p></
 <dt id="arg-fix-img-path">fix_img_path<a class="anchor" aria-label="anchor" href="#arg-fix-img-path"></a></dt>
 <dd><p>logical. If image path are present as raw html inside files,
 use this option to correctly edit their path.</p></dd>
+
+
+<dt id="arg-render-pdf">render_pdf<a class="anchor" aria-label="anchor" href="#arg-render-pdf"></a></dt>
+<dd><p>logical. If TRUE, render a pdf version of the html file</p></dd>
+
+
+<dt id="arg-render-pdf-fun">render_pdf_fun<a class="anchor" aria-label="anchor" href="#arg-render-pdf-fun"></a></dt>
+<dd><p>function. Function to use to render the pdf. Default to pagedown::chrome_print. The function need to take a path to a html file as input.</p></dd>
 
 </dl></div>
     <div class="section level2">
