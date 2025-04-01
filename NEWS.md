@@ -1,7 +1,6 @@
 # squash 1.1.0
 
-+ You can now print the output to pdf (#18)
-
+* You can now print the output to pdf (#18)
 # squash 1.0.0
 
 * Official stable release
