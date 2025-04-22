@@ -1,26 +1,21 @@
-test_that("future settings does not speak for default behaviour", {
-  # set to default
-  plan("default")
-
+test_that("fetch_future_settings quiet TRUE vs FALSE", {
+  oplan <- plan("default")
+  on.exit(plan(oplan), add = TRUE)
   expect_message(
     object = {
-      fetch_future_settings(quiet = FALSE)
+      fetch_future_settings(FALSE)
     },
     regexp = NA
   )
 })
 
-test_that("future settings does not speak for default behaviour", {
-  # set a multisession with one worker
-  plan(future::multisession, workers = 1)
-
+test_that("fetch_future_settings speak when future::multisession", {
+  oplan <- plan(future::multisession, workers = 1)
+  on.exit(plan(oplan), add = TRUE)
   expect_message(
     object = {
       fetch_future_settings(quiet = FALSE)
     },
     regexp = "\\{future\\} is using plan\\(future::multisession, workers = 1\\)"
   )
-
-  # reset to default
-  plan("default")
 })
