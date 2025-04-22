@@ -56,10 +56,18 @@ render_single_qmd <- function(
     paste0(basename(chapter), "_img")
   )
 
+  quarto_render_insistently <- purrr::insistently(
+    quarto_render,
+    rates = purrr::rate_backoff(
+      pause_base = 0.1,
+      max_times = 5
+    )
+  )
+
   # try rendering qmd and warn user if successful / fail
   tryCatch(
     expr = {
-      quarto_render(
+      quarto_render_insistently(
         input = qmd,
         metadata = c(metadata, list(`extract-media` = img_dir)),
         output_format = output_format,
