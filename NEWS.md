@@ -1,6 +1,11 @@
+# squash 1.2.0
+
+* The rendering of the Qmd is now performed insistently with purrr::insistently(), and can be configured in the rendering functions.
+
 # squash 1.1.0
 
 * You can now print the output to pdf (#18)
+
 # squash 1.0.0
 
 * Official stable release
