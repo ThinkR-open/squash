@@ -19,7 +19,9 @@ compile_qmd_course(
   debug = FALSE,
   fix_img_path = TRUE,
   render_pdf = FALSE,
-  render_pdf_fun = pagedown::chrome_print
+  render_pdf_fun = pagedown::chrome_print,
+  render_qmd_purrr_insistently_rate_backoff = purrr::rate_backoff(pause_base = 0.1,
+    max_times = 5)
 )
 }
 \arguments{
@@ -55,6 +57,8 @@ use this option to correctly edit their path.}
 \item{render_pdf}{logical. If TRUE, render a pdf version of the html file}
 
 \item{render_pdf_fun}{function. Function to use to render the pdf. Default to pagedown::chrome_print. The function need to take a path to a html file as input.}
+
+\item{render_qmd_purrr_insistently_rate_backoff}{function. Function to use to retry rendering qmd files in case of failure. Should be a purrr::rate_backoff function.}
 }
 \value{
 character. The path to the resulting html file

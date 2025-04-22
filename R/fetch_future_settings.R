@@ -10,8 +10,7 @@
 #' @noRd
 #' @examples
 #' fetch_future_settings(vec_qmd_path = qmd, quiet = FALSE)
-fetch_future_settings <- function(
-  quiet = TRUE) {
+fetch_future_settings <- function(quiet = TRUE) {
   # look for future settings  (e.g. parallel, sequential, default)
   future_setting <- attr(plan(), "call")
   future_setting <- ifelse(
@@ -20,7 +19,7 @@ fetch_future_settings <- function(
     no = deparse(future_setting)
   )
 
-  if (isFALSE(quiet) && !grepl("default", future_setting)) {
+  if (isFALSE(quiet) && !grepl("sequential", future_setting)) {
     cli_alert_info(paste(
       "{{future}} is using {future_setting},",
       "to modify this use {.code future::plan()}"
