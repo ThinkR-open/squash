@@ -20,6 +20,7 @@
 #' use this option to correctly edit their path.
 #' @param render_pdf logical. If TRUE, render a pdf version of the html file
 #' @param render_pdf_fun function. Function to use to render the pdf. Default to pagedown::chrome_print. The function need to take a path to a html file as input.
+#' @param render_qmd_purrr_insistently_rate_backoff function. Function to use to retry rendering qmd files in case of failure. Should be a purrr::rate_backoff function.
 #'
 #' @importFrom tools file_ext
 #' @importFrom htmltools htmlTemplate renderDocument save_html HTML
@@ -93,7 +94,11 @@ compile_qmd_course <- function(
   debug = FALSE,
   fix_img_path = TRUE,
   render_pdf = FALSE,
-  render_pdf_fun = pagedown::chrome_print
+  render_pdf_fun = pagedown::chrome_print,
+  render_qmd_purrr_insistently_rate_backoff = purrr::rate_backoff(
+    pause_base = 0.1,
+    max_times = 5
+  )
 ) {
   # check inputs and future settings
   not_all_files_are_qmd <- any(
@@ -157,7 +162,8 @@ compile_qmd_course <- function(
         img_root_dir = img_root_dir,
         output_format = output_format,
         metadata = metadata_qmd,
-        quiet = !debug
+        quiet = !debug,
+        purrr_insistently_rate_backoff = render_qmd_purrr_insistently_rate_backoff
       )
     },
     # make random number generation reproducible

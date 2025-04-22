@@ -9,7 +9,8 @@ render_single_qmd(
   img_root_dir = "img",
   output_format = "revealjs",
   metadata = NULL,
-  quiet = TRUE
+  quiet = TRUE,
+  purrr_insistently_rate_backoff = purrr::rate_backoff(pause_base = 0.1, max_times = 5)
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ render_single_qmd(
 \item{metadata}{list. List of metadata to be used for rendering single qmd file}
 
 \item{quiet}{logical. Output info in user console}
+
+\item{purrr_insistently_rate_backoff}{function. Function to use to retry rendering qmd files in case of failure. Should be a purrr::rate_backoff function.}
 }
 \value{
 logical. TRUE if rendering succeeded, FALSE otherwise. Side effect : render qmd as html

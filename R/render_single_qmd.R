@@ -5,6 +5,7 @@
 #' @param qmd character. Path to the qmd file to render
 #' @param img_root_dir character. Path to the main image folder to extract media to
 #' @param metadata list. List of metadata to be used for rendering single qmd file
+#' @param purrr_insistently_rate_backoff function. Function to use to retry rendering qmd files in case of failure. Should be a purrr::rate_backoff function.
 #'
 #' @inheritParams compile_qmd_course
 #'
@@ -46,7 +47,11 @@ render_single_qmd <- function(
   img_root_dir = "img",
   output_format = "revealjs",
   metadata = NULL,
-  quiet = TRUE
+  quiet = TRUE,
+  purrr_insistently_rate_backoff = purrr::rate_backoff(
+    pause_base = 0.1,
+    max_times = 5
+  )
 ) {
   # set image sub-folder name
   chapter <- dirname(qmd)
@@ -58,10 +63,7 @@ render_single_qmd <- function(
 
   quarto_render_insistently <- purrr::insistently(
     quarto_render,
-    rate = purrr::rate_backoff(
-      pause_base = 0.1,
-      max_times = 5
-    )
+    rate = purrr_insistently_rate_backoff
   )
 
   # try rendering qmd and warn user if successful / fail
