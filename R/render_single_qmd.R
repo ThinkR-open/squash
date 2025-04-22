@@ -58,7 +58,7 @@ render_single_qmd <- function(
 
   quarto_render_insistently <- purrr::insistently(
     quarto_render,
-    rates = purrr::rate_backoff(
+    rate = purrr::rate_backoff(
       pause_base = 0.1,
       max_times = 5
     )
