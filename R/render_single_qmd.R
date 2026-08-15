@@ -6,6 +6,7 @@
 #' @param img_root_dir character. Path to the main image folder to extract media to
 #' @param metadata list. List of metadata to be used for rendering single qmd file
 #' @param purrr_insistently_rate_backoff function. Function to use to retry rendering qmd files in case of failure. Should be a purrr::rate_backoff function.
+#' @param isolate logical. If TRUE (default, controlled by option "squash.isolate_render"), render inside a throwaway copy of the quarto project so concurrent renders do not share project state.
 #'
 #' @inheritParams compile_qmd_course
 #'
@@ -51,7 +52,8 @@ render_single_qmd <- function(
   purrr_insistently_rate_backoff = purrr::rate_backoff(
     pause_base = 0.1,
     max_times = 5
-  )
+  ),
+  isolate = getOption("squash.isolate_render", TRUE)
 ) {
   # set image sub-folder name
   chapter <- dirname(qmd)
@@ -66,22 +68,53 @@ render_single_qmd <- function(
     rate = purrr_insistently_rate_backoff
   )
 
+  # concurrent renders sharing one quarto project race on the project
+  # state, so each render runs in its own throwaway copy of the project
+  isolation <- NULL
+  if (isTRUE(isolate)) {
+    isolation <- tryCatch(
+      expr = {
+        build_isolated_project(qmd)
+      },
+      error = \(error_message) {
+        cli_alert_danger(
+          "Could not isolate {qmd} ({conditionMessage(error_message)}), rendering in place"
+        )
+        NULL
+      }
+    )
+  }
+
+  input <- if (is.null(isolation)) {
+    qmd
+  } else {
+    isolation$iso_qmd
+  }
+
   # try rendering qmd and warn user if successful / fail
   tryCatch(
     expr = {
       quarto_render_insistently(
-        input = qmd,
+        input = input,
         metadata = c(metadata, list(`extract-media` = img_dir)),
         output_format = output_format,
         quiet = quiet
       )
+      if (!is.null(isolation)) {
+        collect_isolated_outputs(isolation)
+      }
       return(TRUE)
     },
     error = \(error_message) {
-      cli_alert_danger("Failed to render {qmd}, cleaning and existing")
-
-      # throw an error with original error message
+      cli_alert_danger(
+        "Failed to render {qmd} ({conditionMessage(error_message)}), cleaning and exiting"
+      )
       return(FALSE)
+    },
+    finally = {
+      if (!is.null(isolation)) {
+        unlink(isolation$iso_root, recursive = TRUE)
+      }
     }
   )
 }
