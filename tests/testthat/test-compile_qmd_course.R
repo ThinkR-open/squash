@@ -375,6 +375,25 @@ skip_if_no_chrome <- function() {
   if (inherits(has_chrome, "try-error")) {
     skip("chrome not installed")
   }
+  # finding the binary is not enough: probe that a headless session
+  # can actually be established (fails on some CI runners)
+  probe_html <- tempfile(fileext = ".html")
+  writeLines("<html><body>probe</body></html>", probe_html)
+  probe_pdf <- try(
+    {
+      pagedown::chrome_print(
+        input = probe_html,
+        output = tempfile(fileext = ".pdf"),
+        timeout = 30
+      )
+    },
+    silent = TRUE
+  )
+  unlink(probe_html)
+  if (inherits(probe_pdf, "try-error")) {
+    skip("chrome is installed but headless printing is not functional here")
+  }
+  unlink(probe_pdf)
 }
 
 run_with_multiple_quarto <- function(expr) {

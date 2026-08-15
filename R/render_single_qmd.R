@@ -6,7 +6,7 @@
 #' @param img_root_dir character. Path to the main image folder to extract media to
 #' @param metadata list. List of metadata to be used for rendering single qmd file
 #' @param purrr_insistently_rate_backoff function. Function to use to retry rendering qmd files in case of failure. Should be a purrr::rate_backoff function.
-#' @param isolate logical. If TRUE (default, controlled by option "squash.isolate_render"), render inside a throwaway copy of the quarto project so concurrent renders do not share project state.
+#' @param isolate logical. If TRUE (default, controlled by option "squash.isolate_render"), render inside a throwaway copy of the quarto project so concurrent renders do not share project state. Outputs are copied back to the real chapter afterwards. When isolation is not possible (no quarto project above the qmd, project with a project-level output-dir, filesystem without symlink support), the qmd is rendered in place as before.
 #'
 #' @inheritParams compile_qmd_course
 #'
@@ -76,8 +76,19 @@ render_single_qmd <- function(
       expr = {
         build_isolated_project(qmd)
       },
+      squash_no_project = \(condition) {
+        # no quarto project above the qmd: there is no shared project
+        # state to isolate from, rendering in place is the normal path
+        NULL
+      },
+      squash_no_isolation = \(condition) {
+        cli_alert_info(
+          "{conditionMessage(condition)}, rendering in place"
+        )
+        NULL
+      },
       error = \(error_message) {
-        cli_alert_danger(
+        cli_alert_warning(
           "Could not isolate {qmd} ({conditionMessage(error_message)}), rendering in place"
         )
         NULL
@@ -107,7 +118,7 @@ render_single_qmd <- function(
     },
     error = \(error_message) {
       cli_alert_danger(
-        "Failed to render {qmd} ({conditionMessage(error_message)}), cleaning and exiting"
+        "Failed to render {qmd} ({conditionMessage(error_message)})"
       )
       return(FALSE)
     },

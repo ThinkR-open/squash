@@ -23,7 +23,6 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Antoine Languillaume \email{antoine@thinkr.fr}
   \item Colin Fay \email{colin@thinkr.fr}
   \item Swann Floc'hlay \email{swann@thinkr.fr}
 }

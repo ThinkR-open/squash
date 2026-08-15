@@ -1,6 +1,8 @@
-# squash 1.2.0.9001 (development version)
+# squash 1.3.0
 
 * Each qmd is now rendered inside an isolated throwaway copy of the quarto project (option `squash.isolate_render`, `TRUE` by default). Concurrent renders no longer share the project state (`.quarto/` crossref index, `_extensions/` resolution), which removes the random `Failed to render` errors of parallel compilation (quarto-dev/quarto-cli#2749).
+* Isolation falls back to rendering in place whenever it is not possible: no quarto project above the qmd, project with a project-level `output-dir` (websites, books), or filesystem without symlink support (e.g. Windows without the symlink privilege). Every filesystem step of the isolation is checked so a partial isolated project can never be rendered silently.
+* Outputs are copied back to the real chapter when they are new or updated, so re-renders refresh files left by a previous run.
 * `render_single_qmd()` now reports the underlying error message instead of discarding it.
 
 # squash 1.2.0
