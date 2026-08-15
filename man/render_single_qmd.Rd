@@ -10,7 +10,8 @@ render_single_qmd(
   output_format = "revealjs",
   metadata = NULL,
   quiet = TRUE,
-  purrr_insistently_rate_backoff = purrr::rate_backoff(pause_base = 0.1, max_times = 5)
+  purrr_insistently_rate_backoff = purrr::rate_backoff(pause_base = 0.1, max_times = 5),
+  isolate = getOption("squash.isolate_render", TRUE)
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ render_single_qmd(
 \item{quiet}{logical. Output info in user console}
 
 \item{purrr_insistently_rate_backoff}{function. Function to use to retry rendering qmd files in case of failure. Should be a purrr::rate_backoff function.}
+
+\item{isolate}{logical. If TRUE (default, controlled by option "squash.isolate_render"), render inside a throwaway copy of the quarto project so concurrent renders do not share project state. Outputs are copied back to the real chapter afterwards. When isolation is not possible (no quarto project above the qmd, project with a project-level output-dir, filesystem without symlink support), the qmd is rendered in place as before.}
 }
 \value{
 logical. TRUE if rendering succeeded, FALSE otherwise. Side effect : render qmd as html
