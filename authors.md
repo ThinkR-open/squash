@@ -11,7 +11,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/ThinkR-open/squash/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/ThinkR-open/squash/blob/v1.3.0/DESCRIPTION)
 
 Languillaume A, Fay C, Floc'hlay S (2026). *squash: Several Quarto As
 Single HTML*. R package version 1.3.0,
