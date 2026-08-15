@@ -1,0 +1,42 @@
+# Extract html slide content
+
+Extract slide content from multiple html
+
+## Usage
+
+``` r
+extract_html_slides(vec_html_path, use_metadata = TRUE)
+```
+
+## Arguments
+
+- vec_html_path:
+
+  character. The vector of path to individual html files
+
+- use_metadata:
+
+  logical. Use the keywords metadata for building the slide's url
+
+## Value
+
+HTML. The HTML slide content of all html files combined together.
+
+## Examples
+
+``` r
+# list html files
+courses_path <- system.file(
+  "courses",
+  package = "squash"
+)
+
+htmls <- list.files(
+  path = courses_path,
+  full.names = TRUE,
+  recursive = TRUE,
+  pattern = "html$"
+)
+
+html_slide_content <- extract_html_slides(vec_html_path = htmls)
+```
