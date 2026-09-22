@@ -1,12 +1,15 @@
 #' List detected quarto project
 #'
+#' A folder belongs to the closest quarto project found by walking up its
+#' parents, a project being a folder holding a `_quarto.yml` or
+#' `_quarto.yaml`. This is the project root `quarto inspect` reports, found
+#' without spawning one quarto process per folder.
+#'
 #' @param vec_qmd_path character. Path to the qmd files targeted for compilation
 #' @param quiet logical. Warn user of project status.
 #'
-#' @importFrom quarto quarto_inspect
-#' @importFrom purrr map map_lgl
-#'
-#' @return List of quarto projects detected for each qmd.
+#' @return character. Quarto project root of each qmd, or the qmd folder
+#'   when it belongs to no project, without duplicates.
 #'
 #' @noRd
 #' @examples
@@ -31,23 +34,41 @@ fetch_project <- function(
   # _extensions will be added to project root
   qmd_dir <- unique(dirname(vec_qmd_path))
 
-  quarto_proj <- map(
-    .x = qmd_dir,
-    .f = \(x){
-      # return NULL if dir is not a quarto project
-      tryCatch(
-        expr = {
-          quarto_inspect(x)$dir
-        },
-        error = \(e){
-          NULL
-        }
-      )
-    }
-  ) |> as.vector()
+  quarto_proj <- vapply(
+    X = qmd_dir,
+    FUN = find_quarto_project_root,
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
 
-  dir_is_proj <- !map_lgl(quarto_proj, is.null)
+  dir_is_proj <- !is.na(quarto_proj)
   qmd_proj_dir <- unique(c(qmd_dir[!dir_is_proj], quarto_proj[dir_is_proj]))
 
   return(qmd_proj_dir)
+}
+
+#' Find the root of the quarto project holding a folder
+#'
+#' @param dir character. A folder path.
+#'
+#' @return character. Normalized path of the closest parent folder (the
+#'   folder itself included) holding a `_quarto.yml` or `_quarto.yaml`,
+#'   `NA` when there is none.
+#'
+#' @noRd
+find_quarto_project_root <- function(dir) {
+  current <- normalizePath(dir, winslash = "/", mustWork = FALSE)
+  repeat {
+    config_found <- file.exists(
+      file.path(current, c("_quarto.yml", "_quarto.yaml"))
+    )
+    if (any(config_found)) {
+      return(current)
+    }
+    parent <- dirname(current)
+    if (identical(parent, current)) {
+      return(NA_character_)
+    }
+    current <- parent
+  }
 }
