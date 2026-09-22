@@ -51,13 +51,14 @@ fetch_project <- function(
 #'
 #' @param dir character. A folder path.
 #'
-#' @return character. Normalized path of the closest parent folder (the
+#' @return character. Absolute path of the closest parent folder (the
 #'   folder itself included) holding a `_quarto.yml` or `_quarto.yaml`,
-#'   `NA` when there is none.
+#'   `NA` when there is none. Like quarto, the parents are those of the
+#'   path as written: symlinks are not resolved.
 #'
 #' @noRd
 find_quarto_project_root <- function(dir) {
-  current <- normalizePath(dir, winslash = "/", mustWork = FALSE)
+  current <- absolute_path(dir)
   repeat {
     config_found <- file.exists(
       file.path(current, c("_quarto.yml", "_quarto.yaml"))
@@ -66,9 +67,43 @@ find_quarto_project_root <- function(dir) {
       return(current)
     }
     parent <- dirname(current)
-    if (identical(parent, current)) {
+    if (identical(x = parent, y = current)) {
       return(NA_character_)
     }
     current <- parent
   }
+}
+
+#' Make a path absolute without resolving symlinks
+#'
+#' @param path character. A path, relative to the working directory or
+#'   absolute.
+#'
+#' @return character. The absolute path, with `/` separators and the `.`
+#'   and `..` segments collapsed.
+#'
+#' @noRd
+absolute_path <- function(path) {
+  path <- gsub(pattern = "\\\\", replacement = "/", x = path)
+  if (!grepl(pattern = "^([A-Za-z]:)?/", x = path)) {
+    path <- file.path(gsub(pattern = "\\\\", replacement = "/", x = getwd()), path)
+  }
+  root <- regmatches(x = path, m = regexpr(pattern = "^([A-Za-z]:)?/", text = path))
+  segments <- strsplit(
+    x = substring(text = path, first = nchar(root) + 1),
+    split = "/",
+    fixed = TRUE
+  )[[1]]
+  kept <- character(0)
+  for (a_segment in segments) {
+    if (a_segment %in% c("", ".")) {
+      next
+    }
+    if (identical(x = a_segment, y = "..")) {
+      kept <- kept[-length(kept)]
+      next
+    }
+    kept <- c(kept, a_segment)
+  }
+  return(paste0(root, paste(kept, collapse = "/")))
 }

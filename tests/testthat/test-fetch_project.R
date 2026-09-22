@@ -80,7 +80,7 @@ test_that("fetch_project deduplicates folders and projects", {
 })
 
 test_that("fetch_project agrees with quarto inspect", {
-  skip_if(is.null(quarto::quarto_path()), message = "quarto is not installed")
+  skip_if_not(quarto::quarto_available(), message = "quarto is not installed")
   tree <- make_project_tree()
   on.exit(unlink(tree$root, recursive = TRUE), add = TRUE)
 
@@ -113,5 +113,83 @@ test_that("fetch_project returns a character vector", {
   expect_type(
     object = fetch_project(vec_qmd_path = tree$qmd),
     type = "character"
+  )
+})
+
+make_symlink_tree <- function() {
+  root <- normalizePath(tempfile(pattern = "fetchlink"), winslash = "/", mustWork = FALSE)
+  dir.create(file.path(root, "proj", "chap"), recursive = TRUE)
+  dir.create(file.path(root, "elsewhere", "chap"), recursive = TRUE)
+  dir.create(file.path(root, "outside"))
+  writeLines("project:\n  type: default", con = file.path(root, "proj", "_quarto.yml"))
+  linked <- c(
+    file.symlink(
+      from = file.path(root, "proj", "chap"),
+      to = file.path(root, "outside", "link_in")
+    ),
+    file.symlink(
+      from = file.path(root, "elsewhere", "chap"),
+      to = file.path(root, "proj", "link_out")
+    )
+  )
+  return(list(root = root, linked = all(linked)))
+}
+
+test_that("fetch_project follows the path as written, not the symlink target", {
+  tree <- make_symlink_tree()
+  on.exit(unlink(tree$root, recursive = TRUE), add = TRUE)
+  skip_if_not(tree$linked, message = "symlinks are not supported here")
+
+  # a folder linked from outside a project is not in the project
+  link_in <- file.path(tree$root, "outside", "link_in")
+  expect_equal(
+    object = unlist(fetch_project(vec_qmd_path = file.path(link_in, "a.qmd"))),
+    expected = link_in
+  )
+  # a folder linked into a project belongs to it
+  expect_equal(
+    object = unlist(fetch_project(
+      vec_qmd_path = file.path(tree$root, "proj", "link_out", "a.qmd")
+    )),
+    expected = file.path(tree$root, "proj")
+  )
+})
+
+test_that("fetch_project agrees with quarto inspect through symlinks", {
+  skip_if_not(quarto::quarto_available(), message = "quarto is not installed")
+  tree <- make_symlink_tree()
+  on.exit(unlink(tree$root, recursive = TRUE), add = TRUE)
+  skip_if_not(tree$linked, message = "symlinks are not supported here")
+
+  for (a_dir in file.path(tree$root, c("outside/link_in", "proj/link_out"))) {
+    inspected <- tryCatch(
+      expr = {
+        quarto::quarto_inspect(a_dir)$dir
+      },
+      error = function(e) {
+        a_dir
+      }
+    )
+    expect_equal(
+      object = unlist(fetch_project(vec_qmd_path = file.path(a_dir, "a.qmd"))),
+      expected = inspected,
+      label = a_dir
+    )
+  }
+})
+
+test_that("fetch_project resolves relative paths and dot segments", {
+  tree <- make_project_tree()
+  on.exit(unlink(tree$root, recursive = TRUE), add = TRUE)
+  root <- normalizePath(tree$root, winslash = "/")
+
+  withr::local_dir(file.path(root, "proj_yml", "chap"))
+  expect_equal(
+    object = unlist(fetch_project(vec_qmd_path = file.path("sub", "..", "sub", ".", "dummy.qmd"))),
+    expected = file.path(root, "proj_yml")
+  )
+  expect_equal(
+    object = unlist(fetch_project(vec_qmd_path = file.path("..", "..", "no_proj", "deep", "dummy.qmd"))),
+    expected = file.path("..", "..", "no_proj", "deep")
   )
 })

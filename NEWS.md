@@ -1,6 +1,6 @@
 # squash 1.3.1
 
-* Quarto project detection before compilation no longer runs one `quarto inspect` process per qmd folder: the project root is found by walking up the folders to the closest `_quarto.yml` or `_quarto.yaml`, which is the root `quarto inspect` reports. Measured on 10 chapter folders: 14.7 s down to 0.01 s, i.e. about 1.5 s saved per folder on every compilation.
+* Quarto project detection before compilation no longer runs one `quarto inspect` process per qmd folder: the project root is found by walking up the folders to the closest `_quarto.yml` or `_quarto.yaml`, which is the root `quarto inspect` reports (like quarto, the folders are those of the path as written, symlinks are not resolved). Measured on 10 chapter folders: 14.7 s down to 0.01 s, i.e. about 1.5 s saved per folder on every compilation.
 
 # squash 1.3.0
 
