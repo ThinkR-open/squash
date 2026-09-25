@@ -3,7 +3,6 @@
 #' @param vec_qmd_path character. Path to the qmd files targeted for compilation
 #' @param quiet logical. Warn user of project status.
 #'
-#' @importFrom quarto quarto_inspect
 #' @importFrom cli cli_alert_info
 #' @importFrom purrr map map_lgl
 #' @importFrom fs dir_create
