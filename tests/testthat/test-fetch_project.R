@@ -1,3 +1,10 @@
+# quarto renvoie le chemin tel qu il est ecrit : les comparaisons portent sur
+# le dossier designe, pas sur sa forme (/var contre /private/var sur macOS,
+# noms courts et antislashs sur Windows)
+same_dir <- function(paths) {
+  return(normalizePath(paths, winslash = "/", mustWork = FALSE))
+}
+
 make_project_tree <- function() {
   root <- tempfile(pattern = "fetchproj")
   dirs <- c(
@@ -35,20 +42,20 @@ test_that("fetch_project finds project roots without running quarto", {
   withr::local_envvar(QUARTO_PATH = file.path(tree$root, "no-quarto"))
 
   expect_equal(
-    object = unlist(fetch_project(vec_qmd_path = tree$qmd["proj_yml_sub"])),
-    expected = file.path(root, "proj_yml")
+    object = same_dir(unlist(fetch_project(vec_qmd_path = tree$qmd["proj_yml_sub"]))),
+    expected = same_dir(file.path(root, "proj_yml"))
   )
   expect_equal(
-    object = unlist(fetch_project(vec_qmd_path = tree$qmd["proj_yaml"])),
-    expected = file.path(root, "proj_yaml")
+    object = same_dir(unlist(fetch_project(vec_qmd_path = tree$qmd["proj_yaml"]))),
+    expected = same_dir(file.path(root, "proj_yaml"))
   )
   expect_equal(
-    object = unlist(fetch_project(vec_qmd_path = tree$qmd["inner_sub"])),
-    expected = file.path(root, "proj_yml", "inner")
+    object = same_dir(unlist(fetch_project(vec_qmd_path = tree$qmd["inner_sub"]))),
+    expected = same_dir(file.path(root, "proj_yml", "inner"))
   )
   expect_equal(
-    object = unlist(fetch_project(vec_qmd_path = tree$qmd["empty_yml"])),
-    expected = file.path(root, "empty_yml")
+    object = same_dir(unlist(fetch_project(vec_qmd_path = tree$qmd["empty_yml"]))),
+    expected = same_dir(file.path(root, "empty_yml"))
   )
 })
 
@@ -58,8 +65,8 @@ test_that("fetch_project returns the qmd folder when no project is found", {
 
   qmd <- tree$qmd[c("no_proj", "profile_only")]
   expect_equal(
-    object = unlist(fetch_project(vec_qmd_path = qmd)),
-    expected = unname(dirname(qmd))
+    object = same_dir(unlist(fetch_project(vec_qmd_path = qmd))),
+    expected = same_dir(unname(dirname(qmd)))
   )
 })
 
@@ -71,11 +78,11 @@ test_that("fetch_project deduplicates folders and projects", {
   qmd <- tree$qmd[c("proj_yml", "proj_yml_sub", "no_proj")]
   qmd <- c(qmd, file.path(dirname(tree$qmd["no_proj"]), "other.qmd"))
   expect_equal(
-    object = unlist(fetch_project(vec_qmd_path = qmd)),
-    expected = c(
+    object = same_dir(unlist(fetch_project(vec_qmd_path = qmd))),
+    expected = same_dir(c(
       unname(dirname(tree$qmd["no_proj"])),
       file.path(root, "proj_yml")
-    )
+    ))
   )
 })
 
@@ -96,11 +103,11 @@ test_that("fetch_project agrees with quarto inspect", {
     expected <- if (is.null(inspected)) {
       dirname(a_qmd)
     } else {
-      normalizePath(inspected, winslash = "/")
+      inspected
     }
     expect_equal(
-      object = unlist(fetch_project(vec_qmd_path = a_qmd)),
-      expected = expected,
+      object = same_dir(unlist(fetch_project(vec_qmd_path = a_qmd))),
+      expected = same_dir(expected),
       label = a_qmd
     )
   }
@@ -143,15 +150,15 @@ test_that("fetch_project follows the path as written, not the symlink target", {
   # a folder linked from outside a project is not in the project
   link_in <- file.path(tree$root, "outside", "link_in")
   expect_equal(
-    object = unlist(fetch_project(vec_qmd_path = file.path(link_in, "a.qmd"))),
-    expected = link_in
+    object = same_dir(unlist(fetch_project(vec_qmd_path = file.path(link_in, "a.qmd")))),
+    expected = same_dir(link_in)
   )
   # a folder linked into a project belongs to it
   expect_equal(
-    object = unlist(fetch_project(
+    object = same_dir(unlist(fetch_project(
       vec_qmd_path = file.path(tree$root, "proj", "link_out", "a.qmd")
-    )),
-    expected = file.path(tree$root, "proj")
+    ))),
+    expected = same_dir(file.path(tree$root, "proj"))
   )
 })
 
@@ -171,8 +178,8 @@ test_that("fetch_project agrees with quarto inspect through symlinks", {
       }
     )
     expect_equal(
-      object = unlist(fetch_project(vec_qmd_path = file.path(a_dir, "a.qmd"))),
-      expected = inspected,
+      object = same_dir(unlist(fetch_project(vec_qmd_path = file.path(a_dir, "a.qmd")))),
+      expected = same_dir(inspected),
       label = a_dir
     )
   }
@@ -185,11 +192,11 @@ test_that("fetch_project resolves relative paths and dot segments", {
 
   withr::local_dir(file.path(root, "proj_yml", "chap"))
   expect_equal(
-    object = unlist(fetch_project(vec_qmd_path = file.path("sub", "..", "sub", ".", "dummy.qmd"))),
-    expected = file.path(root, "proj_yml")
+    object = same_dir(unlist(fetch_project(vec_qmd_path = file.path("sub", "..", "sub", ".", "dummy.qmd")))),
+    expected = same_dir(file.path(root, "proj_yml"))
   )
   expect_equal(
-    object = unlist(fetch_project(vec_qmd_path = file.path("..", "..", "no_proj", "deep", "dummy.qmd"))),
-    expected = file.path("..", "..", "no_proj", "deep")
+    object = same_dir(unlist(fetch_project(vec_qmd_path = file.path("..", "..", "no_proj", "deep", "dummy.qmd")))),
+    expected = same_dir(file.path("..", "..", "no_proj", "deep"))
   )
 })
